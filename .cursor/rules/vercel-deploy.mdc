@@ -1,0 +1,20 @@
+---
+description: Tras cambios en el código o assets de producción, desplegar a Vercel sin esperar a que el usuario lo pida.
+alwaysApply: true
+---
+
+# Despliegue Vercel (producción)
+
+Cuando completes **cambios sustantivos** en este proyecto (código de la app, `public/`, `next.config`, env de build, etc.):
+
+1. **Ejecuta tú** el despliegue desde la raíz del proyecto Next (`project/project`):
+
+   `npx vercel deploy --prod --yes`
+
+2. **No esperes** a que el usuario diga “compila en Vercel” o “despliega”: hazlo al **cerrar la tarea**, una vez que `tsc`/lint estén bien si aplica.
+
+3. **No hace falta** desplegar si solo hubo lectura, búsqueda o respuesta informativa **sin** modificar archivos del repo.
+
+4. Si el usuario pide **explícitamente** no desplegar o solo entorno local, respétalo.
+
+Tras el deploy, confirma brevemente la URL de producción (p. ej. `jconefix.vercel.app`) si el CLI la muestra.

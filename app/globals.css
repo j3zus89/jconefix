@@ -1,0 +1,893 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    /* Mismo verde que #0d9488 (identidad por defecto del panel) */
+    --primary: 175 84% 32%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 175 70% 28%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /*
+   * Panel: barra / pie / menús mezclan el primario del usuario con una base oscura.
+   * Cada `data-panel-design` puede retocar la mezcla (alineado con landings).
+   */
+  html[data-app-panel] {
+    --panel-header-bg: color-mix(in srgb, hsl(var(--primary)) 56%, #030712);
+    --panel-footer-bg: color-mix(in srgb, hsl(var(--primary)) 68%, #020617);
+    --panel-menu-bg: color-mix(in srgb, hsl(var(--primary)) 42%, #020617);
+  }
+
+  html[data-app-panel][data-panel-design='heritage'] {
+    --panel-header-bg: color-mix(in srgb, hsl(var(--primary)) 54%, #0a1f1c);
+    --panel-footer-bg: color-mix(in srgb, hsl(var(--primary)) 60%, #071816);
+    --panel-menu-bg: color-mix(in srgb, hsl(var(--primary)) 40%, #061412);
+  }
+
+  html[data-app-panel][data-panel-design='aurora'] {
+    --panel-header-bg: color-mix(in srgb, hsl(var(--primary)) 52%, #030712);
+    --panel-footer-bg: color-mix(in srgb, hsl(var(--primary)) 58%, #020617);
+    --panel-menu-bg: color-mix(in srgb, hsl(var(--primary)) 38%, #020617);
+  }
+
+  html[data-app-panel][data-panel-design='studio'] {
+    --panel-header-bg: color-mix(in srgb, hsl(var(--primary)) 50%, #1c1917);
+    --panel-footer-bg: color-mix(in srgb, hsl(var(--primary)) 56%, #1c1917);
+    --panel-menu-bg: color-mix(in srgb, hsl(var(--primary)) 36%, #292524);
+  }
+
+  /* ── Clásico + modo (igual que antes, ahora con data-panel-design) ── */
+  html[data-app-panel][data-panel-design='classic'][data-panel-theme='light'],
+  .panel-preview-scope[data-panel-design='classic'][data-panel-theme='light'] {
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --secondary: 210 16% 93%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 14% 92%;
+    --muted-foreground: 215 16% 40%;
+    --accent: 210 16% 93%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+  }
+
+  html[data-app-panel][data-panel-design='classic'][data-panel-theme='dark_deep'],
+  .panel-preview-scope[data-panel-design='classic'][data-panel-theme='dark_deep'] {
+    --background: 0 0% 6%;
+    --foreground: 0 0% 96%;
+    --card: 0 0% 9%;
+    --card-foreground: 0 0% 96%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 96%;
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 96%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 0 0% 14%;
+    --accent-foreground: 0 0% 96%;
+    --destructive: 0 62% 32%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+  }
+
+  html[data-app-panel][data-panel-design='classic'][data-panel-theme='night_blue'],
+  .panel-preview-scope[data-panel-design='classic'][data-panel-theme='night_blue'] {
+    --background: 222 44% 6%;
+    --foreground: 213 31% 94%;
+    --card: 222 38% 9%;
+    --card-foreground: 213 31% 94%;
+    --popover: 222 38% 9%;
+    --popover-foreground: 213 31% 94%;
+    --secondary: 217 33% 14%;
+    --secondary-foreground: 213 31% 94%;
+    --muted: 217 28% 14%;
+    --muted-foreground: 215 20% 62%;
+    --accent: 217 33% 16%;
+    --accent-foreground: 213 31% 94%;
+    --destructive: 0 56% 40%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 217 28% 18%;
+    --input: 217 28% 18%;
+  }
+
+  /* ── Heritage Pro (landing clásica) ── */
+  html[data-app-panel][data-panel-design='heritage'][data-panel-theme='light'],
+  .panel-preview-scope[data-panel-design='heritage'][data-panel-theme='light'] {
+    --background: 165 32% 93%;
+    --foreground: 168 35% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 168 30% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 168 30% 12%;
+    --secondary: 160 18% 93%;
+    --secondary-foreground: 168 35% 14%;
+    --muted: 160 16% 91%;
+    --muted-foreground: 165 12% 38%;
+    --accent: 78 85% 94%;
+    --accent-foreground: 168 40% 18%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 160 14% 86%;
+    --input: 160 14% 86%;
+    --panel-header-bg: color-mix(in srgb, hsl(var(--primary)) 58%, #0f172a);
+    --panel-footer-bg: color-mix(in srgb, hsl(var(--primary)) 62%, #0c1917);
+    --panel-menu-bg: color-mix(in srgb, hsl(var(--primary)) 44%, #0a1614);
+  }
+
+  html[data-app-panel][data-panel-design='heritage'][data-panel-theme='dark_deep'],
+  .panel-preview-scope[data-panel-design='heritage'][data-panel-theme='dark_deep'] {
+    --background: 168 38% 7%;
+    --foreground: 85 15% 96%;
+    --card: 168 32% 10%;
+    --card-foreground: 85 10% 95%;
+    --popover: 168 32% 10%;
+    --popover-foreground: 85 10% 95%;
+    --secondary: 168 22% 14%;
+    --secondary-foreground: 85 10% 95%;
+    --muted: 168 18% 14%;
+    --muted-foreground: 160 10% 58%;
+    --accent: 78 55% 18%;
+    --accent-foreground: 78 80% 88%;
+    --destructive: 0 62% 32%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 168 22% 16%;
+    --input: 168 22% 16%;
+  }
+
+  html[data-app-panel][data-panel-design='heritage'][data-panel-theme='night_blue'],
+  .panel-preview-scope[data-panel-design='heritage'][data-panel-theme='night_blue'] {
+    --background: 215 38% 7%;
+    --foreground: 210 25% 94%;
+    --card: 215 32% 10%;
+    --card-foreground: 210 25% 94%;
+    --popover: 215 32% 10%;
+    --popover-foreground: 210 25% 94%;
+    --secondary: 210 28% 14%;
+    --secondary-foreground: 210 25% 94%;
+    --muted: 210 24% 13%;
+    --muted-foreground: 215 15% 58%;
+    --accent: 168 35% 16%;
+    --accent-foreground: 78 85% 88%;
+    --destructive: 0 56% 40%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 215 26% 18%;
+    --input: 215 26% 18%;
+  }
+
+  /* ── Aurora (enterprise / home principal) ── */
+  html[data-app-panel][data-panel-design='aurora'][data-panel-theme='light'],
+  .panel-preview-scope[data-panel-design='aurora'][data-panel-theme='light'] {
+    --background: 218 28% 96%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 220 12% 92%;
+    --muted-foreground: 220 10% 42%;
+    --accent: 160 40% 94%;
+    --accent-foreground: 160 45% 18%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 16% 88%;
+    --input: 220 16% 88%;
+  }
+
+  html[data-app-panel][data-panel-design='aurora'][data-panel-theme='dark_deep'],
+  .panel-preview-scope[data-panel-design='aurora'][data-panel-theme='dark_deep'] {
+    --background: 160 22% 6%;
+    --foreground: 210 25% 95%;
+    --card: 220 24% 8%;
+    --card-foreground: 210 25% 95%;
+    --popover: 220 24% 8%;
+    --popover-foreground: 210 25% 95%;
+    --secondary: 220 18% 12%;
+    --secondary-foreground: 210 25% 95%;
+    --muted: 220 16% 12%;
+    --muted-foreground: 215 12% 60%;
+    --accent: 160 30% 14%;
+    --accent-foreground: 160 40% 92%;
+    --destructive: 0 62% 32%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 18% 14%;
+    --input: 220 18% 14%;
+  }
+
+  html[data-app-panel][data-panel-design='aurora'][data-panel-theme='night_blue'],
+  .panel-preview-scope[data-panel-design='aurora'][data-panel-theme='night_blue'] {
+    --background: 222 42% 6%;
+    --foreground: 213 32% 94%;
+    --card: 222 36% 9%;
+    --card-foreground: 213 32% 94%;
+    --popover: 222 36% 9%;
+    --popover-foreground: 213 32% 94%;
+    --secondary: 217 32% 13%;
+    --secondary-foreground: 213 32% 94%;
+    --muted: 217 28% 12%;
+    --muted-foreground: 215 18% 60%;
+    --accent: 160 35% 14%;
+    --accent-foreground: 155 60% 92%;
+    --destructive: 0 56% 40%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 26% 16%;
+    --input: 220 26% 16%;
+  }
+
+  /* ── Studio (editorial) ── */
+  html[data-app-panel][data-panel-design='studio'][data-panel-theme='light'],
+  .panel-preview-scope[data-panel-design='studio'][data-panel-theme='light'] {
+    --background: 38 42% 93%;
+    --foreground: 30 16% 14%;
+    --card: 40 18% 99%;
+    --card-foreground: 30 16% 14%;
+    --popover: 40 18% 99%;
+    --popover-foreground: 30 16% 14%;
+    --secondary: 35 20% 93%;
+    --secondary-foreground: 30 16% 14%;
+    --muted: 35 16% 91%;
+    --muted-foreground: 30 10% 42%;
+    --accent: 160 20% 92%;
+    --accent-foreground: 168 35% 18%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 35 18% 88%;
+    --input: 35 18% 88%;
+  }
+
+  html[data-app-panel][data-panel-design='studio'][data-panel-theme='dark_deep'],
+  .panel-preview-scope[data-panel-design='studio'][data-panel-theme='dark_deep'] {
+    --background: 30 8% 9%;
+    --foreground: 40 12% 94%;
+    --card: 30 8% 11%;
+    --card-foreground: 40 12% 94%;
+    --popover: 30 8% 11%;
+    --popover-foreground: 40 12% 94%;
+    --secondary: 28 10% 15%;
+    --secondary-foreground: 40 12% 94%;
+    --muted: 28 8% 14%;
+    --muted-foreground: 35 8% 58%;
+    --accent: 160 15% 16%;
+    --accent-foreground: 160 25% 90%;
+    --destructive: 0 62% 32%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 28 10% 17%;
+    --input: 28 10% 17%;
+  }
+
+  html[data-app-panel][data-panel-design='studio'][data-panel-theme='night_blue'],
+  .panel-preview-scope[data-panel-design='studio'][data-panel-theme='night_blue'] {
+    --background: 222 30% 8%;
+    --foreground: 40 20% 94%;
+    --card: 222 26% 11%;
+    --card-foreground: 40 15% 94%;
+    --popover: 222 26% 11%;
+    --popover-foreground: 40 15% 94%;
+    --secondary: 220 22% 14%;
+    --secondary-foreground: 40 15% 94%;
+    --muted: 220 18% 13%;
+    --muted-foreground: 220 12% 58%;
+    --accent: 35 25% 16%;
+    --accent-foreground: 45 40% 92%;
+    --destructive: 0 56% 40%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 222 22% 18%;
+    --input: 222 22% 18%;
+  }
+
+  /* Miniatura en ajustes: mismas variables que el panel (requiere --primary en estilo inline). */
+  .panel-preview-scope {
+    --panel-header-bg: color-mix(in srgb, hsl(var(--primary)) 56%, #030712);
+    --panel-footer-bg: color-mix(in srgb, hsl(var(--primary)) 68%, #020617);
+    --panel-menu-bg: color-mix(in srgb, hsl(var(--primary)) 42%, #020617);
+  }
+
+  /* Modo compacto: tablas de tickets y componente Table (clientes) */
+  html[data-table-compact] table.jc-panel-data-table th,
+  html[data-table-compact] table.jc-panel-data-table td {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    padding-top: 0.375rem !important;
+    padding-bottom: 0.375rem !important;
+  }
+
+  html[data-table-compact] table[data-jc-table] thead th,
+  html[data-table-compact] table[data-jc-table] tbody td {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    padding-top: 0.375rem !important;
+    padding-bottom: 0.375rem !important;
+  }
+
+  html[data-table-compact] table[data-jc-table] thead th {
+    height: 2rem !important;
+  }
+
+  /* Anclas (#que-incluye, #detalle-*) y header fijo ~72px / 80px */
+  html {
+    scroll-padding-top: 5.5rem;
+  }
+  @media (min-width: 640px) {
+    html {
+      scroll-padding-top: 7rem;
+    }
+  }
+
+  /*
+   * Hover "crece" en botones nativos (no solo <Button />). Excluye .no-ui-hover-grow
+   * (switch, checkbox, etc.). Respeta prefers-reduced-motion y puntero finito.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    @media (hover: hover) and (pointer: fine) {
+      html:not([data-app-panel])
+        button:not(:disabled):not([aria-disabled='true']):not(.no-ui-hover-grow),
+      html:not([data-app-panel]) input[type='submit']:not(:disabled):not(.no-ui-hover-grow),
+      html:not([data-app-panel]) input[type='button']:not(:disabled):not(.no-ui-hover-grow),
+      html:not([data-app-panel]) input[type='reset']:not(:disabled):not(.no-ui-hover-grow) {
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      html:not([data-app-panel])
+        button:not(:disabled):not([aria-disabled='true']):not(.no-ui-hover-grow):hover,
+      html:not([data-app-panel]) input[type='submit']:not(:disabled):not(.no-ui-hover-grow):hover,
+      html:not([data-app-panel]) input[type='button']:not(:disabled):not(.no-ui-hover-grow):hover,
+      html:not([data-app-panel]) input[type='reset']:not(:disabled):not(.no-ui-hover-grow):hover {
+        transform: scale(1.03);
+      }
+      html:not([data-app-panel])
+        button:not(:disabled):not([aria-disabled='true']):not(.no-ui-hover-grow):active,
+      html:not([data-app-panel]) input[type='submit']:not(:disabled):not(.no-ui-hover-grow):active,
+      html:not([data-app-panel]) input[type='button']:not(:disabled):not(.no-ui-hover-grow):active,
+      html:not([data-app-panel]) input[type='reset']:not(:disabled):not(.no-ui-hover-grow):active {
+        transform: scale(0.98);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    button:not(:disabled):not(.no-ui-hover-grow),
+    input[type='submit']:not(:disabled):not(.no-ui-hover-grow),
+    input[type='button']:not(:disabled):not(.no-ui-hover-grow),
+    input[type='reset']:not(:disabled):not(.no-ui-hover-grow) {
+      transition: none !important;
+    }
+    button:not(:disabled):not(.no-ui-hover-grow):hover,
+    button:not(:disabled):not(.no-ui-hover-grow):active,
+    input[type='submit']:not(:disabled):not(.no-ui-hover-grow):hover,
+    input[type='submit']:not(:disabled):not(.no-ui-hover-grow):active,
+    input[type='button']:not(:disabled):not(.no-ui-hover-grow):hover,
+    input[type='button']:not(:disabled):not(.no-ui-hover-grow):active,
+    input[type='reset']:not(:disabled):not(.no-ui-hover-grow):hover,
+    input[type='reset']:not(:disabled):not(.no-ui-hover-grow):active {
+      transform: none !important;
+    }
+  }
+}
+
+/* Animación marquee para logos */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Animación para carrusel de tarjetas */
+@keyframes slide-cards {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-slide-cards {
+  animation: slide-cards 40s linear infinite;
+}
+
+.animate-slide-cards:hover {
+  animation-play-state: paused;
+}
+
+/* Animación para carrusel infinito de industrias */
+@keyframes marquee-industries {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-industries {
+  animation: marquee-industries 35s linear infinite;
+}
+
+.animate-marquee-industries:hover {
+  animation-play-state: paused;
+}
+
+/* Iconos flotantes sobre imágenes (landing) */
+@keyframes landing-soft-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-landing-soft-float {
+  animation: landing-soft-float 4.2s ease-in-out infinite;
+}
+
+.animate-landing-soft-float-delayed {
+  animation: landing-soft-float 4.8s ease-in-out infinite;
+  animation-delay: 1.25s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-landing-soft-float,
+  .animate-landing-soft-float-delayed {
+    animation: none;
+  }
+}
+
+/* Latido suave para el selector de región de precios */
+@keyframes region-heartbeat {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(163, 230, 53, 0); }
+  30%       { box-shadow: 0 0 0 5px rgba(163, 230, 53, 0.18); }
+  55%       { box-shadow: 0 0 0 9px rgba(163, 230, 53, 0.07); }
+  80%       { box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.04); }
+}
+
+.animate-region-heartbeat {
+  animation: region-heartbeat 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-region-heartbeat {
+    animation: none;
+  }
+}
+
+/*
+ * Bandera de región (AR/ES): efecto 10 del laboratorio — «Onda lenta y amplia».
+ */
+@keyframes region-flag-wave {
+  0%,
+  100% {
+    transform: perspective(80px) rotateY(-32deg) rotateZ(-1deg);
+  }
+  50% {
+    transform: perspective(80px) rotateY(28deg) rotateZ(2deg);
+  }
+}
+
+.animate-region-flag-wave {
+  display: inline-block;
+  transform-origin: 0% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+  animation: region-flag-wave 2.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-region-flag-wave {
+    animation: none;
+    transform: none;
+    will-change: auto;
+  }
+}
+
+/* Barra de progreso del tab activo en ModulosFichasShowcase */
+@keyframes tabProgress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes tabProgress {
+    from { width: 100%; }
+    to   { width: 100%; }
+  }
+}
+
+/*
+ * Panel (dashboard / admin): sin "zoom" al pasar el ratón sobre botones, tarjetas,
+ * menús y diálogos. `data-app-panel` se pone en <html> desde los layouts del panel
+ * para que también cubra portales de Radix (modales, dropdowns).
+ */
+html[data-app-panel] .hover\:scale-\[1\.01\]:hover,
+html[data-app-panel] .hover\:scale-\[1\.02\]:hover,
+html[data-app-panel] .hover\:scale-\[1\.03\]:hover,
+html[data-app-panel] .hover\:scale-\[1\.07\]:hover,
+html[data-app-panel] .hover\:scale-105:hover,
+html[data-app-panel] .hover\:scale-110:hover,
+html[data-app-panel] .active\:scale-\[0\.98\]:active,
+html[data-app-panel] .active\:scale-\[0\.99\]:active,
+html[data-app-panel] .active\:scale-95:active,
+html[data-app-panel] .group:hover .group-hover\:scale-105,
+html[data-app-panel] .group:hover .group-hover\:scale-110,
+html[data-app-panel] .group:hover .group-hover\:scale-\[1\.03\],
+html[data-app-panel] .group:hover .group-hover\:scale-\[1\.07\] {
+  --tw-scale-x: 1 !important;
+  --tw-scale-y: 1 !important;
+}
+
+/* ── App nativa Capacitor (User-Agent JCOneFixNative) ── */
+@keyframes cap-native-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cap-native-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  border-top-color: #a3e635;
+  border-radius: 50%;
+  animation: cap-native-spin 0.75s linear infinite;
+}
+
+html.cap-native {
+  overscroll-behavior: none !important;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden !important;
+  background-color: #004d40;
+  /* APK: header alineado a marca y status bar nativa (#004d40). */
+  --panel-header-bg: #004d40;
+}
+
+html.cap-native input,
+html.cap-native textarea,
+html.cap-native [contenteditable='true'] {
+  -webkit-touch-callout: default;
+}
+
+html.cap-native body {
+  touch-action: manipulation;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  height: 100%;
+  max-height: 100dvh;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  background-color: #004d40;
+}
+
+/* Una sola columna con scroll: login y páginas sin data-cap-app-shell */
+html.cap-native .cap-native-page-fill {
+  max-height: 100dvh;
+  max-height: 100svh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+html.cap-native [data-cap-app-main],
+html.cap-native .overflow-y-auto {
+  overscroll-behavior-y: contain;
+}
+
+/* Sin selección de texto en controles tipo app (inputs siguen seleccionables abajo) */
+html.cap-native button,
+html.cap-native [role='button'],
+html.cap-native [role='menuitem'],
+html.cap-native [role='tab'],
+html.cap-native [role='option'],
+html.cap-native header a,
+html.cap-native header button,
+html.cap-native nav a,
+html.cap-native [data-cap-no-select] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html.cap-native input,
+html.cap-native textarea,
+html.cap-native [contenteditable='true'],
+html.cap-native [data-cap-allow-select],
+html.cap-native .select-text {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/*
+ * Feedback táctil inmediato (sin depender del hover de escritorio).
+ * Excluimos enlaces largos de contenido para no deformar tipografía.
+ */
+@media (hover: none) {
+  html.cap-native button:not(:disabled):active,
+  html.cap-native [role='button']:not(:disabled):active,
+  html.cap-native [role='tab']:active,
+  html.cap-native header button:active,
+  html.cap-native header nav a:active {
+    transition:
+      transform 0.08s ease-out,
+      opacity 0.08s ease-out,
+      filter 0.08s ease-out;
+    transform: scale(0.97);
+    opacity: 0.92;
+  }
+
+  html.cap-native button:not(:disabled),
+  html.cap-native [role='button']:not(:disabled),
+  html.cap-native [role='tab'],
+  html.cap-native header button,
+  html.cap-native header nav a {
+    transition:
+      transform 0.1s ease-out,
+      opacity 0.1s ease-out;
+  }
+}
+
+/* Safe area: notch / status bar (Capacitor StatusBar sin overlay) */
+html.cap-native header.fixed,
+html.cap-native nav.sticky {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+html.cap-native [data-cap-safe-top] {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+  padding-left: max(0.5rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+}
+
+html.cap-native [data-web-chrome] {
+  display: none !important;
+}
+
+/* Barra superior: aire bajo notch + menos "sitio web" en móvil */
+@media (max-width: 640px) {
+  html.cap-native header[data-cap-safe-top] {
+    padding-bottom: 0.45rem;
+  }
+}
+
+/* Barra de gestos + barra inferior Capacitor (CapacitorBottomNav, ~3.5rem) en móvil; en md+ no hay bottom nav. */
+html.cap-native [data-cap-app-shell] {
+  padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  html.cap-native [data-cap-app-shell] {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* Scroll principal del panel: inercia táctil + aire inferior en APK (footer web oculto). */
+html.cap-native [data-cap-app-main] {
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+/* Campana de notificaciones del panel: balanceo tipo "tintineo" */
+@keyframes panel-bell-shake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  12% {
+    transform: rotate(16deg);
+  }
+  28% {
+    transform: rotate(-13deg);
+  }
+  44% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(-7deg);
+  }
+  76% {
+    transform: rotate(4deg);
+  }
+}
+
+.animate-panel-bell-shake {
+  animation: panel-bell-shake 0.65s ease-in-out both;
+  transform-origin: 50% 0%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-panel-bell-shake {
+    animation: none;
+  }
+}
+
+/* ── PWA / móvil: safe areas, pull-to-refresh, tap highlight, fuentes sistema (Tailwind font-sans) ── */
+html {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  overscroll-behavior-y: none;
+}
+
+@media (max-width: 767px) {
+  html:not(.cap-native) [data-cap-app-shell] [data-cap-app-main] {
+    padding-bottom: calc(4.35rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Iconos compactos en cabecera del panel; targets táctiles amplios vía min size en botones */
+  [data-app-panel] header button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  [data-app-panel] header button svg,
+  [data-app-panel] header a svg {
+    height: 1.15rem;
+    width: 1.15rem;
+  }
+}
+
+/* Mejoras adicionales para responsive en móviles pequeños */
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
+  /* Ajustes para inputs en móviles pequeños */
+  input, select, textarea {
+    font-size: 16px !important; /* Evita zoom en iOS */
+  }
+
+  /* Scroll horizontal suavizado */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Tablets y dispositivos medianos */
+@media (min-width: 481px) and (max-width: 1024px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* Desktop grande - optimización */
+@media (min-width: 1920px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* Fix para overflow horizontal en móviles */
+html, body {
+  max-width: 100vw;
+  overflow-x: clip;
+}
+
+/* Mejoras táctiles en móviles */
+@media (hover: none) and (pointer: coarse) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Feedback táctil más rápido */
+  button:active, a:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+}
+
+/* Optimización para móviles pequeños */
+@media (max-width: 640px) {
+  /* Reduce animaciones en móviles para mejor performance */
+  .animate-marquee,
+  .animate-slide-cards,
+  .animate-marquee-industries {
+    animation-duration: 45s;
+  }
+}

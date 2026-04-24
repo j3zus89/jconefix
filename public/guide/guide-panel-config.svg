@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" fill="none" role="img" aria-labelledby="t1">
+  <title id="t1">Ejemplo visual - configuracion del taller</title>
+  <rect width="880" height="480" rx="16" fill="#f8fafc"/>
+  <rect x="24" y="24" width="832" height="48" rx="10" fill="#124c48"/>
+  <rect x="24" y="84" width="200" height="372" rx="12" fill="#fff" stroke="#e2e8f0"/>
+  <rect x="40" y="104" width="140" height="10" rx="2" fill="#0d9488" opacity="0.3"/>
+  <rect x="40" y="128" width="160" height="8" rx="2" fill="#e2e8f0"/>
+  <rect x="40" y="148" width="150" height="8" rx="2" fill="#e2e8f0"/>
+  <rect x="40" y="168" width="155" height="8" rx="2" fill="#e2e8f0"/>
+  <rect x="40" y="188" width="148" height="8" rx="2" fill="#e2e8f0"/>
+  <rect x="236" y="84" width="620" height="372" rx="12" fill="#fff" stroke="#e2e8f0"/>
+  <text x="260" y="118" fill="#334155" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Ajustes generales</text>
+  <rect x="260" y="136" width="320" height="36" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <rect x="260" y="188" width="320" height="36" rx="8" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <rect x="260" y="240" width="200" height="36" rx="8" fill="#0d9488" opacity="0.9"/>
+  <rect x="260" y="296" width="480" height="120" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+</svg>

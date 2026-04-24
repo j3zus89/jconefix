@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" fill="none" role="img" aria-labelledby="t1">
+  <title id="t1">Ejemplo visual - ajustes por region Espana / Argentina</title>
+  <rect width="880" height="480" rx="16" fill="#f8fafc"/>
+  <rect x="24" y="24" width="832" height="48" rx="10" fill="#124c48"/>
+  <rect x="24" y="84" width="832" height="372" rx="12" fill="#fff" stroke="#e2e8f0"/>
+  <rect x="48" y="120" width="360" height="160" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="64" y="152" fill="#1e40af" font-family="system-ui,sans-serif" font-size="13" font-weight="700">ES - Espana</text>
+  <rect x="64" y="168" width="200" height="10" rx="2" fill="#93c5fd"/>
+  <rect x="64" y="188" width="160" height="10" rx="2" fill="#bfdbfe"/>
+  <rect x="440" y="120" width="360" height="160" rx="12" fill="#f0f9ff" stroke="#7dd3fc"/>
+  <text x="456" y="152" fill="#0369a1" font-family="system-ui,sans-serif" font-size="13" font-weight="700">AR - Argentina</text>
+  <rect x="456" y="168" width="200" height="10" rx="2" fill="#7dd3fc"/>
+  <rect x="456" y="188" width="180" height="10" rx="2" fill="#bae6fd"/>
+  <rect x="48" y="300" width="784" height="120" rx="10" fill="#f1f5f9" stroke="#e2e8f0"/>
+  <text x="64" y="332" fill="#475569" font-family="system-ui,sans-serif" font-size="12">La moneda en Configuracion general define IVA y campos fiscales.</text>
+</svg>

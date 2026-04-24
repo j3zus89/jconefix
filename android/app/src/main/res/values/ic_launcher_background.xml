@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Alineado con generate-android-assets.mjs (LAUNCHER_BG, disco negro del logo) -->
+    <color name="ic_launcher_background">#000000</color>
+</resources>

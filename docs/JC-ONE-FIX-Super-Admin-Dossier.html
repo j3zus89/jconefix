@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JC ONE FIX — Panel SUPER_ADMIN (dossier)</title>
+  <style>
+    @page { margin: 18mm 16mm 22mm 16mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      color: #1e293b;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 12px 8px 48px;
+    }
+    h1 { font-size: 20pt; color: #0f172a; margin: 0 0 0.25em; text-align: center; }
+    h2 { font-size: 12.5pt; color: #0d9488; border-bottom: 2px solid #99f6e4; padding-bottom: 4px; margin-top: 1.35em; page-break-after: avoid; }
+    h3 { font-size: 10.8pt; color: #134e4a; margin-top: 0.95em; page-break-after: avoid; }
+    p { margin: 0.45em 0; }
+    .cover { text-align: center; margin-bottom: 1.75em; padding-bottom: 1.25em; border-bottom: 1px solid #e2e8f0; }
+    .meta { font-size: 9pt; color: #64748b; margin-top: 0.75em; }
+    table { width: 100%; border-collapse: collapse; font-size: 9.3pt; margin: 0.65em 0; }
+    th, td { border: 1px solid #cbd5e1; padding: 5px 7px; text-align: left; vertical-align: top; }
+    th { background: #f0fdfa; color: #115e59; font-weight: 600; }
+    ul { margin: 0.35em 0; padding-left: 1.15em; }
+    li { margin: 0.2em 0; }
+    code { font-size: 8.8pt; background: #f1f5f9; padding: 1px 4px; border-radius: 3px; }
+    .note { font-size: 9pt; background: #fef3c7; border-left: 4px solid #d97706; padding: 8px 11px; margin: 0.85em 0; }
+    .warn { font-size: 9pt; background: #fef2f2; border-left: 4px solid #dc2626; padding: 8px 11px; margin: 0.85em 0; }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <h1>Panel SUPER_ADMIN — JC ONE FIX</h1>
+    <p><strong>Dossier funcional: alcance, pantallas y capacidades</strong></p>
+    <p class="meta">Abril 2026 · Documentación derivada del código (<code>/admin</code>, APIs <code>/api/admin/*</code>)</p>
+  </div>
+
+  <h2>1. Qué es este panel</h2>
+  <p>El <strong>panel SUPER_ADMIN</strong> es la consola interna de operación de JC ONE FIX. Solo puede acceder un usuario cuya cuenta esté en la <strong>lista de super administradores</strong> (verificación vía Supabase Auth + allowlist en código). No es el panel del taller: es la herramienta para <strong>gestionar tenants (organizaciones)</strong>, <strong>usuarios globales</strong>, <strong>soporte a clientes</strong>, <strong>licencias</strong>, <strong>auditoría</strong> y <strong>métricas agregadas</strong>.</p>
+  <p><strong>URL de entrada:</strong> <code>/admin/login</code> (sesión independiente del flujo normal; el layout comprueba <code>isSuperAdmin()</code> en cada carga y redirige si no hay permiso).</p>
+  <div class="note"><strong>Sesión:</strong> el layout renueva el token de Supabase como mucho cada ~4 minutos y al volver a la pestaña, para evitar 429 por refrescos excesivos y cortes de sesión.</div>
+
+  <h2>2. Navegación principal (escritorio)</h2>
+  <p>Barra lateral fija con enlaces:</p>
+  <table>
+    <thead><tr><th>Sección</th><th>Ruta</th><th>Función</th></tr></thead>
+    <tbody>
+      <tr><td>Inicio</td><td><code>/admin</code></td><td>Command Center: KPIs, alertas, soporte y leads en resumen; botón nueva organización</td></tr>
+      <tr><td>Soporte</td><td><code>/admin/support</code></td><td>Buzón de hilos con clientes (contacto desde su panel); badge con conversaciones sin responder</td></tr>
+      <tr><td>Wiki del Bot</td><td><code>/admin/wiki</code></td><td>Artículos de conocimiento para el asistente/bot de soporte (CRUD por categoría)</td></tr>
+      <tr><td>Leads</td><td><code>/admin/leads</code></td><td>Solicitudes comerciales del formulario web (“Solicitar alta”)</td></tr>
+      <tr><td>Organizaciones</td><td><code>/admin/organizations</code></td><td>Listado maestro de tenants; filtros; presencia “panel en línea”; acciones rápidas</td></tr>
+      <tr><td>Usuarios</td><td><code>/admin/users</code></td><td>Búsqueda global de usuarios Auth; reset password, ban, borrado, diagnóstico FK</td></tr>
+      <tr><td>Auditoría</td><td><code>/admin/audit</code></td><td>Registro de acciones del SUPER_ADMIN (quién, qué, org/usuario objetivo, IP, fecha)</td></tr>
+      <tr><td>Analytics</td><td><code>/admin/analytics</code></td><td>Snapshot: orgs por plan y estado, tickets 7d/30d, trials que expiran en 14 días</td></tr>
+      <tr><td>Seguridad</td><td><code>/admin/security</code></td><td>Cambio de contraseña del propio super admin; MFA TOTP (Google Authenticator)</td></tr>
+    </tbody>
+  </table>
+  <p>Enlace externo en sidebar: <strong>Ver web pública</strong>. Cierre de sesión devuelve al login del producto (<code>/login</code>).</p>
+  <p><strong>Topbar:</strong> migas de ruta; aviso rojo si hay hilos de soporte pendientes; etiqueta <code>SUPER_ADMIN</code>.</p>
+
+  <h2>3. Modo móvil (<code>/admin/app/*</code>)</h2>
+  <p>Versión compacta con <strong>MobileAdminShell</strong>: acceso a inicio, organizaciones, usuarios, leads y soporte desde el móvil; mismos proveedores de contexto (chat de soporte flotante). Útil para responder clientes o consultar KPIs fuera del escritorio.</p>
+
+  <h2>4. Inicio — Command Center</h2>
+  <ul>
+    <li><strong>KPIs globales</strong> (API <code>/api/admin/kpis</code>): total de organizaciones, activas, en prueba, suspendidas; usuarios totales; tickets totales; tickets últimos 7 días; trials que expiran en 7 días; marca de tiempo de actualización.</li>
+    <li><strong>Banner de urgencias:</strong> mensajes de soporte sin responder + organizaciones suspendidas o en trial con &lt;5 días.</li>
+    <li><strong>Tarjetas enlazadas</strong> a Organizaciones (filtros active/trial) y Usuarios.</li>
+    <li><strong>Vista previa Soporte:</strong> últimos hilos o los que esperan respuesta.</li>
+    <li><strong>Vista previa Leads:</strong> últimas solicitudes comerciales.</li>
+    <li><strong>Tabla “requieren atención”:</strong> orgs suspendidas o trial crítico.</li>
+    <li><strong>Modal “Nueva organización”:</strong> alta de tenant (nombre, owner, plan inicial, etc.) vía API de creación.</li>
+    <li><strong>Lista reciente de organizaciones</strong> con acceso al detalle.</li>
+  </ul>
+
+  <h2>5. Organizaciones</h2>
+  <h3>5.1 Listado</h3>
+  <ul>
+    <li>Tabla con: nombre, slug, estado efectivo (activo, prueba, suspendido, cancelado, expirado, licencia vencida…), plan, ciclo de facturación, trial/licencia, límites <code>max_users</code> / <code>max_tickets</code>, owner, métricas (usuarios activos, tickets, clientes, inventario, pendientes).</li>
+    <li><strong>Presencia en panel:</strong> indicador “Panel en línea” si hay heartbeat reciente del dashboard del tenant (~3 min); si no, “fuera” con última actividad.</li>
+    <li>Búsqueda y filtros por query string (p. ej. <code>?filter=active</code>).</li>
+    <li>Acciones: ir al detalle, ampliar prueba rápida en filas elegibles, eliminar organización (con confirmación).</li>
+    <li>Botón <strong>Nueva organización</strong> (mismo modal que en inicio).</li>
+  </ul>
+  <h3>5.2 Detalle por organización (<code>/admin/organizations/[id]</code>)</h3>
+  <p>Pestañas:</p>
+  <ul>
+    <li><strong>Overview:</strong> editar <strong>nombre visible</strong> en el panel del cliente; tarjetas de usuarios activos, tickets (total/pendientes), clientes, inventario; última fecha de ticket y tickets completados.</li>
+    <li><strong>Licencia:</strong> plan comercial (p. ej. JC ONE FIX ilimitado vs plan histórico con límites); ciclo mensual/anual; estado suscripción (activo / prueba / suspendido); límites de usuarios y tickets; renovación desde hoy; aplicar preset del plan; <strong>licencia interna ilimitada</strong> (sin cortes por <code>trial_ends_at</code> ni <code>license_expires_at</code>, salvo suspendido/cancelado) para cuentas fundadoras; notas y banner internos (<code>super_admin_notes</code>, <code>super_admin_banner</code> en settings).</li>
+    <li><strong>Prueba gratuita:</strong> ampliar por días o fijar fecha/hora fin; opción de sincronizar con caducidad de licencia.</li>
+    <li><strong>Members:</strong> listado unificado de miembros/técnicos vinculados a la org (usuario, rol, email, estado).</li>
+    <li><strong>Auditoría:</strong> últimas acciones de super admin referidas a esa org.</li>
+    <li><strong>Soporte:</strong> generar <strong>enlace de acción para el owner</strong> (magic link) y copiarlo al portapapeles — útil para recuperación de acceso.</li>
+  </ul>
+
+  <h2>6. Usuarios (Auth global)</h2>
+  <ul>
+    <li>Búsqueda por email, teléfono o UUID (<code>/api/admin/users/search</code>); refresco automático periódico.</li>
+    <li>Indicador de <strong>usuario en panel ahora</strong> según último heartbeat.</li>
+    <li><strong>Reset de contraseña</strong> administrativo (<code>/api/admin/users/reset-password</code>).</li>
+    <li><strong>Ban / desban</strong> (<code>/api/admin/users/toggle-ban</code>).</li>
+    <li><strong>Eliminar usuario</strong> (<code>/api/admin/users/delete</code>) con precaución.</li>
+    <li><strong>Diagnóstico FK</strong> (<code>/api/admin/users/diagnose-fk</code>) para incoherencias con datos del tenant.</li>
+    <li>Selección múltiple y acciones en lote donde la UI lo permita.</li>
+  </ul>
+
+  <h2>7. Soporte técnico (clientes)</h2>
+  <ul>
+    <li>Los talleres inician conversación desde <strong>Contacto apoyo</strong> en su panel.</li>
+    <li><strong>SupportChatInbox</strong> en <code>/admin/support</code>: hilos, respuestas, estado “esperando respuesta”, adjuntos (<code>/api/admin/support-chat/attachment</code>).</li>
+    <li><strong>AdminSupportChatDock:</strong> burbuja flotante global en el layout admin para contestar sin perder contexto.</li>
+    <li>Los badges del menú y topbar se actualizan al navegar, cada 30 s y tras eventos internos de refresco.</li>
+  </ul>
+
+  <h2>8. Wiki del Bot</h2>
+  <p>Gestión de artículos (título, contenido, categoría) para alimentar respuestas automáticas o asistente de soporte. Categorías incluidas: General, Tickets, Facturación, Inventario, POS, Configuración, Técnico, Pagos. API: <code>/api/admin/support-bot/wiki</code>.</p>
+
+  <h2>9. Leads comerciales</h2>
+  <p>Listado de solicitudes capturadas desde la home (formulario de alta). Campos típicos: contacto, taller, interés de plan y facturación, notas, fecha. Flujo recomendado en UI: tras cobro externo, crear la org en Command Center con el mismo plan y periodo; licencia +30 o +365 días desde activación. API: <code>/api/admin/commercial-signup-requests</code>.</p>
+
+  <h2>10. Plan y licencias (página informativa)</h2>
+  <p><code>/admin/plans</code> resume el <strong>único plan de venta</strong> público (precio mensual/anual, características) y remite a <strong>Organizaciones</strong> para overrides por tenant (<code>plan_type</code>, <code>billing_cycle</code>, <code>license_expires_at</code>, <code>features</code> en base de datos).</p>
+
+  <h2>11. Auditoría</h2>
+  <p>Listado paginado de eventos: acción, admin_user_id, organización y usuario objetivo, detalles JSON, IP, timestamp. Búsqueda en cliente sobre acción, IPs e IDs. API: <code>/api/admin/audit/list</code>. Complemento: RPC <code>log_super_admin_action</code> desde utilidades de auth.</p>
+
+  <h2>12. Analytics</h2>
+  <p>Snapshot agregado (<code>/api/admin/analytics/snapshot</code>): conteos por estado de suscripción, por plan, trials que expiran en 14 días, volumen de tickets 7 y 30 días, total de organizaciones.</p>
+
+  <h2>13. Seguridad del super admin</h2>
+  <ul>
+    <li><strong>Cambio de contraseña:</strong> verificación con contraseña actual vía <code>signInWithPassword</code> y actualización con Supabase Auth.</li>
+    <li><strong>MFA TOTP (Google Authenticator):</strong> alta con QR y secreto, verificación de código, baja del factor; recomendado para proteger el panel.</li>
+  </ul>
+
+  <h2>14. APIs administrativas (referencia)</h2>
+  <p>Endpoints bajo <code>/api/admin/</code> (todos protegidos para super admin): KPIs, listado y actualización de organizaciones, creación y borrado de org, miembros por org, soporte chat, adjuntos, wiki bot, usuarios (búsqueda, reset pass, ban, delete, diagnose, generate-link), auditoría, analytics snapshot, solicitudes comerciales, health y utilidades de depuración (<code>debug-organizations</code>) según despliegue.</p>
+
+  <h2>15. Capacidades resumidas (checklist)</h2>
+  <table>
+    <thead><tr><th>Capacidad</th><th>Disponible</th></tr></thead>
+    <tbody>
+      <tr><td>Crear / borrar organizaciones</td><td>Sí</td></tr>
+      <tr><td>Ajustar licencia, trial, plan, límites, notas internas</td><td>Sí</td></tr>
+      <tr><td>Licencia interna ilimitada (fundadores)</td><td>Sí</td></tr>
+      <tr><td>Ver uso por org (tickets, clientes, stock, usuarios)</td><td>Sí</td></tr>
+      <tr><td>Ver si el tenant tiene sesión activa en el panel</td><td>Sí (heartbeat)</td></tr>
+      <tr><td>Gestionar usuarios globales (pass, ban, delete)</td><td>Sí</td></tr>
+      <tr><td>Generar magic link para owner</td><td>Sí</td></tr>
+      <tr><td>Soporte en tiempo real con clientes</td><td>Sí</td></tr>
+      <tr><td>Wiki editable para bot / conocimiento</td><td>Sí</td></tr>
+      <tr><td>CRM interno de leads web</td><td>Sí</td></tr>
+      <tr><td>Métricas globales y auditoría</td><td>Sí</td></tr>
+      <tr><td>MFA y contraseña del propio super admin</td><td>Sí</td></tr>
+      <tr><td>Acceso móvil dedicado</td><td>Sí (<code>/admin/app</code>)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn"><strong>Importante:</strong> Este panel concentra poder total sobre tenants y cuentas. El acceso debe limitarse a personal de confianza; conviene tener <strong>MFA activado</strong> y revisar la <strong>auditoría</strong> con regularidad.</div>
+
+  <p class="meta" style="text-align:center;margin-top:2em">Fin del dossier SUPER_ADMIN</p>
+</body>
+</html>

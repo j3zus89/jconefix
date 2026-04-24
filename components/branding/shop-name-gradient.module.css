@@ -1,0 +1,51 @@
+/* Nombre del taller en la barra superior — degradé animado (variante demo #15) */
+.wrap {
+  min-width: 0;
+}
+
+.label {
+  display: inline-block;
+  max-width: 100%;
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes shopNameGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.gradient {
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #F5C518,
+    #D4A915,
+    #ffffff,
+    #F5C518
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  animation: shopNameGradientShift 5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient {
+    animation: none !important;
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    color: #fff !important;
+  }
+}

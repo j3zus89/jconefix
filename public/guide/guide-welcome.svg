@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" fill="none" role="img" aria-labelledby="t1">
+  <title id="t1">Ejemplo visual - bienvenida al panel JC ONE FIX</title>
+  <rect width="880" height="480" rx="16" fill="#f1f5f9"/>
+  <rect x="24" y="24" width="832" height="52" rx="10" fill="#124c48"/>
+  <rect x="44" y="40" width="160" height="18" rx="4" fill="#fff" opacity="0.2"/>
+  <rect x="220" y="38" width="280" height="22" rx="6" fill="#fff" opacity="0.12"/>
+  <rect x="620" y="36" width="200" height="28" rx="14" fill="#fff" opacity="0.15"/>
+  <rect x="24" y="92" width="832" height="364" rx="12" fill="#fff" stroke="#e2e8f0"/>
+  <text x="56" y="140" fill="#0f766e" font-family="system-ui,sans-serif" font-size="22" font-weight="700">JC ONE FIX</text>
+  <text x="56" y="172" fill="#64748b" font-family="system-ui,sans-serif" font-size="14">Panel de gestion - accede desde cualquier dispositivo</text>
+  <rect x="56" y="200" width="240" height="72" rx="10" fill="#ecfdf5" stroke="#99f6e4"/>
+  <rect x="320" y="200" width="240" height="72" rx="10" fill="#eff6ff" stroke="#bfdbfe"/>
+  <rect x="584" y="200" width="240" height="72" rx="10" fill="#fef3c7" stroke="#fde68a"/>
+  <rect x="56" y="300" width="768" height="120" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <rect x="72" y="318" width="120" height="10" rx="2" fill="#cbd5e1"/>
+  <rect x="72" y="338" width="500" height="8" rx="2" fill="#e2e8f0"/>
+  <rect x="72" y="356" width="420" height="8" rx="2" fill="#e2e8f0"/>
+</svg>

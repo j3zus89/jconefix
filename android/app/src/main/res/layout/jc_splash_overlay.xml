@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Splash a pantalla completa (Capacitor legacy / WindowManager).
+  El splash del sistema API 31+ solo permite un icono pequeño en el centro — por eso
+  el logo se veía minúsculo dentro de un recuadro claro.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cap_splash_background">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/splash" />
+
+</FrameLayout>

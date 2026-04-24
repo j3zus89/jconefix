@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Política de seguridad de red para JC ONE FIX.
+  - Permite tráfico HTTPS a todos los dominios (incluye Vercel, Supabase, PayPal, Google).
+  - usesCleartextTraffic en el Manifest cubre los casos edge de recursos HTTP externos.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">jconefix.vercel.app</domain>
+        <domain includeSubdomains="true">jconefix.com.ar</domain>
+        <domain includeSubdomains="true">supabase.co</domain>
+        <domain includeSubdomains="true">supabase.in</domain>
+        <domain includeSubdomains="true">vercel.app</domain>
+        <domain includeSubdomains="true">vercel.com</domain>
+        <domain includeSubdomains="true">paypal.com</domain>
+        <domain includeSubdomains="true">google.com</domain>
+        <domain includeSubdomains="true">googleapis.com</domain>
+        <domain includeSubdomains="true">gstatic.com</domain>
+    </domain-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

@@ -1,0 +1,8 @@
+# Si el repo Git es solo esta carpeta (sin padre con otro package.json), este archivo basta.
+# Si el repo está un nivel arriba: Netlify → Base directory = `project`, o `netlify.toml` en la raíz del repo con `base = "project"`.
+[build]
+command = "npx next build"
+publish = ".next"
+
+[[plugins]]
+package = "@netlify/plugin-nextjs"

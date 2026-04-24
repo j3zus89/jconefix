@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" fill="none" role="img" aria-labelledby="t1">
+  <title id="t1">Ejemplo visual - asistente IA (Gemini)</title>
+  <rect width="880" height="480" rx="16" fill="#f8fafc"/>
+  <rect x="24" y="24" width="832" height="48" rx="10" fill="#124c48"/>
+  <rect x="24" y="84" width="832" height="372" rx="12" fill="#fff" stroke="#e2e8f0"/>
+  <path d="M48 140 L68 120 L88 140 L68 160 Z" fill="#a855f7" opacity="0.9"/>
+  <text x="100" y="148" fill="#334155" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Sugerencias con IA</text>
+  <rect x="48" y="168" width="520" height="72" rx="12" fill="#faf5ff" stroke="#e9d5ff"/>
+  <text x="64" y="198" fill="#6b21a8" font-family="system-ui,sans-serif" font-size="12">Redactar mensaje al cliente</text>
+  <rect x="48" y="260" width="784" height="160" rx="10" fill="#f1f5f9" stroke="#e2e8f0"/>
+  <circle cx="80" cy="300" r="6" fill="#0d9488"/>
+  <rect x="96" y="290" width="400" height="10" rx="2" fill="#cbd5e1"/>
+  <rect x="96" y="308" width="340" height="8" rx="2" fill="#e2e8f0"/>
+</svg>

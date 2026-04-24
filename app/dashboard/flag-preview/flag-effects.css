@@ -1,0 +1,221 @@
+/* Laboratorio: 10 variantes de ondeo (solo esta página + referencia para copiar al panel). */
+
+.flag-preview-fx-base {
+  display: inline-block;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flag-preview-fx-1,
+  .flag-preview-fx-2,
+  .flag-preview-fx-3,
+  .flag-preview-fx-4,
+  .flag-preview-fx-5,
+  .flag-preview-fx-6,
+  .flag-preview-fx-7,
+  .flag-preview-fx-8,
+  .flag-preview-fx-9,
+  .flag-preview-fx-10 {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+/* 1 — Ondea 3D (como el panel actual) */
+@keyframes flag-fx-1 {
+  0% {
+    transform: perspective(64px) rotateY(-22deg) rotateZ(-2deg) skewY(1deg);
+  }
+  12.5% {
+    transform: perspective(64px) rotateY(8deg) rotateZ(1.5deg) skewY(-0.5deg);
+  }
+  25% {
+    transform: perspective(64px) rotateY(20deg) rotateZ(2deg) skewY(-1deg);
+  }
+  37.5% {
+    transform: perspective(64px) rotateY(-6deg) rotateZ(-1deg) skewY(0.5deg);
+  }
+  50% {
+    transform: perspective(64px) rotateY(-18deg) rotateZ(1deg) skewY(1deg);
+  }
+  62.5% {
+    transform: perspective(64px) rotateY(14deg) rotateZ(-1.5deg) skewY(-0.5deg);
+  }
+  75% {
+    transform: perspective(64px) rotateY(22deg) rotateZ(2.5deg) skewY(-1deg);
+  }
+  87.5% {
+    transform: perspective(64px) rotateY(-10deg) rotateZ(-0.5deg) skewY(0.5deg);
+  }
+  100% {
+    transform: perspective(64px) rotateY(-22deg) rotateZ(-2deg) skewY(1deg);
+  }
+}
+.flag-preview-fx-1.flag-preview-fx-base {
+  transform-origin: 0% 50%;
+  animation: flag-fx-1 1.05s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+/* 2 — Vaivén suave (péndulo en Z) */
+@keyframes flag-fx-2 {
+  0%,
+  100% {
+    transform: rotate(-14deg);
+  }
+  50% {
+    transform: rotate(14deg);
+  }
+}
+.flag-preview-fx-2.flag-preview-fx-base {
+  transform-origin: 0% 100%;
+  animation: flag-fx-2 1.8s ease-in-out infinite;
+}
+
+/* 3 — Aleteo rápido */
+@keyframes flag-fx-3 {
+  0%,
+  100% {
+    transform: perspective(48px) rotateY(-16deg);
+  }
+  50% {
+    transform: perspective(48px) rotateY(16deg);
+  }
+}
+.flag-preview-fx-3.flag-preview-fx-base {
+  transform-origin: 0% 50%;
+  animation: flag-fx-3 0.42s ease-in-out infinite;
+}
+
+/* 4 — Tela al viento (skew fuerte) */
+@keyframes flag-fx-4 {
+  0%,
+  100% {
+    transform: skewX(-12deg) rotate(-6deg);
+  }
+  33% {
+    transform: skewX(10deg) rotate(4deg);
+  }
+  66% {
+    transform: skewX(-6deg) rotate(8deg);
+  }
+}
+.flag-preview-fx-4.flag-preview-fx-base {
+  transform-origin: 0% 50%;
+  animation: flag-fx-4 0.95s ease-in-out infinite;
+}
+
+/* 5 — Oleaje (sube y baja + ligera torsión) */
+@keyframes flag-fx-5 {
+  0%,
+  100% {
+    transform: translateY(0) rotateZ(-5deg);
+  }
+  25% {
+    transform: translateY(-3px) rotateZ(4deg);
+  }
+  50% {
+    transform: translateY(0) rotateZ(6deg);
+  }
+  75% {
+    transform: translateY(2px) rotateZ(-3deg);
+  }
+}
+.flag-preview-fx-5.flag-preview-fx-base {
+  transform-origin: 50% 100%;
+  animation: flag-fx-5 1.2s ease-in-out infinite;
+}
+
+/* 6 — Balanceo amplio */
+@keyframes flag-fx-6 {
+  0%,
+  100% {
+    transform: rotate(-18deg);
+  }
+  50% {
+    transform: rotate(22deg);
+  }
+}
+.flag-preview-fx-6.flag-preview-fx-base {
+  transform-origin: 0% 50%;
+  animation: flag-fx-6 1.4s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+/* 7 — Respiración (ancho) */
+@keyframes flag-fx-7 {
+  0%,
+  100% {
+    transform: scaleX(1) scaleY(1);
+  }
+  50% {
+    transform: scaleX(1.12) scaleY(0.96);
+  }
+}
+.flag-preview-fx-7.flag-preview-fx-base {
+  transform-origin: 0% 50%;
+  animation: flag-fx-7 1.1s ease-in-out infinite;
+}
+
+/* 8 — Ráfaga horizontal */
+@keyframes flag-fx-8 {
+  0%,
+  100% {
+    transform: translateX(0) rotateZ(0deg);
+  }
+  20% {
+    transform: translateX(4px) rotateZ(-8deg);
+  }
+  40% {
+    transform: translateX(-3px) rotateZ(6deg);
+  }
+  60% {
+    transform: translateX(5px) rotateZ(-5deg);
+  }
+  80% {
+    transform: translateX(-2px) rotateZ(4deg);
+  }
+}
+.flag-preview-fx-8.flag-preview-fx-base {
+  transform-origin: 0% 50%;
+  animation: flag-fx-8 0.85s ease-in-out infinite;
+}
+
+/* 9 — Twist serpenteante */
+@keyframes flag-fx-9 {
+  0% {
+    transform: perspective(56px) rotateY(-12deg) skewX(4deg);
+  }
+  25% {
+    transform: perspective(56px) rotateY(18deg) skewX(-6deg);
+  }
+  50% {
+    transform: perspective(56px) rotateY(-20deg) skewX(5deg);
+  }
+  75% {
+    transform: perspective(56px) rotateY(14deg) skewX(-4deg);
+  }
+  100% {
+    transform: perspective(56px) rotateY(-12deg) skewX(4deg);
+  }
+}
+.flag-preview-fx-9.flag-preview-fx-base {
+  transform-origin: 0% 50%;
+  animation: flag-fx-9 0.65s linear infinite;
+}
+
+/* 10 — Onda lenta y amplia */
+@keyframes flag-fx-10 {
+  0%,
+  100% {
+    transform: perspective(80px) rotateY(-32deg) rotateZ(-1deg);
+  }
+  50% {
+    transform: perspective(80px) rotateY(28deg) rotateZ(2deg);
+  }
+}
+.flag-preview-fx-10.flag-preview-fx-base {
+  transform-origin: 0% 50%;
+  animation: flag-fx-10 2.6s ease-in-out infinite;
+}

@@ -1,0 +1,437 @@
+/* 20 demos de marca — sin giro 3D horizontal. Respeta prefers-reduced-motion. */
+/* Clase local: los selectores en @media deben incluir una clase del módulo (no solo :global). */
+.motionSandbox {
+}
+
+.typography {
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.lettersRow {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0.04em;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.letter {
+  display: inline-block;
+}
+
+/* ─── 1. Pulso de escala ─── */
+@keyframes d1 {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+.demo1 {
+  color: #fff;
+  animation: d1 2.2s ease-in-out infinite;
+}
+
+/* ─── 2. Halo / sombra pulsante ─── */
+@keyframes d2 {
+  0%,
+  100% {
+    text-shadow:
+      0 0 0 transparent,
+      0 0 0 transparent;
+  }
+  50% {
+    text-shadow:
+      0 0 12px rgba(163, 230, 53, 0.9),
+      0 0 24px rgba(45, 212, 191, 0.45);
+  }
+}
+.demo2 {
+  color: #fff;
+  animation: d2 2.5s ease-in-out infinite;
+}
+
+/* ─── 3. Brillo que cruza (shimmer) ─── */
+@keyframes d3 {
+  0% {
+    background-position: 120% center;
+  }
+  100% {
+    background-position: -20% center;
+  }
+}
+.demo3 {
+  background: linear-gradient(
+    105deg,
+    #ffffff 0%,
+    #ffffff 35%,
+    #d9f99d 50%,
+    #ffffff 65%,
+    #ffffff 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: d3 2.8s linear infinite;
+}
+
+/* ─── 4. Ritmo de interletraje ─── */
+@keyframes d4 {
+  0%,
+  100% {
+    letter-spacing: 0.05em;
+  }
+  50% {
+    letter-spacing: 0.2em;
+  }
+}
+.demo4 {
+  color: #fff;
+  animation: d4 3s ease-in-out infinite;
+}
+
+/* ─── 5. Flotación suave ─── */
+@keyframes d5 {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+.demo5 {
+  color: #fff;
+  animation: d5 2.4s ease-in-out infinite;
+}
+
+/* ─── 6. Vaivén lateral ─── */
+@keyframes d6 {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+.demo6 {
+  color: #fff;
+  animation: d6 2s ease-in-out infinite;
+}
+
+/* ─── 7. Inclinación (plano, 2D) ─── */
+@keyframes d7 {
+  0%,
+  100% {
+    transform: rotate(-2.5deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+.demo7 {
+  color: #fff;
+  display: inline-block;
+  animation: d7 2.8s ease-in-out infinite;
+}
+
+/* ─── 8. Respiración (opacidad) ─── */
+@keyframes d8 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+.demo8 {
+  color: #fff;
+  animation: d8 2.6s ease-in-out infinite;
+}
+
+/* ─── 9. Línea inferior que crece ─── */
+.underlineTrack {
+  color: #fff;
+  position: relative;
+  display: inline-block;
+}
+.underlineTrack::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 2px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: d9 2.4s ease-in-out infinite;
+}
+@keyframes d9 {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  40% {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: right center;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right center;
+  }
+}
+
+/* ─── 10. Tembleque leve (skew) ─── */
+@keyframes d10 {
+  0%,
+  100% {
+    transform: skewX(0deg);
+  }
+  25% {
+    transform: skewX(-3deg);
+  }
+  75% {
+    transform: skewX(3deg);
+  }
+}
+.demo10 {
+  color: #fff;
+  display: inline-block;
+  animation: d10 2.2s ease-in-out infinite;
+}
+
+/* ─── 11. Rebote corto ─── */
+@keyframes d11 {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-6px);
+  }
+  40% {
+    transform: translateY(0);
+  }
+  55% {
+    transform: translateY(-3px);
+  }
+  70% {
+    transform: translateY(0);
+  }
+}
+.demo11 {
+  color: #fff;
+  display: inline-block;
+  animation: d11 2s ease-in-out infinite;
+}
+
+/* ─── 12. Matiz suave (tono) ─── */
+@keyframes d12 {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(25deg);
+  }
+}
+.demo12 {
+  color: #ecfccb;
+  animation: d12 4s ease-in-out infinite;
+}
+
+/* ─── 13. Contraste vivo ─── */
+@keyframes d13 {
+  0%,
+  100% {
+    filter: contrast(1) brightness(1);
+  }
+  50% {
+    filter: contrast(1.15) brightness(1.12);
+  }
+}
+.demo13 {
+  color: #fff;
+  animation: d13 2s ease-in-out infinite;
+}
+
+/* ─── 14. Pop elástico ─── */
+@keyframes d14 {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.12);
+  }
+  50% {
+    transform: scale(0.96);
+  }
+  70% {
+    transform: scale(1.04);
+  }
+}
+.demo14 {
+  color: #fff;
+  display: inline-block;
+  animation: d14 2.5s ease-in-out infinite;
+}
+
+/* ─── 15. Degradé animado (marca) ─── */
+@keyframes d15 {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+.demo15 {
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #F5C518,
+    #D4A915,
+    #ffffff,
+    #F5C518
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: d15 5s linear infinite;
+}
+
+/* ─── 16. Glitch sutil ─── */
+@keyframes d16 {
+  0%,
+  100% {
+    text-shadow:
+      0 0 0 transparent,
+      0 0 0 transparent;
+    transform: translate(0, 0);
+  }
+  92% {
+    text-shadow:
+      0 0 0 transparent,
+      0 0 0 transparent;
+    transform: translate(0, 0);
+  }
+  93% {
+    text-shadow:
+      -1px 0 #F5C518,
+      1px 0 #D4A915;
+    transform: translate(-1px, 0);
+  }
+  94% {
+    text-shadow:
+      1px 0 #F5C518,
+      -1px 0 #D4A915;
+    transform: translate(1px, 0);
+  }
+  95% {
+    text-shadow: none;
+    transform: translate(0, 0);
+  }
+}
+.demo16 {
+  color: #fff;
+  animation: d16 3.5s steps(1, end) infinite;
+}
+
+/* ─── 17. Onda por letra (usa .lettersRow + .letter.wave) ─── */
+@keyframes d17 {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+.wave {
+  animation: d17 1.1s ease-in-out infinite;
+}
+
+/* ─── 18. Gelatina ─── */
+@keyframes d18 {
+  0%,
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    transform: scale3d(1.08, 0.92, 1);
+  }
+  50% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+  65% {
+    transform: scale3d(1.02, 0.98, 1);
+  }
+}
+.demo18 {
+  color: #fff;
+  display: inline-block;
+  transform-origin: center center;
+  animation: d18 2.8s ease-in-out infinite;
+}
+
+/* ─── 19. Destello de brillo ─── */
+@keyframes d19 {
+  0%,
+  90%,
+  100% {
+    filter: brightness(1);
+  }
+  93% {
+    filter: brightness(1.45);
+  }
+  96% {
+    filter: brightness(1);
+  }
+}
+.demo19 {
+  color: #fff;
+  animation: d19 3s ease-in-out infinite;
+}
+
+/* ─── 20. Estirón horizontal ─── */
+@keyframes d20 {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(1.08);
+  }
+}
+.demo20 {
+  color: #fff;
+  display: inline-block;
+  transform-origin: center center;
+  animation: d20 2.3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motionSandbox *,
+  .motionSandbox *::after {
+    animation: none !important;
+  }
+}

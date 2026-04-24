@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" fill="none" role="img" aria-labelledby="t1">
+  <title id="t1">Ejemplo visual - soporte JC ONE FIX</title>
+  <rect width="880" height="480" rx="16" fill="#f0fdf4"/>
+  <rect x="24" y="24" width="832" height="48" rx="10" fill="#124c48"/>
+  <rect x="24" y="84" width="832" height="372" rx="12" fill="#fff" stroke="#e2e8f0"/>
+  <rect x="48" y="112" width="48" height="48" rx="24" fill="#3b82f6"/>
+  <path d="M62 128 Q70 120 78 128 Q70 136 62 128" fill="#fff" opacity="0.9"/>
+  <rect x="108" y="118" width="200" height="14" rx="3" fill="#334155"/>
+  <rect x="108" y="138" width="280" height="10" rx="2" fill="#94a3b8"/>
+  <rect x="48" y="180" width="520" height="64" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+  <rect x="48" y="260" width="440" height="52" rx="12" fill="#ecfdf5" stroke="#99f6e4"/>
+  <text x="48" y="360" fill="#64748b" font-family="system-ui,sans-serif" font-size="12">Chat: bot y equipo humano cuando lo necesites</text>
+</svg>

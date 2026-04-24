@@ -1,0 +1,28 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "jconefix.vercel.app" }],
+      "destination": "https://jconefix.com.ar/:path*",
+      "permanent": true
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/billing-reminders",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/ticket-delay-followup",
+      "schedule": "30 9 * * *"
+    },
+    {
+      "path": "/api/cron/arca-reconcile",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/support-chat-attachments-cleanup",
+      "schedule": "15 4 * * *"
+    }
+  ]
+}

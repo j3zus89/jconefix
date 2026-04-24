@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Verde oscuro alineado al header del panel (#004d40); evita flashes blancos al arrancar -->
+    <color name="jc_system_bar">#004D40</color>
+    <color name="cap_splash_background">#004D40</color>
+</resources>

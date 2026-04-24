@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JC ONE FIX — Dossier del producto</title>
+  <style>
+    @page { margin: 18mm 16mm 22mm 16mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      color: #1e293b;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 12px 8px 48px;
+    }
+    h1 { font-size: 22pt; color: #0f766e; margin: 0 0 0.25em; text-align: center; }
+    h2 { font-size: 13pt; color: #0f766e; border-bottom: 2px solid #99f6e4; padding-bottom: 4px; margin-top: 1.4em; page-break-after: avoid; }
+    h3 { font-size: 11pt; color: #134e4a; margin-top: 1em; page-break-after: avoid; }
+    p { margin: 0.5em 0; }
+    .cover { text-align: center; margin-bottom: 2em; padding: 1em 0 2em; border-bottom: 1px solid #e2e8f0; }
+    .cover .sub { font-size: 12pt; color: #475569; margin-top: 0.5em; }
+    .meta { font-size: 9pt; color: #64748b; margin-top: 1em; }
+    table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin: 0.75em 0; }
+    th, td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: #f0fdfa; color: #115e59; font-weight: 600; }
+    ul { margin: 0.4em 0; padding-left: 1.2em; }
+    li { margin: 0.25em 0; }
+    hr { border: none; border-top: 1px solid #e2e8f0; margin: 1.5em 0; }
+    strong { color: #0f172a; }
+    .note { font-size: 9pt; background: #fffbeb; border-left: 4px solid #f59e0b; padding: 8px 12px; margin: 1em 0; }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <h1>JC ONE FIX</h1>
+    <p class="sub"><strong>Sistema de gestión integral para talleres de reparación electrónica</strong></p>
+    <p class="meta">Documento descriptivo del producto · Abril 2026<br />Basado en la aplicación y la guía integrada del panel.</p>
+  </div>
+
+  <h2>1. Qué es JC ONE FIX</h2>
+  <p><strong>JC ONE FIX</strong> es un software en la nube pensado para <strong>talleres de reparación electrónica</strong> (móviles, tablets, consolas, microelectrónica, TV, audio, wearables, drones, etc.). Centraliza en un <strong>único panel web</strong> todo el flujo operativo: desde que entra un dispositivo hasta el cobro, la factura y el análisis del negocio.</p>
+  <p>No requiere instalación de servidor: el equipo accede con <strong>navegador</strong> (ordenador, tablet o móvil) mediante su cuenta. Los datos se alojan de forma segura en infraestructura cloud (por ejemplo <strong>Supabase</strong>), con copias de seguridad y cifrado según el proveedor.</p>
+  <p><strong>Propuesta de valor:</strong> ningún dispositivo se pierde en papeles sueltos; cada reparación es un <strong>ticket</strong> con historial, fotos, técnico asignado, repuestos, factura y comunicación con el cliente, todo trazable.</p>
+
+  <h2>2. Para quién está pensado</h2>
+  <ul>
+    <li>Talleres de reparación de smartphones, tablets, portátiles, consolas, placas, TV, audio, etc.</li>
+    <li>Recepción y técnicos que necesitan el mismo dato sin depender solo de WhatsApp o Excel.</li>
+    <li>Dueños o gerentes que quieren ingresos, gastos, margen y rendimiento por técnico.</li>
+    <li>Negocios en <strong>España</strong> y <strong>Argentina</strong>, con adaptación de moneda, IVA y campos fiscales.</li>
+  </ul>
+
+  <h2>3. Tecnología y acceso</h2>
+  <table>
+    <thead><tr><th>Aspecto</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td>Tipo</td><td>Aplicación web (SaaS), diseño responsive</td></tr>
+      <tr><td>Acceso</td><td>URL del panel + usuario (email) y contraseña</td></tr>
+      <tr><td>Instalación local</td><td>No obligatoria; opcional <strong>QZ Tray</strong> para impresión térmica y cajón portamonedas</td></tr>
+      <tr><td>Datos</td><td>Nube, cifrado y respaldos según proveedor</td></tr>
+      <tr><td>Asistente IA</td><td>Integración opcional con <strong>Google Gemini</strong> (API key por organización)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. España vs Argentina (región)</h2>
+  <p>El sistema adapta campos y lógica fiscal según la configuración de la organización (p. ej. moneda en ajustes generales).</p>
+  <table>
+    <thead><tr><th>Concepto</th><th>España</th><th>Argentina</th></tr></thead>
+    <tbody>
+      <tr><td>Moneda habitual</td><td>Euro (€)</td><td>Peso argentino (ARS)</td></tr>
+      <tr><td>Identificación fiscal cliente</td><td>NIF / CIF / DNI / NIE</td><td>CUIT / CUIL / DNI</td></tr>
+      <tr><td>Impuesto</td><td>IVA (p. ej. 21 % habitual)</td><td>Según condición AFIP/ARCA</td></tr>
+      <tr><td>RGPD / GDPR</td><td>Campos y consentimiento en clientes</td><td>No aplica el mismo esquema UE</td></tr>
+      <tr><td>Condición IVA cliente</td><td>Según caso</td><td>Monotributo, RI, exento, etc.</td></tr>
+      <tr><td>Teléfono</td><td>Prefijo +34</td><td>Prefijo +54</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><strong>Argentina:</strong> JC ONE FIX permite generar y gestionar el documento de factura en el panel, pero <strong>no sustituye la factura electrónica oficial</strong> ante ARCA/AFIP cuando la normativa lo exija. En ese caso debe emitirse por los medios oficiales y registrar el cobro en el sistema.</div>
+
+  <h2>5. Módulos y funcionalidades</h2>
+
+  <h3>5.1 Primeros pasos y dashboard</h3>
+  <ul>
+    <li>Guía de usuario integrada en el panel (<code>/dashboard/guide</code>).</li>
+    <li>Resumen: tickets abiertos, ingresos del periodo, clientes nuevos, urgentes, actividad reciente.</li>
+    <li>Configuración inicial: datos del taller, moneda, empleados, estados de ticket, métodos de pago, clientes y primer ticket.</li>
+  </ul>
+
+  <h3>5.2 Reparaciones y tickets</h3>
+  <p>Un <strong>ticket</strong> es el registro central: diagnóstico, repuestos, imágenes, cobro, comentarios y estado hasta la entrega.</p>
+  <p><strong>Elementos clave:</strong> número de boleto (ID único, etiqueta/QR); <strong>estado</strong> del flujo; <strong>prioridad</strong> (normal, alta, urgente — las urgentes en rojo en listas); <strong>tipo de tarea</strong> TIENDA, ONLINE, DOMICILIO, GARANTÍA, EMPRESA; <strong>técnico asignado</strong> con notificación en campana; <strong>borradores</strong> hasta publicar; PIN/patrón cifrado y visible solo a personal autorizado.</p>
+  <p><strong>Flujo de estados habitual (personalizable):</strong> Entrada → En estudio → Presupuesto → En proceso → Esperando piezas → Reparado → No reparado → Entregado. Cada estado puede tener nombre y color propios en Configuración.</p>
+  <p><strong>Ficha del ticket — pestañas:</strong></p>
+  <ul>
+    <li><strong>Hacer:</strong> tareas, diagnóstico, comentarios internos y al cliente.</li>
+    <li><strong>Repuestos:</strong> piezas vinculadas; descuento automático de inventario (reversión posible si se cancela la reparación).</li>
+    <li><strong>Imágenes:</strong> pre-reparación, post-reparación, microscopio (cámara USB).</li>
+    <li><strong>Condiciones / Accesorios:</strong> estado físico y lo que entrega el cliente.</li>
+    <li><strong>Factura:</strong> crear, ver y cobrar la reparación.</li>
+  </ul>
+  <p><strong>Acciones:</strong> cambiar estado (historial registrado), reasignar técnico, editar precio en línea, imprimir ficha, imprimir etiqueta con QR, compartir portal cliente.</p>
+  <p><strong>Cobro:</strong> desde pestaña Factura — nueva factura, líneas, cobro por efectivo/tarjeta/transferencia o combinado; cajón automático con QZ al cobrar en efectivo; marcar entregado tras pago.</p>
+
+  <h3>5.3 Clientes</h3>
+  <p>Búsqueda, grupos (individual, empresa, VIP, mayorista), historial e importes, exportación CSV/Excel, importación masiva, RGPD en España, leads / clientes potenciales.</p>
+
+  <h3>5.4 Inventario</h3>
+  <p>Repuestos y productos, stock mínimo y alertas, SKU y códigos de barras, ubicación en almacén, importación Excel, órdenes de compra a proveedores, transferencias entre ubicaciones.</p>
+
+  <h3>5.5 Punto de venta (POS)</h3>
+  <p>Venta con búsqueda o escáner, descuentos, IVA, efectivo/tarjeta/transferencia y pago combinado con cambio, historial exportable, ticket térmico con QZ Tray, cajón ESC/POS, caja registradora.</p>
+
+  <h3>5.6 Facturación</h3>
+  <p>Creación desde la ficha del ticket (pestaña Factura) o vista global de facturas. Líneas con descripción, cantidad y precio; numeración correlativa; IVA según región.</p>
+  <table>
+    <thead><tr><th>Estado</th><th>Significado</th></tr></thead>
+    <tbody>
+      <tr><td>Borrador</td><td>En preparación, no enviada ni cobrada</td></tr>
+      <tr><td>Emitida</td><td>Generada y enviada al cliente</td></tr>
+      <tr><td>Pagada</td><td>Pago registrado</td></tr>
+      <tr><td>Parcialmente pagada</td><td>Pagos a plazos</td></tr>
+      <tr><td>Cancelada</td><td>Anulada; no computa en ingresos</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Salidas:</strong> impresión navegador (A4/térmica), impresión directa QZ, email con PDF, WhatsApp con resumen.</p>
+  <p><strong>España:</strong> IVA 21 % por defecto; tipos reducido/superreducido desde Configuración; base + IVA + total; factura simplificada en POS cuando aplica.</p>
+  <p><strong>Argentina:</strong> según condición del taller (RI, monotributo, exento) y del cliente; CUIT del taller y condición IVA en ficha de cliente; moneda ARS.</p>
+
+  <h3>5.7 Gastos</h3>
+  <p>Flujo: Gastos → Nuevo gasto → categoría, importe, fecha, descripción, comprobante opcional. Define categorías en Gastos → Categorías.</p>
+  <p><strong>Ejemplos de categorías:</strong> Alquiler, Suministros, Herramientas, Publicidad, Personal, Transporte, Repuestos, Software, Seguros.</p>
+
+  <h3>5.8 Informes</h3>
+  <p>Resumen ingresos/gastos/beneficio por fechas y exportación Excel; informe por técnico; enlazable con comisiones.</p>
+
+  <h3>5.9 Configuración</h3>
+  <p><strong>General:</strong> nombre del taller (barra y facturas), dirección, teléfono, email, moneda (EUR/ARS), logo, NIF/CIF o CUIT, zona horaria.</p>
+  <p><strong>Empleados y roles (ejemplos):</strong> Propietario (acceso total), Administrador, Gerente (sin ajustes críticos), Recepcionista (tickets, clientes, cobros), Técnicos (tickets asignados). Enlace usuario ↔ empleado para notificaciones; permisos por rol configurables.</p>
+  <p><strong>QZ Tray:</strong> instalación en PC del taller, puerto 8182, WSS/certificado en HTTPS; impresión térmica y cajón solo en ese equipo.</p>
+  <p><strong>Notificaciones (campana):</strong> ticket asignado, ticket listo para recepción, mensajes del soporte JC ONE FIX.</p>
+  <p><strong>Correo y WhatsApp:</strong> SMTP propio, botones rápidos en ficha, plantillas de email por cambio de estado, número soporte AR en variables de entorno.</p>
+  <p><strong>Portal cliente, Gemini API key, comisiones</strong> según pantallas de ajustes.</p>
+
+  <h3>5.10 Otras áreas del panel</h3>
+  <p>Presupuestos, garantías, flujo de caja, entradas, transacciones, bandeja entrada/salida, integraciones y perfil. La disponibilidad puede depender del plan de la organización.</p>
+
+  <h2>6. Herramientas y UX</h2>
+  <ul>
+    <li><strong>Búsqueda global:</strong> barra superior; tickets (número, marca, modelo) y clientes (nombre, teléfono, email); mínimo 2 caracteres; escribir p. ej. T-00123 para ir al ticket.</li>
+    <li><strong>Asistente IA (Gemini):</strong> pulir diagnóstico y comentarios en ficha; presupuesto redactado para WhatsApp; requiere API key en Configuración general.</li>
+    <li><strong>Portal del cliente:</strong> activar en ajustes; compartir enlace desde ticket; el cliente ve estado y contenido marcado como visible.</li>
+    <li><strong>Fichaje:</strong> menú de usuario → reloj entrada/salida y comienzo de turno; revisión en informes.</li>
+    <li><strong>Chat interno:</strong> burbuja inferior derecha; solo equipo, no clientes.</li>
+    <li><strong>Soporte JC ONE FIX:</strong> icono asistente en barra superior; chat en tiempo real con persona (no solo bot); punto verde = equipo activo; contador rojo si hay mensajes sin leer.</li>
+  </ul>
+
+  <h2>7. Planes</h2>
+  <p>Existen límites por plan (p. ej. usuarios). Algunas funciones avanzadas pueden requerir el plan completo. Consultar la pantalla de planes o contrato de la cuenta.</p>
+
+  <h2>8. Verticales cubiertas (referencia marketing)</h2>
+  <p>Smartphones, tablets e iPad, TV y monitores, drones, audio/Hi-Fi, consolas, microelectrónica, wearables, entre otros.</p>
+
+  <h2>9. Resumen ejecutivo</h2>
+  <table>
+    <thead><tr><th>Área</th><th>Cobertura</th></tr></thead>
+    <tbody>
+      <tr><td>Operación</td><td>Tickets, estados, técnicos, fotos, microscopio, repuestos</td></tr>
+      <tr><td>Comercial</td><td>Clientes, leads, portal, comunicación</td></tr>
+      <tr><td>Stock</td><td>Inventario, OCs, transferencias, importación</td></tr>
+      <tr><td>Caja</td><td>POS, cajón, QZ, historial</td></tr>
+      <tr><td>Administración</td><td>Facturas, gastos, informes, roles</td></tr>
+      <tr><td>Inteligencia</td><td>IA Gemini opcional</td></tr>
+      <tr><td>Soporte</td><td>Equipo humano en el panel</td></tr>
+    </tbody>
+  </table>
+
+  <hr />
+  <p class="meta" style="text-align:center">Fin del dossier · Para procedimientos paso a paso, usar la guía integrada en el panel: <strong>/dashboard/guide</strong></p>
+</body>
+</html>

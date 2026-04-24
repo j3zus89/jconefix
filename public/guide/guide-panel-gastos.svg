@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" fill="none" role="img" aria-labelledby="t1">
+  <title id="t1">Ejemplo visual - gastos</title>
+  <rect width="880" height="480" rx="16" fill="#f8fafc"/>
+  <rect x="24" y="24" width="832" height="48" rx="10" fill="#124c48"/>
+  <rect x="24" y="84" width="832" height="372" rx="12" fill="#fff" stroke="#e2e8f0"/>
+  <text x="48" y="118" fill="#334155" font-family="system-ui,sans-serif" font-size="14" font-weight="600">Gastos</text>
+  <rect x="48" y="132" width="140" height="32" rx="8" fill="#0d9488"/>
+  <rect x="48" y="180" width="784" height="44" rx="8" fill="#fef2f2" stroke="#fecaca"/>
+  <rect x="48" y="236" width="784" height="44" rx="8" fill="#fff" stroke="#f1f5f9"/>
+  <rect x="48" y="292" width="784" height="44" rx="8" fill="#fff" stroke="#f1f5f9"/>
+  <rect x="48" y="348" width="784" height="44" rx="8" fill="#fff" stroke="#f1f5f9"/>
+  <rect x="680" y="192" width="120" height="18" rx="4" fill="#fee2e2"/>
+</svg>

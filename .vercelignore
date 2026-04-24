@@ -1,0 +1,14 @@
+node_modules
+.next
+.env
+.env.local
+.git
+*.log
+.DS_Store
+.vercel
+llama_env
+__pycache__
+*.pyc
+.pytest_cache
+.venv
+venv

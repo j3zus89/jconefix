@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Sustituye el layout del bridge de Capacitor: sin esto, el CoordinatorLayout es
+  transparente y tras setTheme(NoActionBar) se ve el fondo claro del tema → pantalla
+  blanca enorme con el logo minúsculo hasta que carga la web.
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cap_splash_background"
+    tools:context="com.getcapacitor.BridgeActivity">
+
+    <com.getcapacitor.CapacitorWebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cap_splash_background"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

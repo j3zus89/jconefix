@@ -1,0 +1,14 @@
+---
+description: El agente debe gestionar el servidor Next (parar/iniciar/reiniciar) él mismo en la terminal.
+alwaysApply: true
+---
+
+# Servidor de desarrollo
+
+Cuando haga falta **parar**, **iniciar** o **reiniciar** el servidor (`next dev`, `npm run dev`, `npm run dev:clean`, etc.):
+
+1. **Hazlo tú** en la terminal del proyecto (`project/project`), usando los comandos adecuados en PowerShell.
+2. **No te limites** a decirle al usuario que lo haga manualmente, salvo que no haya forma de ejecutar comandos (bloqueo real del entorno).
+3. Si hay varios procesos o puertos ocupados, intenta dejar **un solo** `npm run dev` coherente o documenta el puerto que usa Next tras arrancar.
+
+Para caché rota de Next, usar `npm run dev:clean` o borrar `.next` antes de arrancar cuando corresponda.

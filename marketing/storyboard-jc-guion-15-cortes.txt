@@ -1,0 +1,45 @@
+================================================================================
+STORYBOARD — JC ONE FIX (15 cortes / mismo guion que las imágenes jc-guion-XX)
+Duración referencia montaje: ~60 s de imagen sincronizada (ritmo de spot ágil).
+Si la voz en ElevenLabs queda más larga (~68–75 s es normal en español claro), escalá
+todas las columnas «Dur» por (duración_WAV / 60,4).
+Distribución proporcional por palabras por frase (~163 palabras en el guion).
+Imágenes: …/assets/jc-guion-01 … jc-guion-15.png (sin texto en imagen).
+================================================================================
+
+CÓMO USARLO
+  1) Generá el audio en ElevenLabs con el guion completo (un solo WAV).
+  2) En Premiere / CapCut / DaVinci: colocá el WAV y medí dónde termina cada frase
+     (marcadores M) — eso es la referencia FINAL; la tabla de abajo es punto de partida.
+  3) Si el WAV total ≠ 64 s: escalá todas las duraciones al mismo porcentaje.
+
+--------------------------------------------------------------------------------
+#  Imagen                              In (s)   Dur (s)   Frase (guion)
+--------------------------------------------------------------------------------
+01 jc-guion-01-cloud-transformacion      0,0      6,3      Te presentamos JC ONE FIX, un software en la nube que cambiará tu forma de trabajar.
+02 jc-guion-02-panel-unificado           6,3      4,7      Centraliza la gestión de tickets, inventario y facturación desde un solo panel.
+03 jc-guion-03-ticket-fotos-imei-firma  11,0      5,1      Cada ticket tiene fotos, IMEI y firma del cliente, accesible desde cualquier dispositivo.
+04 jc-guion-04-adios-confusiones        16,1      1,5      Adiós a confusiones.
+05 jc-guion-05-facturacion-electronica  17,6      3,9      ¿Factura con AFIP/ARCA? Con nosotros, emitir comprobantes electrónicos es rápido.
+06 jc-guion-06-whatsapp-cliente-estado  21,5      5,5      Envía actualizaciones por WhatsApp y permite que tus clientes verifiquen sus reparaciones cuando deseen.
+07 jc-guion-07-diez-modulos             27,0      4,7      El software tiene diez módulos para todos los aspectos de tu taller.
+08 jc-guion-08-inventario-reportes      31,7      5,1      Controla inventario en tiempo real y genera reportes de ingresos y gastos fácilmente.
+09 jc-guion-09-ia-diagnostico-presup.   36,8      3,9      La inteligencia artificial de Gemini ayudará en diagnósticos y presupuestos.
+10 jc-guion-10-quince-dias-prueba       40,7      2,4      Pruébalo sin costo por 15 días.
+11 jc-guion-11-simplicidad-panel        43,1      5,1      Accede a todo el panel y experimenta la simplicidad de gestionar tu taller.
+12 jc-guion-12-plan-mensual-anual       48,2      3,9      Al final, elige un plan mensual o anual, sin sorpresas.
+13 jc-guion-13-registro-transforma      52,1      2,4      Regístrate ahora y transforma tu taller.
+14 jc-guion-14-organiza-controla        54,5      4,7      Organiza y controla cada aspecto de tu negocio con JC ONE FIX.
+15 jc-guion-15-no-esperes-mas           59,2      1,2      ¡No esperes más!
+--------------------------------------------------------------------------------
+SUMA «Dur» (tabla): 60,4 s.  Eso es ~161 palabras/min si leés el guion entero — rápido.
+Para ~140 palabras/min (más natural), multiplicá cada Dur por 1,15 → total ~69 s.
+
+================================================================================
+OUT (s) por corte = In + Dur  |  último frame útil ≈ 60,4 s + 0,5 s cola a negro/logo
+================================================================================
+
+CONSEJOS DE MONTAJE
+  • Corte 04: puede durar 2,0 s en imagen aunque la voz sea 0,8 s (impacto).
+  • Corte 10 + 13: buenos para subir música 1–2 dB.
+  • Corte 15: dejá 0,4–0,8 s de silencio o sting final antes del logo.
