@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { requireSuperAdminFromRequest } from '@/lib/auth/super-admin-server';
-import { PANEL_ONLINE_WINDOW_MS, PANEL_REALTIME_WINDOW_MS } from '@/lib/panel-presence';
+import { PANEL_ONLINE_WINDOW_MS } from '@/lib/panel-presence';
+
+/** Ventana corta para "realtime" (30 segundos) vs ventana estándar (3 minutos) */
+const REALTIME_WINDOW_MS = 30_000;
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -65,7 +68,7 @@ export async function GET(req: NextRequest) {
 
   // Usar ventana de tiempo real (30s) si se solicita, de lo contrario usar la ventana estándar (3min)
   const isRealtime = req.nextUrl.searchParams.get('realtime') === 'true';
-  const windowMs = isRealtime ? PANEL_REALTIME_WINDOW_MS : PANEL_ONLINE_WINDOW_MS;
+  const windowMs = isRealtime ? REALTIME_WINDOW_MS : PANEL_ONLINE_WINDOW_MS;
   const cutoffIso = new Date(Date.now() - windowMs).toISOString();
 
   const { data: sessionRows, error: sessErr } = await supabaseAdmin

@@ -6,7 +6,7 @@ import { Activity, RefreshCw, Monitor, Building2, User, ChevronDown, ChevronUp, 
 import { adminFetch } from '@/lib/auth/adminFetch';
 import { cn } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
-import { PANEL_REALTIME_WINDOW_MS } from '@/lib/panel-presence';
+import { PANEL_ONLINE_WINDOW_MS } from '@/lib/panel-presence';
 
 type OnlineUser = {
   user_id: string;
@@ -25,7 +25,7 @@ type OnlineUser = {
 };
 
 /** Tiempo máximo para considerar una sesión activa en tiempo real (30 segundos) */
-const REALTIME_WINDOW_MS = PANEL_REALTIME_WINDOW_MS;
+const REALTIME_WINDOW_MS = PANEL_ONLINE_WINDOW_MS;
 
 /** Intervalo de polling de respaldo cuando Realtime no está disponible (15 segundos) */
 const FALLBACK_POLLING_MS = 15_000;
