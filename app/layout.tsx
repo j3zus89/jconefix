@@ -1,4 +1,4 @@
-import './globals.css';
+import './globals.css'; // Redeploy forced v2
 import type { Metadata, Viewport } from 'next';
 import { Toaster } from 'sonner';
 import { SiteGuard } from '@/components/site-guard';

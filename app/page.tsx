@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: `${APP_URL}/og-image.png?v=2025`,
+        url: `${APP_URL}/og-image1.png`,
         width: 1200,
         height: 630,
         alt: 'Jconefix — Software de Gestión para Servicios Técnicos',
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     description: HOME_DESCRIPTION,
     images: [
       {
-        url: `${APP_URL}/og-image.png?v=2025`,
+        url: `${APP_URL}/og-image1.png`,
         width: 1200,
         height: 630,
         alt: 'Jconefix — software de taller rápido, AFIP y WhatsApp',
