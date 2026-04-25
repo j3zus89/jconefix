@@ -55,14 +55,14 @@ function buildHtml(p: PanelLoginEmailParams): string {
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:24px 12px;">
     <tr><td align="center">
       <table width="560" style="max-width:560px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;">
-        <tr><td style="background:#F5C518;border-radius:12px 12px 0 0;padding:20px 24px;">
-          <p style="margin:0;font-size:12px;color:#F5C518;text-transform:uppercase;letter-spacing:1px;">JC ONE FIX · Alerta de acceso</p>
+        <tr><td style="background:#124c48;border-radius:12px 12px 0 0;padding:20px 24px;">
+          <p style="margin:0;font-size:12px;color:#a3e635;text-transform:uppercase;letter-spacing:1px;">JC ONE FIX · Alerta de acceso</p>
           <h1 style="margin:6px 0 0;font-size:20px;color:#fff;">Nueva conexión al panel</h1>
         </td></tr>
         <tr><td style="padding:24px;font-size:14px;color:#334155;line-height:1.5;">
           <table width="100%" style="border-collapse:collapse;">
             <tr><td style="padding:8px 0;color:#64748b;width:120px;">Usuario</td>
-                <td style="padding:8px 0;"><strong>${user}</strong><br/><a href="mailto:${mail}" style="color:#F5C518;">${mail}</a></td></tr>
+                <td style="padding:8px 0;"><strong>${user}</strong><br/><a href="mailto:${mail}" style="color:#124c48;">${mail}</a></td></tr>
             <tr><td style="padding:8px 0;color:#64748b;">Taller</td>
                 <td style="padding:8px 0;"><strong>${org}</strong></td></tr>
             <tr><td style="padding:8px 0;color:#64748b;vertical-align:top;">Ubicación de la conexión</td>

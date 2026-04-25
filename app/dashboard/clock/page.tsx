@@ -168,7 +168,7 @@ export default function ClockPage() {
           email: user.email,
           role: 'admin',
           is_active: true,
-          color: 'bg-primary',
+          color: '#0d9488',
           permissions: IMPLICIT_TECH_PERMISSIONS,
           panel_user_id: user.id,
           clock_pin: null,
@@ -355,7 +355,7 @@ export default function ClockPage() {
       {/* Reloj grande */}
       <Card>
         <CardContent className="pt-6 text-center">
-          <div className="text-5xl sm:text-6xl font-bold text-primary mb-2 tabular-nums">
+          <div className="text-5xl sm:text-6xl font-bold text-[#0d9488] mb-2 tabular-nums">
             {currentTime.toLocaleTimeString('es-ES', {
               hour: '2-digit',
               minute: '2-digit',
@@ -417,7 +417,7 @@ export default function ClockPage() {
                 <button
                   type="button"
                   onClick={() => setShowNote(true)}
-                  className="text-sm font-medium text-primary hover:underline inline-flex items-center gap-1"
+                  className="text-sm font-medium text-[#0d9488] hover:underline inline-flex items-center gap-1"
                 >
                   <Plus className="h-4 w-4" />
                   Añadir nota al próximo fichaje
@@ -489,7 +489,7 @@ export default function ClockPage() {
               </div>
               <Button
                 type="button"
-                className="w-full h-12 font-semibold bg-primary hover:bg-primary text-white border-0 hover:bg-primary/90"
+                className="w-full h-12 font-semibold bg-lime-500 hover:bg-lime-600 text-gray-900 border-0"
                 onClick={() => void openSheet()}
               >
                 <ClipboardList className="h-4 w-4 mr-2" />
@@ -535,7 +535,7 @@ export default function ClockPage() {
               'w-3 h-3 rounded-full',
               shiftState === 'out' && 'bg-gray-400',
               shiftState === 'in' && 'bg-green-500',
-              shiftState === 'break' && 'bg-gray-500'
+              shiftState === 'break' && 'bg-amber-500'
             )}
           />
           <span className="text-sm font-medium text-gray-700">
@@ -549,7 +549,7 @@ export default function ClockPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <History className="h-5 w-5 text-primary" />
+            <History className="h-5 w-5 text-[#0d9488]" />
             Registros de hoy
             {selectedTechId && (
               <span className="text-sm font-normal text-gray-500">

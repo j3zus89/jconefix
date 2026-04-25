@@ -1325,22 +1325,19 @@ export default function NewTicketPage() {
                     <div className="flex justify-between gap-2 tabular-nums">
                       <span className="text-gray-600">Total trabajo (estim.)</span>
                       <span className="font-medium">
-                        {sym}
-                        {billingPreview.total.toFixed(2)}
+                        {sym} {billingPreview.total.toFixed(2)}
                       </span>
                     </div>
                     <div className="mt-0.5 flex justify-between gap-2 tabular-nums text-gray-600">
                       <span>− Seña</span>
                       <span>
-                        {sym}
-                        {billingPreview.dep.toFixed(2)}
+                        {sym} {billingPreview.dep.toFixed(2)}
                       </span>
                     </div>
                     <div className="mt-1.5 flex justify-between gap-2 border-t border-gray-200 pt-1.5 font-semibold tabular-nums">
                       <span>Pendiente (estimado)</span>
                       <span className="text-primary">
-                        {sym}
-                        {billingPreview.pending.toFixed(2)}
+                        {sym} {billingPreview.pending.toFixed(2)}
                       </span>
                     </div>
                   </div>
@@ -1376,7 +1373,7 @@ export default function NewTicketPage() {
             </Button>
             <Button
               type="button"
-              variant="outline"
+              className="bg-primary text-white hover:bg-primary/90"
               disabled={ticketRf.formState.isSubmitting}
               onClick={() => {
                 void submitDraftOnly();

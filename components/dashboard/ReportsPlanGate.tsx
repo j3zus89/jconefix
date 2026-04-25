@@ -77,11 +77,11 @@ export function ReportsPlanGate({ children }: { children: React.ReactNode }) {
   if (!allowed) {
     return (
       <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center p-6">
-        <div className="max-w-lg rounded-2xl border border-white/10 bg-primary gradient-to-b from-[#0D1117] to-[#0D1117] p-8 text-center shadow-2xl shadow-black/40">
-          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 ring-1 ring-primary/30">
-            <BarChart3 className="h-7 w-7 text-primary" aria-hidden />
+        <div className="max-w-lg rounded-2xl border border-white/10 bg-gradient-to-b from-[#0c1520] to-[#050a12] p-8 text-center shadow-2xl shadow-black/40">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#a3e635]/15 ring-1 ring-[#a3e635]/30">
+            <BarChart3 className="h-7 w-7 text-[#a3e635]" aria-hidden />
           </div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/90">Informes</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#a3e635]/90">Informes</p>
           <h1 className="mt-2 font-serif text-2xl font-bold text-white">Informes avanzados</h1>
           <p className="mt-3 text-sm leading-relaxed text-slate-400">
             Los informes de ingresos, reparaciones y técnicos van con el plan completo{' '}

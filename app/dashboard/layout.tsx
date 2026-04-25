@@ -17,39 +17,11 @@ import { PanelSessionHeartbeat } from '@/components/dashboard/PanelSessionHeartb
 import { WelcomeModal } from '@/components/dashboard/WelcomeModal';
 import { VisualPreferencesSync } from '@/components/dashboard/VisualPreferencesSync';
 import { PanelUiModeProvider } from '@/components/dashboard/PanelUiModeContext';
-import { DashboardFloatingChatsProvider, useDashboardFloatingChats, supportChatSideBySideRightStyle, supportChatStackedBottomStyle } from '@/components/dashboard/DashboardFloatingChatsContext';
+import { DashboardFloatingChatsProvider } from '@/components/dashboard/DashboardFloatingChatsContext';
 import { getBrandingLogoForSignedInUser, VISUAL_PREFS_EVENT } from '@/lib/visual-preferences';
 import { CapacitorPanelStatusBarSync } from '@/components/capacitor/CapacitorPanelStatusBarSync';
 import { CapacitorBottomNav } from '@/components/capacitor/CapacitorBottomNav';
 import { getSiteCanonicalUrl } from '@/lib/site-canonical';
-
-/** Wrapper para posicionar el chat de soporte dinámicamente según si el chat interno está abierto */
-function SupportContactDialogPositioned({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange: (v: boolean) => void;
-}) {
-  const { internalChatOpen, dockMode } = useDashboardFloatingChats();
-
-  // Si el chat interno no está abierto, posicionar en esquina inferior derecha
-  // Si está abierto, posicionar al lado (lado a lado) o encima (stacked)
-  const positionStyle = internalChatOpen
-    ? dockMode === 'sideBySide'
-      ? supportChatSideBySideRightStyle()
-      : supportChatStackedBottomStyle()
-    : { right: '1rem' }; // bottom-4 right-4 cuando no hay chat interno
-
-  return (
-    <div
-      className="fixed bottom-4 z-[55]"
-      style={positionStyle}
-    >
-      <SupportContactDialog open={open} onOpenChange={onOpenChange} />
-    </div>
-  );
-}
 
 function NavFallback() {
   return (
@@ -86,12 +58,6 @@ export default function DashboardLayout({
   const router = useRouter();
   const [splashBrandingLogo, setSplashBrandingLogo] = useState<string | null>(null);
 
-  // Chat interno: leer estado desde localStorage
-  const [internalChatEnabled, setInternalChatEnabled] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('jcof_internal_chat_enabled') === 'true';
-  });
-
   useEffect(() => {
     const syncLogo = async () => {
       const supabase = createClient();
@@ -104,16 +70,6 @@ export default function DashboardLayout({
     const onPrefs = () => void syncLogo();
     window.addEventListener(VISUAL_PREFS_EVENT, onPrefs);
     return () => window.removeEventListener(VISUAL_PREFS_EVENT, onPrefs);
-  }, []);
-
-  // Escuchar cambios en la configuración del chat interno
-  useEffect(() => {
-    const handleStorage = () => {
-      const enabled = localStorage.getItem('jcof_internal_chat_enabled') === 'true';
-      setInternalChatEnabled(enabled);
-    };
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
   // ── Polling de mensajes no leídos del soporte (solo cuando el chat está cerrado) ──
@@ -325,6 +281,13 @@ export default function DashboardLayout({
       <>
         <VisualPreferencesSync />
         <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-5 bg-slate-50 px-4">
+          {splashBrandingLogo ? (
+            <img
+              src={splashBrandingLogo}
+              alt=""
+              className="max-h-16 w-auto max-w-[min(100%,240px)] object-contain"
+            />
+          ) : null}
           <div className="h-8 w-8 shrink-0 rounded-full border-4 border-primary border-t-transparent animate-spin" />
         </div>
       </>
@@ -363,6 +326,13 @@ export default function DashboardLayout({
       <>
         <VisualPreferencesSync />
         <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-3 bg-slate-50 px-4">
+          {splashBrandingLogo ? (
+            <img
+              src={splashBrandingLogo}
+              alt=""
+              className="max-h-16 w-auto max-w-[min(100%,240px)] object-contain"
+            />
+          ) : null}
           <div className="h-8 w-8 shrink-0 rounded-full border-4 border-primary border-t-transparent animate-spin" />
           <p className="text-xs text-slate-500 text-center max-w-xs">Comprobando acceso…</p>
         </div>
@@ -378,7 +348,7 @@ export default function DashboardLayout({
       <DashboardFloatingChatsProvider supportOpen={supportOpen}>
       <div
         data-cap-app-shell
-        className="flex h-[100dvh] min-h-[100dvh] max-h-[100dvh] flex-col overflow-hidden bg-background"
+        className="flex h-[100dvh] min-h-[100dvh] max-h-[100dvh] flex-col bg-background"
       >
       <PanelSessionHeartbeat />
       {supportGhostMode && (
@@ -447,15 +417,15 @@ export default function DashboardLayout({
           <button
             type="button"
             onClick={() => setSupportOpen(true)}
-            aria-label="Soporte — MARI"
-            title="MARI · soporte"
+            aria-label="Soporte — JC BOT FIX"
+            title="JC BOT FIX · soporte"
             className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full p-0 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
           >
             <span className="relative flex h-9 w-9 items-center justify-center">
               <SupportAssistantMascot
                 size="nav"
                 frame="circle"
-                title="MARI"
+                title="JC BOT FIX"
               />
               <span
                 className="pointer-events-none absolute right-0 top-0 z-[1] h-2 w-2 translate-x-px -translate-y-px rounded-full border-2 border-[var(--panel-header-bg)] bg-emerald-400"
@@ -482,9 +452,13 @@ export default function DashboardLayout({
       {/* Sello corporativo: capa oscura + texto claro para legible con cualquier primario del panel */}
       <footer
         data-web-chrome
-        className="flex shrink-0 items-center justify-center overflow-hidden border-t border-white/15 bg-[var(--panel-footer-bg)]"
+        className="relative flex shrink-0 items-center justify-center overflow-hidden border-t border-white/15 bg-[var(--panel-footer-bg)]"
       >
-        <div className="flex items-center justify-center gap-2 px-4 py-1.5">
+        <div
+          className="pointer-events-none absolute inset-0 bg-black/30"
+          aria-hidden
+        />
+        <div className="relative z-[1] flex items-center justify-center gap-2 px-4 py-1.5">
           <span className="select-none text-[11px] text-white/90 [text-shadow:0_1px_2px_rgba(0,0,0,0.55)]">
             {new Date().getFullYear()}
           </span>
@@ -498,20 +472,13 @@ export default function DashboardLayout({
         </div>
       </footer>
 
+      <FloatingChat />
       <WelcomeModal />
       <CapacitorBottomNav />
 
+      {/* Soporte solo desde el teléfono del header: al cerrar no queda ningún icono flotante */}
+      <SupportContactDialog open={supportOpen} onOpenChange={setSupportOpen} />
     </div>
-
-      {/* Chat de soporte - posicionado dinámicamente según estado del chat interno */}
-      <SupportContactDialogPositioned
-        open={supportOpen}
-        onOpenChange={setSupportOpen}
-      />
-
-      {/* Chat interno fuera del contenedor para que se quede fijo en la esquina inferior */}
-      {internalChatEnabled && <FloatingChat />}
-
       </DashboardFloatingChatsProvider>
       </PanelUiModeProvider>
     </>

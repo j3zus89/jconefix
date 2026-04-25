@@ -216,7 +216,7 @@ export default function ExpenseCategoriesPage() {
             <Plus className="h-4 w-4" />
             Añadir
           </Button>
-          <Button asChild className="bg-primary hover:bg-primary">
+          <Button asChild className="bg-[#0d9488] hover:bg-[#0f766e]">
             <Link href="/dashboard/expenses">Ir a gastos</Link>
           </Button>
         </div>
@@ -231,7 +231,7 @@ export default function ExpenseCategoriesPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-16 text-gray-500 gap-2">
-          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+          <Loader2 className="h-6 w-6 animate-spin text-[#0d9488]" />
           Cargando…
         </div>
       ) : (
@@ -305,7 +305,7 @@ export default function ExpenseCategoriesPage() {
             <Button variant="outline" onClick={() => setAddOpen(false)}>
               Cancelar
             </Button>
-            <Button className="bg-primary hover:bg-primary" disabled={saving} onClick={() => void submitAdd()}>
+            <Button className="bg-[#0d9488] hover:bg-[#0f766e]" disabled={saving} onClick={() => void submitAdd()}>
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Crear'}
             </Button>
           </DialogFooter>

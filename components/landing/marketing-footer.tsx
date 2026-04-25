@@ -33,7 +33,7 @@ export function MarketingFooter({ variant = 'light' }: { variant?: 'light' | 'da
           {/* Columna 1: Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-2">
-              <JcOneFixAppIcon className="h-6 w-6 rounded-md p-0.5" />
+              <JcOneFixAppIcon className="!h-6 !w-6 rounded-md p-0.5" />
               <JcOneFixMark tone={isDark ? 'onDark' : 'onLight'} className="text-sm font-bold" />
             </Link>
             <p className={`text-[11px] ${textMuted} leading-relaxed`}>

@@ -13,50 +13,6 @@
   "lang": "es-AR",
   "dir": "ltr",
   "categories": ["business", "productivity", "utilities"],
-  "icons": [
-    {
-      "src": "/nuevologo.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/nuevologo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/nuevologo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/nuevologo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Panel admin",
-      "short_name": "Admin",
-      "url": "/admin",
-      "icons": [{ "src": "/nuevologo.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Órdenes / tickets",
-      "short_name": "Tickets",
-      "url": "/dashboard/tickets",
-      "icons": [{ "src": "/nuevologo.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Soporte (admin)",
-      "short_name": "Soporte",
-      "url": "/admin/support",
-      "icons": [{ "src": "/nuevologo.png", "sizes": "192x192" }]
-    }
-  ]
+  "icons": [],
+  "shortcuts": []
 }

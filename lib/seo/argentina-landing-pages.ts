@@ -24,7 +24,7 @@ export const ARGENTINA_LANDING_PAGES: ArgentinaLandingPage[] = [
     slug: 'software-servicio-tecnico-celulares-afip',
     title: 'Software para Servicio Técnico de Celulares con AFIP',
     metaDescription:
-      'Gestioná tu servicio técnico de celulares en Argentina con JC ONE FIX: órdenes de reparación, stock de repuestos, clientes con CUIT y facturación alineada a ARCA/AFIP. Probá 30 días gratis.',
+      'Gestioná tu servicio técnico de celulares en Argentina con JC ONE FIX: órdenes de reparación, stock de repuestos, clientes con CUIT y facturación alineada a ARCA/AFIP. Probá 15 días gratis.',
     keywords: [
       'software servicio técnico celulares Argentina',
       'gestión taller celulares AFIP',
@@ -57,7 +57,7 @@ export const ARGENTINA_LANDING_PAGES: ArgentinaLandingPage[] = [
         heading: 'Por qué elegir JC ONE FIX en tu servicio técnico',
         paragraphs: [
           'Somos **software de gestión de taller**, no un ERP genérico: el vocabulario y los flujos hablan de **órdenes**, **repuestos** y **clientes**, no de “proyectos” abstractos.',
-          'Operás en **pesos (ARS)** con precios públicos en la web, sin sorpresas por tipo de cambio. Si querés ver el producto, **30 días de prueba** te permiten cargar datos reales sin tarjeta al inicio.',
+          'Operás en **pesos (ARS)** con precios públicos en la web, sin sorpresas por tipo de cambio. Si querés ver el producto, **15 días de prueba** te permiten cargar datos reales sin tarjeta al inicio.',
         ],
       },
     ],

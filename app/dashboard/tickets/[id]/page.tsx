@@ -11,7 +11,6 @@ import {
   TriangleAlert as AlertTriangle, Loader as Loader2, Home,
   Flag, Search, Copy, Trash2, Send, Mail, Check,
   Eye, X, DollarSign, CreditCard, Banknote, Camera, Sparkles, History, Undo2,
-  Smartphone, Monitor, Laptop, Tablet, Gamepad2, Watch, Headphones, Speaker,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -393,30 +392,14 @@ const STATUS_GROUPS = [
       { value: 'repaired_collected', label: 'Reparado y Recogido', dot: '#22c55e' },
       { value: 'no_reparado', label: 'NO REPARADO', dot: '#ef4444' },
       { value: 'cancelled', label: 'Cancelado', dot: '#6b7280' },
-      { value: 'delivered', label: 'Entregado', dot: '#22c55e' },
     ],
   },
 ];
 
 const ALL_STATUSES = STATUS_GROUPS.flatMap((g) => g.items);
 const PENDING_STATUS = { value: 'pending', label: 'Pendiente', dot: '#eab308' };
-const UNKNOWN_STATUS = { value: 'unknown', label: 'Desconocido', dot: '#6b7280' };
-function getStatusByValue(val: string | null | undefined) {
-  if (!val) return UNKNOWN_STATUS;
-  const found = ALL_STATUSES.find((s) => s.value === val);
-  if (found) return found;
-  // Intentar mapeos comunes de BD a UI
-  const mappings: Record<string, { value: string; label: string; dot: string }> = {
-    pending: PENDING_STATUS,
-    waiting: { value: 'waiting_parts', label: 'Waiting for Parts', dot: '#3b82f6' },
-    in_progress: { value: 'en_proceso', label: 'EN PROCESO', dot: '#ef4444' },
-    completed: { value: 'reparado', label: 'REPARADO', dot: '#22c55e' },
-    no_repair: { value: 'no_reparado', label: 'NO REPARADO', dot: '#ef4444' },
-    draft: { value: 'entrada', label: 'ENTRADA', dot: '#ef4444' },
-    cancelado: { value: 'cancelled', label: 'Cancelado', dot: '#6b7280' },
-  };
-  if (mappings[val]) return mappings[val];
-  return { value: val, label: val.replace(/_/g, ' ').toUpperCase(), dot: '#6b7280' };
+function getStatusByValue(val: string) {
+  return ALL_STATUSES.find((s) => s.value === val) || PENDING_STATUS;
 }
 
 function StatusDot({ color }: { color: string }) {
@@ -1419,16 +1402,7 @@ export default function TicketDetailPage() {
 
       toast.success(`Estado cambiado a: ${newStatusObj.label}`);
     } catch (error: unknown) {
-      let msg: string;
-      if (error instanceof Error) {
-        msg = error.message;
-      } else if (error && typeof error === 'object') {
-        // Manejar errores de Supabase/PostgREST
-        const errObj = error as any;
-        msg = errObj?.message || errObj?.error?.message || errObj?.error || errObj?.details || JSON.stringify(error);
-      } else {
-        msg = String(error);
-      }
+      const msg = error instanceof Error ? error.message : String(error);
       toast.error(
         humanizeRepairTicketsSchemaError(msg) || 'Error al cambiar estado: ' + msg
       );
@@ -1460,8 +1434,7 @@ export default function TicketDetailPage() {
       loadComments();
       toast.success('Comentario guardado');
     } catch (e: any) {
-      const msg = e?.message || (typeof e === 'string' ? e : 'Error desconocido');
-      toast.error(msg);
+      toast.error(e.message);
     } finally {
       setSavingComment(false);
     }
@@ -2262,7 +2235,7 @@ export default function TicketDetailPage() {
 
       toast.success(
         result.method === 'cash' && result.change != null && result.change > 0
-          ? `✅ Cobrado. Cambio: ${shopSettings?.currency_symbol ?? '$'} ${result.change.toFixed(2)}`
+          ? `✅ Cobrado. Cambio: ${shopSettings?.currency_symbol ?? '€'}${result.change.toFixed(2)}`
           : `✅ Cobrado correctamente (${methodLabel[result.method] ?? result.method})`
       );
       setShowPaymentModal(false);
@@ -2936,7 +2909,7 @@ export default function TicketDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-[#0d9488] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -3267,7 +3240,7 @@ export default function TicketDetailPage() {
           aria-live="polite"
         >
           <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-lg">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <Loader2 className="h-6 w-6 animate-spin text-[#0d9488]" />
             <p className="text-sm font-medium text-gray-800">Generando documento…</p>
           </div>
         </div>
@@ -3279,7 +3252,7 @@ export default function TicketDetailPage() {
               <Home className="h-4 w-4" />
             </Link>
             <ChevronRight className="h-3.5 w-3.5" />
-            <Link href="/dashboard/tickets" className="text-primary hover:underline">Entradas</Link>
+            <Link href="/dashboard/tickets" className="text-[#0d9488] hover:underline">Entradas</Link>
           </div>
           <div className="flex flex-col items-stretch sm:items-end gap-2 min-w-0">
             <div className="flex flex-wrap items-center gap-2 justify-end">
@@ -3330,7 +3303,7 @@ export default function TicketDetailPage() {
           <button
             onClick={handleCreateInvoice}
             disabled={creatingInvoice || verifying}
-            className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-primary hover:bg-primary/90 text-white rounded font-medium disabled:opacity-50"
+            className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-[#0d9488] hover:bg-[#1d4ed8] text-white rounded font-medium disabled:opacity-50"
           >
             {creatingInvoice ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <FilePlus className="h-3.5 w-3.5" />}
             Crear factura
@@ -3470,7 +3443,7 @@ export default function TicketDetailPage() {
                   href={`/dashboard/devoluciones/print/${returnConstanciaId}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0d9488] hover:underline"
                 >
                   <Printer className="h-3.5 w-3.5" />
                   Imprimir constancia (documento interno)
@@ -3549,7 +3522,7 @@ export default function TicketDetailPage() {
                   href={`/dashboard/devoluciones/print/${returnConstanciaId}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0d9488] hover:underline"
                 >
                   <Printer className="h-3.5 w-3.5" />
                   Imprimir constancia (documento interno)
@@ -3621,7 +3594,7 @@ export default function TicketDetailPage() {
                       <SelectItem key={inv.id} value={inv.id}>
                         {inv.invoice_number}
                         {inv.total_amount != null && !Number.isNaN(Number(inv.total_amount))
-                          ? ` · ${currSym} ${Number(inv.total_amount).toFixed(2)}`
+                          ? ` · ${currSym}${Number(inv.total_amount).toFixed(2)}`
                           : ''}
                       </SelectItem>
                     ))}
@@ -3791,15 +3764,15 @@ export default function TicketDetailPage() {
           <div className="bg-white border border-gray-200 rounded-md mb-4">
             <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
               <div>
-                <p className="font-semibold text-primary text-sm">{ticket.device_type}</p>
+                <p className="font-semibold text-[#0d9488] text-sm">{ticket.device_type}</p>
                 <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-                  <span className={cn('w-1.5 h-1.5 rounded-full', ticket.serial_number || ticket.imei ? 'bg-primary' : 'bg-gray-400')} />
+                  <span className={cn('w-1.5 h-1.5 rounded-full', ticket.serial_number || ticket.imei ? 'bg-green-500' : 'bg-gray-400')} />
                   {ticket.serial_number || ticket.imei || 'Sin número de serie/IMEI'}
                 </p>
               </div>
               <button
                 onClick={() => { setEditingPrice(true); setPriceValue((ticket.estimated_cost || 0).toFixed(2)); }}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-primary hover:bg-primary/90 text-white rounded font-medium"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-[#0d9488] hover:bg-[#1d4ed8] text-white rounded font-medium"
               >
                 <Plus className="h-3.5 w-3.5" />Agregar servicio<ChevronDown className="h-3 w-3" />
               </button>
@@ -3809,31 +3782,8 @@ export default function TicketDetailPage() {
               <div className="border border-gray-200 rounded-md">
                 <div className="flex items-center justify-between p-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-primary/10 rounded-md flex items-center justify-center">
-                      {(() => {
-                        const category = ticket.device_category?.toUpperCase();
-                        const iconClass = "h-4 w-4 text-primary";
-                        switch (category) {
-                          case 'SMARTPHONES':
-                            return <Smartphone className={iconClass} />;
-                          case 'SMART_TV':
-                            return <Monitor className={iconClass} />;
-                          case 'LAPTOPS':
-                            return <Laptop className={iconClass} />;
-                          case 'TABLETS':
-                            return <Tablet className={iconClass} />;
-                          case 'CONSOLAS':
-                            return <Gamepad2 className={iconClass} />;
-                          case 'SMARTWATCH':
-                            return <Watch className={iconClass} />;
-                          case 'AURICULARES':
-                            return <Headphones className={iconClass} />;
-                          case 'AUDIO_VIDEO':
-                            return <Speaker className={iconClass} />;
-                          default:
-                            return <Package className={iconClass} />;
-                        }
-                      })()}
+                    <div className="w-9 h-9 bg-repairdesk-50 rounded-md flex items-center justify-center">
+                      <Phone className="h-4 w-4 text-repairdesk-500" />
                     </div>
                     <div>
                       <div className="text-sm font-semibold text-gray-900">{ticket.device_type}</div>
@@ -3867,7 +3817,7 @@ export default function TicketDetailPage() {
                           <div className="p-2 border-b border-gray-100">
                             <div className="relative">
                               <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
-                              <input autoFocus value={statusSearch} onChange={(e) => setStatusSearch(e.target.value)} placeholder="Buscar estado..." className="w-full pl-7 pr-3 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-primary" />
+                              <input autoFocus value={statusSearch} onChange={(e) => setStatusSearch(e.target.value)} placeholder="Buscar estado..." className="w-full pl-7 pr-3 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-[#0d9488]" />
                             </div>
                           </div>
                           <div className="max-h-72 overflow-y-auto py-1">
@@ -3904,10 +3854,10 @@ export default function TicketDetailPage() {
                         value={priceValue}
                         onChange={e => setPriceValue(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') handleSavePrice(); if (e.key === 'Escape') setEditingPrice(false); }}
-                        className="border border-primary rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary w-36"
+                        className="border border-[#0d9488] rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d9488] w-36"
                         placeholder="Introducir precio"
                       />
-                      <button onClick={handleSavePrice} disabled={savingPrice} className="bg-primary text-white text-xs px-3 py-1.5 rounded hover:bg-primary/90 flex items-center gap-1">
+                      <button onClick={handleSavePrice} disabled={savingPrice} className="bg-[#0d9488] text-white text-xs px-3 py-1.5 rounded hover:bg-[#1d4ed8] flex items-center gap-1">
                         {savingPrice ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}Guardar
                       </button>
                       <button onClick={() => setEditingPrice(false)} className="text-xs px-3 py-1.5 rounded border border-gray-300 hover:bg-gray-50">Cancelar</button>
@@ -3916,11 +3866,11 @@ export default function TicketDetailPage() {
                     <div className="flex items-center gap-4">
                       <button
                         onClick={() => { setEditingPrice(true); setPriceValue((ticket.estimated_cost || 0).toFixed(2)); }}
-                        className="flex items-center gap-2 text-sm font-semibold text-gray-900 hover:text-primary group"
+                        className="flex items-center gap-2 text-sm font-semibold text-gray-900 hover:text-[#0d9488] group"
                       >
-                        <DollarSign className="h-3.5 w-3.5 text-gray-400 group-hover:text-primary" />
-                        {currSym} {total.toFixed(2)}
-                        <Pencil className="h-3 w-3 text-gray-300 group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <DollarSign className="h-3.5 w-3.5 text-gray-400 group-hover:text-[#0d9488]" />
+                        {currSym}{total.toFixed(2)}
+                        <Pencil className="h-3 w-3 text-gray-300 group-hover:text-[#0d9488] opacity-0 group-hover:opacity-100 transition-opacity" />
                       </button>
                       <span className="text-xs text-gray-400 border border-gray-200 px-2 py-0.5 rounded">Haz clic para editar el precio</span>
                     </div>
@@ -3948,7 +3898,7 @@ export default function TicketDetailPage() {
                         techIdForColor = hit?.[0];
                       }
                       const circleColor =
-                        (techIdForColor && techIdToColor.get(techIdForColor)) || '#1a1a1a';
+                        (techIdForColor && techIdToColor.get(techIdForColor)) || '#0d9488';
                       const showPhoto =
                         Boolean(assigneeAvatarUrl) && !assigneeAvatarBroken;
                       const assigneeRoleLine =
@@ -4011,7 +3961,7 @@ export default function TicketDetailPage() {
                             <button
                               type="button"
                               disabled={savingAssignee}
-                              className="flex w-full max-w-full items-center gap-2 rounded-lg py-1 pr-1 text-left transition-colors hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a]/40 disabled:opacity-60"
+                              className="flex w-full max-w-full items-center gap-2 rounded-lg py-1 pr-1 text-left transition-colors hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d9488]/40 disabled:opacity-60"
                             >
                               {avatar}
                               {textBlock}
@@ -4048,7 +3998,7 @@ export default function TicketDetailPage() {
                                 >
                                   <div
                                     className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ring-1 ring-gray-200"
-                                    style={{ backgroundColor: '#1a1a1a' }}
+                                    style={{ backgroundColor: '#0d9488' }}
                                   >
                                     U
                                   </div>
@@ -4060,7 +4010,7 @@ export default function TicketDetailPage() {
                                   ticket.assigned_to && isUuid(ticket.assigned_to)
                                     ? ticket.assigned_to === t.id
                                     : false;
-                                const col = techIdToColor.get(t.id) || '#1a1a1a';
+                                const col = techIdToColor.get(t.id) || '#0d9488';
                                 return (
                                   <button
                                     key={t.id}
@@ -4068,7 +4018,7 @@ export default function TicketDetailPage() {
                                     onClick={() => void handleReassignTechnician(t.id)}
                                     className={cn(
                                       'flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm transition-colors',
-                                      sel ? 'bg-emerald-50 text-[#0D1117]' : 'hover:bg-gray-50'
+                                      sel ? 'bg-emerald-50 text-[#124c48]' : 'hover:bg-gray-50'
                                     )}
                                   >
                                     <div
@@ -4276,7 +4226,7 @@ export default function TicketDetailPage() {
                 <button
                   type="button"
                   onClick={() => setOpenToolbox(null)}
-                  className="shrink-0 text-[10px] font-medium text-primary hover:underline"
+                  className="shrink-0 text-[10px] font-medium text-[#0d9488] hover:underline"
                 >
                   Cerrar panel
                 </button>
@@ -4289,7 +4239,7 @@ export default function TicketDetailPage() {
                 className={cn(
                   'flex flex-col items-start gap-1 rounded-lg border px-2.5 py-2 text-left transition-all',
                   openToolbox === 'problem'
-                    ? 'border-primary bg-red-50 shadow-sm ring-1 ring-red-300/50'
+                    ? 'border-red-400 bg-red-50 shadow-sm ring-1 ring-red-300/50'
                     : 'border-red-200/80 bg-red-50/25 hover:border-red-300 hover:bg-red-50/40'
                 )}
               >
@@ -4297,7 +4247,7 @@ export default function TicketDetailPage() {
                   <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-red-600" />
                   Problema
                 </span>
-                <span className="line-clamp-2 w-full text-center text-[10px] leading-snug text-red-800/85">
+                <span className="line-clamp-2 w-full text-[10px] font-normal leading-snug text-red-800/85">
                   {ticket.issue_description?.trim()
                     ? `${ticket.issue_description.trim().slice(0, 72)}${ticket.issue_description.trim().length > 72 ? '…' : ''}`
                     : 'Sin descripción'}
@@ -4308,7 +4258,7 @@ export default function TicketDetailPage() {
                 className={cn(
                   'relative rounded-lg border transition-all',
                   openToolbox === 'parts'
-                    ? 'border-primary bg-teal-50/70 shadow-sm ring-1 ring-[#1a1a1a]/35'
+                    ? 'border-[#0d9488] bg-teal-50/70 shadow-sm ring-1 ring-[#0d9488]/35'
                     : 'border-gray-200 bg-white hover:border-gray-300'
                 )}
               >
@@ -4334,7 +4284,7 @@ export default function TicketDetailPage() {
                     setRepuestoSearch('');
                     setShowRepuestoModal(true);
                   }}
-                  className="absolute right-1 top-1 rounded-md p-1 text-primary hover:bg-teal-100"
+                  className="absolute right-1 top-1 rounded-md p-1 text-[#0d9488] hover:bg-teal-100"
                 >
                   <Plus className="h-3.5 w-3.5" />
                 </button>
@@ -4346,7 +4296,7 @@ export default function TicketDetailPage() {
                 className={cn(
                   'flex flex-col items-start gap-0.5 rounded-lg border px-2.5 py-2 text-left transition-all',
                   openToolbox === 'supply'
-                    ? 'border-primary bg-teal-50/70 shadow-sm ring-1 ring-[#1a1a1a]/35'
+                    ? 'border-[#0d9488] bg-teal-50/70 shadow-sm ring-1 ring-[#0d9488]/35'
                     : 'border-gray-200 bg-white hover:bg-gray-50'
                 )}
               >
@@ -4365,7 +4315,7 @@ export default function TicketDetailPage() {
                 className={cn(
                   'flex flex-col items-start gap-0.5 rounded-lg border px-2.5 py-2 text-left transition-all',
                   openToolbox === 'images'
-                    ? 'border-primary bg-teal-50/70 shadow-sm ring-1 ring-[#1a1a1a]/35'
+                    ? 'border-[#0d9488] bg-teal-50/70 shadow-sm ring-1 ring-[#0d9488]/35'
                     : 'border-gray-200 bg-white hover:bg-gray-50'
                 )}
               >
@@ -4386,7 +4336,7 @@ export default function TicketDetailPage() {
                 className={cn(
                   'flex flex-col items-start gap-0.5 rounded-lg border px-2.5 py-2 text-left transition-all sm:col-span-1 col-span-2 xl:col-span-1',
                   openToolbox === 'conditions'
-                    ? 'border-primary bg-teal-50/70 shadow-sm ring-1 ring-[#1a1a1a]/35'
+                    ? 'border-[#0d9488] bg-teal-50/70 shadow-sm ring-1 ring-[#0d9488]/35'
                     : 'border-gray-200 bg-white hover:bg-gray-50'
                 )}
               >
@@ -4417,7 +4367,9 @@ export default function TicketDetailPage() {
                             <p className="truncate text-sm font-medium">{part.part_name}</p>
                             {part.part_number ? <p className="truncate text-xs text-gray-500">#{part.part_number}</p> : null}
                             <p className="text-xs text-gray-500">
-                              Cant: {part.quantity} × {currSym} {Number(part.unit_cost).toFixed(2)} = {currSym} {Number(part.total_cost).toFixed(2)}
+                              Cant: {part.quantity} × {currSym}
+                              {Number(part.unit_cost).toFixed(2)} = {currSym}
+                              {Number(part.total_cost).toFixed(2)}
                             </p>
                             {part.products?.storage_location ? (
                               <span className="mt-1 inline-flex items-center gap-0.5 rounded-full border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-800">
@@ -4425,7 +4377,7 @@ export default function TicketDetailPage() {
                               </span>
                             ) : null}
                             {part.product_id && liveStock !== undefined ? (
-                              <p className="mt-0.5 text-[11px] font-medium text-primary">Stock inventario ahora: {liveStock}</p>
+                              <p className="mt-0.5 text-[11px] font-medium text-[#0d9488]">Stock inventario ahora: {liveStock}</p>
                             ) : part.product_id ? (
                               <p className="mt-0.5 text-[11px] text-gray-400">Vinculado a inventario</p>
                             ) : null}
@@ -4443,7 +4395,7 @@ export default function TicketDetailPage() {
                   </div>
                 ) : (
                   <p className="text-sm text-gray-400">
-                    No hay piezas adjuntas. Pulsa <span className="font-medium text-primary">+</span> en el recuadro
+                    No hay piezas adjuntas. Pulsa <span className="font-medium text-[#0d9488]">+</span> en el recuadro
                     «Piezas» para elegir del inventario.
                   </p>
                 )}
@@ -4474,7 +4426,7 @@ export default function TicketDetailPage() {
                           type="checkbox"
                           checked={accessories[item.key as keyof TicketAccessories] as boolean}
                           onChange={(e) => handleSaveAccessories({ [item.key]: e.target.checked })}
-                          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                          className="h-4 w-4 rounded border-gray-300 text-[#0d9488] focus:ring-[#0d9488]"
                         />
                         <span className="text-sm text-gray-700">{item.label}</span>
                       </label>
@@ -4505,7 +4457,7 @@ export default function TicketDetailPage() {
                       className={cn(
                         'whitespace-nowrap border-b-2 px-2 py-1 text-[11px] font-medium sm:px-2.5 sm:py-1.5 sm:text-xs',
                         activeImageTab === 'pre'
-                          ? 'border-primary text-primary'
+                          ? 'border-[#0d9488] text-[#0d9488]'
                           : 'border-transparent text-gray-500 hover:text-gray-700'
                       )}
                     >
@@ -4517,7 +4469,7 @@ export default function TicketDetailPage() {
                       className={cn(
                         'whitespace-nowrap border-b-2 px-2 py-1 text-[11px] font-medium sm:px-2.5 sm:py-1.5 sm:text-xs',
                         activeImageTab === 'post'
-                          ? 'border-primary text-primary'
+                          ? 'border-[#0d9488] text-[#0d9488]'
                           : 'border-transparent text-gray-500 hover:text-gray-700'
                       )}
                     >
@@ -4529,7 +4481,7 @@ export default function TicketDetailPage() {
                       className={cn(
                         'whitespace-nowrap border-b-2 px-2 py-1 text-[11px] font-medium sm:px-2.5 sm:py-1.5 sm:text-xs',
                         activeImageTab === 'micro'
-                          ? 'border-primary text-primary'
+                          ? 'border-[#0d9488] text-[#0d9488]'
                           : 'border-transparent text-gray-500 hover:text-gray-700'
                       )}
                     >
@@ -4557,7 +4509,7 @@ export default function TicketDetailPage() {
                         <Button
                           type="button"
                           size="sm"
-                          className="h-8 bg-primary text-white hover:bg-primary/90"
+                          className="h-8 bg-[#0d9488] text-white hover:bg-[#0f766e]"
                           disabled={
                             uploadingMicroscope ||
                             microscopeWebcamFiles.length === 0 ||
@@ -4607,7 +4559,7 @@ export default function TicketDetailPage() {
                       />
                       <label
                         htmlFor={`image-upload-${activeImageTab}`}
-                        className="inline-flex shrink-0 cursor-pointer items-center gap-0.5 rounded bg-primary px-2 py-1 text-[10px] font-medium text-white hover:bg-primary/90"
+                        className="inline-flex shrink-0 cursor-pointer items-center gap-0.5 rounded bg-[#0d9488] px-2 py-1 text-[10px] font-medium text-white hover:bg-[#0f766e]"
                       >
                         <Plus className="h-3 w-3" />
                         Agregar
@@ -4648,7 +4600,7 @@ export default function TicketDetailPage() {
                               <div className="group relative h-14 w-14 overflow-hidden rounded border border-gray-200 bg-gray-50 sm:h-16 sm:w-16">
                                 <button
                                   type="button"
-                                  className="absolute inset-0 z-0 flex h-full w-full items-center justify-center p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1a1a1a] focus-visible:ring-offset-1"
+                                  className="absolute inset-0 z-0 flex h-full w-full items-center justify-center p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d9488] focus-visible:ring-offset-1"
                                   onClick={() => {
                                     if (thumbUrl) {
                                       setImageLightbox({
@@ -4703,7 +4655,7 @@ export default function TicketDetailPage() {
                       className={cn(
                         'border-b-2 px-3 py-2 text-sm font-medium',
                         activeConditionTab === 'pre'
-                          ? 'border-primary text-primary'
+                          ? 'border-[#0d9488] text-[#0d9488]'
                           : 'border-transparent text-gray-500'
                       )}
                     >
@@ -4715,7 +4667,7 @@ export default function TicketDetailPage() {
                       className={cn(
                         'border-b-2 px-3 py-2 text-sm font-medium',
                         activeConditionTab === 'post'
-                          ? 'border-primary text-primary'
+                          ? 'border-[#0d9488] text-[#0d9488]'
                           : 'border-transparent text-gray-500'
                       )}
                     >
@@ -4807,7 +4759,7 @@ export default function TicketDetailPage() {
               <DialogContent className="sm:max-w-md" onClick={(e) => e.stopPropagation()}>
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2 text-base">
-                    <Package className="h-4 w-4 text-primary" />
+                    <Package className="h-4 w-4 text-[#0d9488]" />
                     Añadir repuesto (inventario)
                   </DialogTitle>
                 </DialogHeader>
@@ -4821,11 +4773,11 @@ export default function TicketDetailPage() {
                     placeholder="Nombre, SKU o UPC…"
                     value={repuestoSearch}
                     onChange={(e) => setRepuestoSearch(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d9488]/30"
                   />
                   {repuestoSearchLoading ? (
                     <div className="flex justify-center py-6">
-                      <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                      <Loader2 className="h-6 w-6 animate-spin text-[#0d9488]" />
                     </div>
                   ) : selectedRepuesto ? (
                     <div className="rounded-lg border border-gray-200 bg-gray-50/80 p-3 space-y-2">
@@ -4835,12 +4787,12 @@ export default function TicketDetailPage() {
                         <span
                           className={cn(
                             'font-medium',
-                            selectedRepuesto.quantity <= 0 ? 'text-red-600' : 'text-primary'
+                            selectedRepuesto.quantity <= 0 ? 'text-red-600' : 'text-[#0d9488]'
                           )}
                         >
                           Stock en inventario: {selectedRepuesto.quantity}
                         </span>
-                        <span>P. venta: {currSym} {Number(selectedRepuesto.price || 0).toFixed(2)}</span>
+                        <span>P. venta: {currSym}{Number(selectedRepuesto.price || 0).toFixed(2)}</span>
                       </div>
                       <div className="flex items-center gap-2 pt-1">
                         <label className="text-xs text-gray-600">Cantidad en el ticket:</label>
@@ -4861,7 +4813,7 @@ export default function TicketDetailPage() {
                       ) : null}
                       <button
                         type="button"
-                        className="text-xs text-primary hover:underline"
+                        className="text-xs text-[#0d9488] hover:underline"
                         onClick={() => { setSelectedRepuesto(null); setRepuestoQty(1); }}
                       >
                         Elegir otro repuesto
@@ -4880,7 +4832,7 @@ export default function TicketDetailPage() {
                               setSelectedRepuesto(p);
                               setRepuestoQty(1);
                             }}
-                            className="w-full text-left px-3 py-2.5 text-sm hover:bg-primary/5 transition-colors"
+                            className="w-full text-left px-3 py-2.5 text-sm hover:bg-[#0d9488]/5 transition-colors"
                           >
                             <span className="font-medium text-gray-900 block truncate">{p.name}</span>
                             <span className="text-xs text-gray-500">
@@ -4888,7 +4840,7 @@ export default function TicketDetailPage() {
                               <span className={cn(p.quantity <= 0 ? 'text-red-600 font-medium' : 'text-gray-700')}>
                                 Stock: {p.quantity}
                               </span>
-                              {p.unit_cost != null ? ` · Coste ${currSym} ${Number(p.unit_cost).toFixed(2)}` : ''}
+                              {p.unit_cost != null ? ` · Coste ${currSym}${Number(p.unit_cost).toFixed(2)}` : ''}
                             </span>
                           </button>
                         ))
@@ -4908,7 +4860,7 @@ export default function TicketDetailPage() {
                     type="button"
                     disabled={!selectedRepuesto}
                     onClick={() => void handleAddPartFromInventario()}
-                    className="text-sm px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none"
+                    className="text-sm px-4 py-2 rounded-md bg-[#0d9488] text-white hover:bg-[#0f766e] disabled:opacity-50 disabled:pointer-events-none"
                   >
                     Añadir al ticket
                   </button>
@@ -4920,7 +4872,7 @@ export default function TicketDetailPage() {
             <div className="border-b border-gray-200 overflow-x-auto">
               <div className="flex min-w-max">
                 {COMMENT_TABS.map((tab) => (
-                  <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={cn('px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors', activeTab === tab.key ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700')}>
+                  <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={cn('px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors', activeTab === tab.key ? 'border-[#0d9488] text-[#0d9488]' : 'border-transparent text-gray-500 hover:text-gray-700')}>
                     {tab.label}
                     {tab.key !== 'tareas' && comments.filter(c => c.comment_type === tab.key || (tab.key === 'privados' && c.is_private)).length > 0 && (
                       <span className="ml-1.5 text-xs bg-repairdesk-100 text-repairdesk-600 px-1.5 py-0.5 rounded-full">{comments.filter(c => c.comment_type === tab.key || (tab.key === 'privados' && c.is_private)).length}</span>
@@ -4947,11 +4899,11 @@ export default function TicketDetailPage() {
                       </p>
                     ) : null}
                     <div className="flex gap-2">
-                      <button onClick={handleSendEmail} disabled={sendingEmail} className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded text-sm font-medium">
+                      <button onClick={handleSendEmail} disabled={sendingEmail} className="flex items-center gap-2 bg-[#0d9488] hover:bg-[#1d4ed8] text-white px-4 py-2 rounded text-sm font-medium">
                         {sendingEmail ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                         Enviar a {emailTo}
                       </button>
-                      <button onClick={() => setEmailPreview(false)} className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">Editar</button>
+                      <button onClick={() => setEmailPreview(false)} className="px-4 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50">Editar</button>
                     </div>
                   </div>
                 ) : (
@@ -4959,18 +4911,18 @@ export default function TicketDetailPage() {
                     <div className="grid grid-cols-3 gap-3">
                       <div>
                         <label className="text-xs text-gray-500 block mb-1">A:</label>
-                        <input value={emailTo} onChange={e => setEmailTo(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary" placeholder="email@cliente.com" />
+                        <input value={emailTo} onChange={e => setEmailTo(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488]" placeholder="email@cliente.com" />
                       </div>
                       <div>
                         <label className="text-xs text-gray-500 block mb-1">C.C.:</label>
-                        <input value={emailCC} onChange={e => setEmailCC(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary" placeholder="cc@email.com" />
+                        <input value={emailCC} onChange={e => setEmailCC(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488]" placeholder="cc@email.com" />
                       </div>
                       <div>
                         <label className="text-xs text-gray-500 block mb-1">Respuesta enlazada:</label>
                         <div className="relative" ref={templateRef}>
                           <button
                             onClick={() => setTemplateDropdown(!templateDropdown)}
-                            className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary text-left flex items-center justify-between bg-white hover:bg-gray-50"
+                            className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] text-left flex items-center justify-between bg-white hover:bg-gray-50"
                           >
                             <span className={selectedTemplate ? 'text-gray-900' : 'text-gray-400'}>{selectedTemplate?.name || 'Seleccionar plantilla...'}</span>
                             <ChevronDown className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
@@ -4982,7 +4934,7 @@ export default function TicketDetailPage() {
                               </div>
                               <div className="max-h-64 overflow-y-auto py-1">
                                 {buildTicketEmailTemplates().map((tmpl) => (
-                                  <button key={tmpl.id} onClick={() => applyTemplate(tmpl)} className={cn('w-full text-left px-3 py-2.5 text-sm hover:bg-repairdesk-50 transition-colors', selectedTemplate?.id === tmpl.id && 'bg-repairdesk-50 text-primary font-medium')}>
+                                  <button key={tmpl.id} onClick={() => applyTemplate(tmpl)} className={cn('w-full text-left px-3 py-2.5 text-sm hover:bg-repairdesk-50 transition-colors', selectedTemplate?.id === tmpl.id && 'bg-repairdesk-50 text-[#0d9488] font-medium')}>
                                     <div className="flex items-center gap-2">
                                       <Mail className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
                                       {tmpl.name}
@@ -4998,14 +4950,14 @@ export default function TicketDetailPage() {
 
                     <div>
                       <label className="text-xs text-gray-500 block mb-1">Asunto:</label>
-                      <input value={emailSubject} onChange={e => setEmailSubject(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Asunto del correo..." />
+                      <input value={emailSubject} onChange={e => setEmailSubject(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488]" placeholder="Asunto del correo..." />
                     </div>
 
                     {emailBody && (
                       <div>
                         <div className="flex items-center justify-between mb-1">
                           <label className="text-xs text-gray-500">Plantilla seleccionada:</label>
-                          <button onClick={() => setEmailPreview(true)} className="text-xs text-primary hover:underline flex items-center gap-1">
+                          <button onClick={() => setEmailPreview(true)} className="text-xs text-[#0d9488] hover:underline flex items-center gap-1">
                             <Eye className="h-3 w-3" />Vista previa
                           </button>
                         </div>
@@ -5022,7 +4974,7 @@ export default function TicketDetailPage() {
 
                     <div>
                       <label className="text-xs text-gray-500 block mb-1">Mensaje personalizado para el cliente (opcional):</label>
-                      <textarea value={additionalNote} onChange={e => setAdditionalNote(e.target.value)} rows={3} className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none" placeholder="Aparecerá en el correo en el apartado «Mensaje del taller», debajo de los datos del cliente." />
+                      <textarea value={additionalNote} onChange={e => setAdditionalNote(e.target.value)} rows={3} className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] resize-none" placeholder="Aparecerá en el correo en el apartado «Mensaje del taller», debajo de los datos del cliente." />
                     </div>
 
                     <div className="flex items-center justify-between pt-1">
@@ -5030,7 +4982,7 @@ export default function TicketDetailPage() {
                         <button
                           type="button"
                           onClick={() => openWhatsAppModal()}
-                          className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-primary hover:bg-primary/90 text-white rounded font-medium disabled:opacity-50"
+                          className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-[#0d9488] hover:bg-[#1d4ed8] text-white rounded font-medium disabled:opacity-50"
                         >
                           <WhatsAppLogo className="h-3.5 w-3.5 shrink-0" />
                           Enviar
@@ -5067,7 +5019,7 @@ export default function TicketDetailPage() {
                         <button
                           onClick={handleSendEmail}
                           disabled={!emailTo.trim() || sendingEmail}
-                          className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-primary hover:bg-primary/90 text-white rounded font-medium disabled:opacity-50"
+                          className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-[#0d9488] hover:bg-[#1d4ed8] text-white rounded font-medium disabled:opacity-50"
                         >
                           {sendingEmail ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
                           Enviar
@@ -5086,9 +5038,9 @@ export default function TicketDetailPage() {
                       id="showSystemMessages"
                       checked={showSystemMessages}
                       onChange={(e) => setShowSystemMessages(e.target.checked)}
-                      className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      className="w-4 h-4 rounded border-gray-300 text-[#0d9488] focus:ring-[#0d9488]"
                     />
-                    <label htmlFor="showSystemMessages" className="text-sm text-primary cursor-pointer">
+                    <label htmlFor="showSystemMessages" className="text-sm text-[#0d9488] cursor-pointer">
                       Mostrar mensajes del sistema
                     </label>
                   </div>
@@ -5111,7 +5063,7 @@ export default function TicketDetailPage() {
                     onChange={(e) => setCommentText(e.target.value)}
                     placeholder={activeTab === 'privados' ? 'Comentario interno privado...' : activeTab === 'diagnostico' ? 'Registrar hallazgos técnicos...' : 'Escribir comentario...'}
                     rows={3}
-                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] resize-none"
                   />
                   <div className="flex items-center justify-between gap-2 mt-2">
                     <button
@@ -5123,7 +5075,7 @@ export default function TicketDetailPage() {
                       {polishingComment ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                       Pulir con IA
                     </button>
-                    <button onClick={handleAddComment} disabled={!commentText.trim() || savingComment} className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-primary hover:bg-primary/90 text-white rounded disabled:opacity-50 ml-auto">
+                    <button onClick={handleAddComment} disabled={!commentText.trim() || savingComment} className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-[#0d9488] hover:bg-[#1d4ed8] text-white rounded disabled:opacity-50 ml-auto">
                       {savingComment ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}Guardar
                     </button>
                   </div>
@@ -5134,7 +5086,7 @@ export default function TicketDetailPage() {
                     {tabComments.map((comment) => {
                       let bgClass = 'bg-gray-50 border-gray-100';
                       let badge = null;
-                      let avatarColor = '#1a1a1a';
+                      let avatarColor = '#0d9488';
 
                       if (comment.comment_type === 'sistema') {
                         bgClass = 'bg-red-50 border-red-100';
@@ -5155,7 +5107,7 @@ export default function TicketDetailPage() {
                       } else if (comment.comment_type === 'nota_ticket') {
                         bgClass = 'bg-teal-50 border-teal-100';
                         badge = <span className="text-xs bg-teal-100 text-teal-800 px-1.5 py-0.5 rounded">nota en ticket</span>;
-                        avatarColor = '#D4A915';
+                        avatarColor = '#0f766e';
                       } else if (comment.comment_type === 'diagnostico') {
                         bgClass = 'bg-amber-50 border-amber-100';
                         badge = <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">diagnóstico</span>;
@@ -5243,7 +5195,7 @@ export default function TicketDetailPage() {
                                         type="button"
                                         onClick={() => void handleSaveCommentEdit()}
                                         disabled={savingCommentEdit}
-                                        className="text-xs px-2 py-1 rounded bg-primary text-white disabled:opacity-50"
+                                        className="text-xs px-2 py-1 rounded bg-[#0d9488] text-white disabled:opacity-50"
                                       >
                                         {savingCommentEdit ? '…' : 'Guardar'}
                                       </button>
@@ -5265,7 +5217,7 @@ export default function TicketDetailPage() {
                                         setEditingCommentId(comment.id);
                                         setEditingCommentText(comment.content);
                                       }}
-                                      className="text-gray-400 hover:text-primary p-0.5"
+                                      className="text-gray-400 hover:text-[#0d9488] p-0.5"
                                       title="Editar texto"
                                     >
                                       <Pencil className="h-3.5 w-3.5" />
@@ -5279,7 +5231,7 @@ export default function TicketDetailPage() {
                                 value={editingCommentText}
                                 onChange={(e) => setEditingCommentText(e.target.value)}
                                 rows={3}
-                                className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                                className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] resize-none"
                               />
                             ) : (
                               <p className="text-gray-700 whitespace-pre-wrap">{displayContent}</p>
@@ -5312,7 +5264,7 @@ export default function TicketDetailPage() {
                       const labelBtn = (
                         <label
                           htmlFor="ticket-attachment-upload"
-                          className="mt-3 inline-block text-sm text-primary hover:underline cursor-pointer"
+                          className="mt-3 inline-block text-sm text-[#0d9488] hover:underline cursor-pointer"
                         >
                           + Subir archivo
                         </label>
@@ -5372,7 +5324,7 @@ export default function TicketDetailPage() {
                                       }
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="font-medium text-primary hover:underline break-all"
+                                      className="font-medium text-[#0d9488] hover:underline break-all"
                                     >
                                       {name}
                                     </a>
@@ -5414,20 +5366,20 @@ export default function TicketDetailPage() {
               <div className="px-4 pb-4 space-y-2 text-sm">
                 <div className="grid grid-cols-2 gap-x-2 gap-y-2">
                   <span className="text-gray-500 text-xs">Nombre</span>
-                  <Link href={`/dashboard/customers`} className="font-semibold text-primary hover:underline text-xs">{ticket.customers.name}</Link>
+                  <Link href={`/dashboard/customers`} className="font-semibold text-[#0d9488] hover:underline text-xs">{ticket.customers.name}</Link>
                   {ticket.customers.email && (<><span className="text-gray-500 text-xs">Email</span><a href={`mailto:${ticket.customers.email}`} className="text-blue-600 hover:underline text-xs break-all">{ticket.customers.email}</a></>)}
                   {ticket.customers.phone && (<><span className="text-gray-500 text-xs">Teléfono</span><span className="text-xs text-gray-900">{ticket.customers.phone}</span></>)}
                   {ticket.customers.customer_group && (<><span className="text-gray-500 text-xs">Grupo</span><span className="text-xs text-gray-900">{ticket.customers.customer_group}</span></>)}
                   {ticket.customers.organization && (<><span className="text-gray-500 text-xs">Organización</span><span className="text-xs text-gray-900">{ticket.customers.organization}</span></>)}
                 </div>
                 <div className="pt-2 flex flex-wrap gap-2">
-                  <button onClick={() => { setActiveTab('email_sms'); setEmailTo(ticket.customers?.email || ''); }} className="text-xs text-primary border border-primary rounded px-2.5 py-1 hover:bg-blue-50 flex items-center gap-1">
+                  <button onClick={() => { setActiveTab('email_sms'); setEmailTo(ticket.customers?.email || ''); }} className="text-xs text-[#0d9488] border border-[#0d9488] rounded px-2.5 py-1 hover:bg-blue-50 flex items-center gap-1">
                     <Mail className="h-3 w-3" />Email
                   </button>
                   <button
                     type="button"
                     onClick={() => openWhatsAppModal()}
-                    className="text-xs font-medium rounded px-2.5 py-1 flex items-center gap-1 bg-primary hover:bg-primary/90 text-white"
+                    className="text-xs font-medium rounded px-2.5 py-1 flex items-center gap-1 bg-[#0d9488] hover:bg-[#1d4ed8] text-white"
                   >
                     <WhatsAppLogo className="h-3 w-3 shrink-0" />
                     Enviar
@@ -5458,7 +5410,7 @@ export default function TicketDetailPage() {
                 <button
                   type="button"
                   onClick={openDeviceLockModal}
-                  className="text-left text-gray-900 whitespace-pre-wrap break-words rounded px-0.5 -mx-0.5 hover:text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="text-left text-gray-900 whitespace-pre-wrap break-words rounded px-0.5 -mx-0.5 hover:text-[#0d9488] hover:underline focus:outline-none focus:ring-2 focus:ring-[#0d9488]/30"
                 >
                   {ticket.pin_pattern || 'No tiene'}
                 </button>
@@ -5505,7 +5457,7 @@ export default function TicketDetailPage() {
                     className="flex flex-col gap-0.5 p-2 rounded-md border border-amber-200 bg-white hover:bg-amber-50 transition-colors group"
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-semibold text-primary group-hover:underline">
+                      <span className="text-xs font-semibold text-[#0d9488] group-hover:underline">
                         #{t.ticket_number}
                       </span>
                       <span className="text-[10px] text-gray-500 shrink-0">
@@ -5554,7 +5506,7 @@ export default function TicketDetailPage() {
               <ChevronUp className="h-4 w-4 text-gray-400" />
             </div>
             <div className="px-4 pb-4 text-sm">
-              <p className="text-primary text-xs font-medium mb-3">1 Artículo</p>
+              <p className="text-[#0d9488] text-xs font-medium mb-3">1 Artículo</p>
               <div className="border border-gray-200 rounded-lg p-2.5 mb-3">
                 <div className="flex items-start gap-2">
                   <div className="w-5 h-5 bg-gray-100 rounded flex-shrink-0 mt-0.5 flex items-center justify-center">
@@ -5571,15 +5523,15 @@ export default function TicketDetailPage() {
                           onChange={e => setPriceValue(e.target.value)}
                           onKeyDown={e => { if (e.key === 'Enter') handleSavePrice(); if (e.key === 'Escape') setEditingPrice(false); }}
                           autoFocus
-                          className="border border-primary rounded px-2 py-1 text-xs w-24 focus:outline-none"
+                          className="border border-[#0d9488] rounded px-2 py-1 text-xs w-24 focus:outline-none"
                           placeholder="0.00"
                         />
-                        <button onClick={handleSavePrice} className="bg-primary text-white text-xs px-2 py-1 rounded">{savingPrice ? '...' : 'OK'}</button>
+                        <button onClick={handleSavePrice} className="bg-[#0d9488] text-white text-xs px-2 py-1 rounded">{savingPrice ? '...' : 'OK'}</button>
                         <button onClick={() => setEditingPrice(false)} className="text-gray-400 hover:text-gray-600"><X className="h-3.5 w-3.5" /></button>
                       </div>
                     ) : (
-                      <button onClick={() => { setEditingPrice(true); setPriceValue((ticket.estimated_cost || 0).toFixed(2)); }} className="text-xs text-gray-900 font-bold mt-1 flex items-center gap-1 group hover:text-primary">
-                        {currSym} {total.toFixed(2)}
+                      <button onClick={() => { setEditingPrice(true); setPriceValue((ticket.estimated_cost || 0).toFixed(2)); }} className="text-xs text-gray-900 font-bold mt-1 flex items-center gap-1 group hover:text-[#0d9488]">
+                        {currSym}{total.toFixed(2)}
                         <Pencil className="h-2.5 w-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </button>
                     )}
@@ -5601,7 +5553,7 @@ export default function TicketDetailPage() {
                   checked={applyIvaEffective}
                   onCheckedChange={(c) => void handleApplyIvaChange(c)}
                   disabled={savingApplyIva}
-                  className="data-[state=checked]:bg-primary shrink-0"
+                  className="data-[state=checked]:bg-[#0d9488] shrink-0"
                 />
               </div>
 
@@ -5634,13 +5586,15 @@ export default function TicketDetailPage() {
                     <div className="flex justify-between">
                       <span>Base imponible</span>
                       <span className="font-medium text-gray-800">
-                        {currSym} {total.toFixed(2)}
+                        {currSym}
+                        {total.toFixed(2)}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span>IVA 21%</span>
                       <span className="font-medium text-gray-800">
-                        {currSym} {billingIvaAmount.toFixed(2)}
+                        {currSym}
+                        {billingIvaAmount.toFixed(2)}
                       </span>
                     </div>
                   </div>
@@ -5649,23 +5603,26 @@ export default function TicketDetailPage() {
                   <div>
                     <span className="text-gray-500">Total</span>
                     <p className="font-bold text-gray-900">
-                      {currSym} {billingGrandTotal.toFixed(2)}
+                      {currSym}
+                      {billingGrandTotal.toFixed(2)}
                     </p>
                   </div>
                   <div>
                     <span className="text-gray-500">Pagado</span>
                     <p className="font-bold text-green-600">
-                      {currSym} {billingPaidAmount.toFixed(2)}
+                      {currSym}
+                      {billingPaidAmount.toFixed(2)}
                     </p>
                   </div>
                   <div>
                     <span className="text-gray-500">Pendiente</span>
                     <p className="font-bold text-red-500">
-                      {currSym} {billingPendingAmount.toFixed(2)}
+                      {currSym}
+                      {billingPendingAmount.toFixed(2)}
                     </p>
                   </div>
                 </div>
-                <div className="text-xs text-primary font-medium pt-1 border-t border-gray-200">
+                <div className="text-xs text-[#0d9488] font-medium pt-1 border-t border-gray-200">
                   Utilidad estimada: {currSym}
                   {total.toFixed(2)}
                 </div>
@@ -5678,7 +5635,7 @@ export default function TicketDetailPage() {
                       type="button"
                       onClick={() => setShowPaymentModal(true)}
                       disabled={!canCollectMore}
-                      className="min-w-0 text-xs bg-primary hover:bg-primary/90 text-white py-2 rounded-lg font-semibold flex items-center justify-center gap-1 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                      className="min-w-0 text-xs bg-[#0d9488] hover:bg-[#0f766e] text-white py-2 rounded-lg font-semibold flex items-center justify-center gap-1 transition-colors disabled:opacity-40 disabled:pointer-events-none"
                     >
                       <CreditCard className="h-3.5 w-3.5 shrink-0" />
                       <span className="truncate">Cobrar</span>
@@ -5754,7 +5711,7 @@ export default function TicketDetailPage() {
             <div className="flex justify-end gap-2 mb-4 print:hidden">
               <button 
                 onClick={() => { window.print(); setShowPrintView(false); }}
-                className="bg-primary text-white px-3 py-1 rounded text-sm"
+                className="bg-[#0d9488] text-white px-3 py-1 rounded text-sm"
               >
                 🖨️ Imprimir
               </button>
@@ -6048,7 +6005,7 @@ export default function TicketDetailPage() {
             <div className="p-6">
               {loadingCustomerOrders ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <Loader2 className="h-8 w-8 animate-spin text-[#0d9488]" />
                 </div>
               ) : customerOrders.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -6069,7 +6026,7 @@ export default function TicketDetailPage() {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold text-primary">
+                            <span className="font-semibold text-[#0d9488]">
                               #{order.ticket_number}
                             </span>
                             <span className={`px-2 py-0.5 rounded text-xs font-medium ${
@@ -6085,7 +6042,7 @@ export default function TicketDetailPage() {
                           <p className="text-xs text-gray-600 mt-1 line-clamp-2">{order.issue_description}</p>
                           {order.estimated_cost > 0 && (
                             <p className="text-sm font-medium text-gray-900 mt-2">
-                              {currSym} {order.estimated_cost.toFixed(2)}
+                              {currSym}{order.estimated_cost.toFixed(2)}
                             </p>
                           )}
                         </div>
@@ -6174,7 +6131,7 @@ export default function TicketDetailPage() {
               type="button"
               onClick={() => void handleSaveDeviceLock()}
               disabled={savingDeviceLock}
-              className="text-sm px-4 py-2 rounded-md bg-primary text-white hover:bg-primary/90 disabled:opacity-50 inline-flex items-center justify-center gap-2 min-w-[7rem]"
+              className="text-sm px-4 py-2 rounded-md bg-[#0d9488] text-white hover:bg-[#0f766e] disabled:opacity-50 inline-flex items-center justify-center gap-2 min-w-[7rem]"
             >
               {savingDeviceLock ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
             </button>

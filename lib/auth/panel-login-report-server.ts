@@ -4,7 +4,6 @@ import { formatIpGeoLine, lookupIpGeo } from '@/lib/geo/ip-api-lookup';
 import { notifyAdminPanelLogin } from '@/lib/notifications/login-alert-email';
 
 const THROTTLE_MINUTES = 30;
-const NEW_USER_HOURS_CUTOFF = 24; // Considerar "nuevo" si se registró hace menos de 24h
 
 function formatCountryLabel(raw: string | null | undefined): string {
   const s = (raw || '').trim().toUpperCase();
@@ -90,40 +89,19 @@ export async function processPanelLoginReport(params: {
     const orgNameSubject =
       params.source === 'super_admin' ? 'SUPER_ADMIN' : orgName === '—' ? 'Sin organización' : orgName;
 
-    // Verificar si es usuario nuevo: primera conexión o registrado hace menos de 24h
-    const { data: previousLogins } = await admin
-      .from('super_admin_audit_log')
-      .select('id, created_at')
-      .eq('target_user_id', params.userId)
-      .eq('action', 'panel_login')
-      .order('created_at', { ascending: false })
-      .limit(2);
+    const { data: throttle } = await admin
+      .from('panel_login_email_throttle')
+      .select('last_sent_at')
+      .eq('user_id', params.userId)
+      .maybeSingle();
 
-    // Es nuevo si: no tiene logins previos ANTES de este, O se registró hace menos de 24h
-    const hasPreviousLogins = (previousLogins?.length ?? 0) > 1; // >1 porque el login actual ya está siendo registrado
+    const now = Date.now();
+    const last = throttle?.last_sent_at ? new Date(throttle.last_sent_at as string).getTime() : 0;
+    const throttleMs = THROTTLE_MINUTES * 60 * 1000;
+    const shouldTryEmail = !last || now - last > throttleMs;
 
-    // Verificar fecha de creación del perfil (si está disponible)
-    let isRecentlyRegistered = false;
-    try {
-      const { data: userData } = await admin
-        .from('profiles')
-        .select('created_at')
-        .eq('id', params.userId)
-        .maybeSingle();
-      if (userData?.created_at) {
-        const hoursSinceRegistration = (Date.now() - new Date(userData.created_at).getTime()) / (1000 * 60 * 60);
-        isRecentlyRegistered = hoursSinceRegistration <= NEW_USER_HOURS_CUTOFF;
-      }
-    } catch {
-      // Si no podemos verificar, asumimos que no es reciente
-      isRecentlyRegistered = false;
-    }
-
-    const isNewUser = !hasPreviousLogins || isRecentlyRegistered;
-
-    // Solo enviar email si es usuario nuevo
     let emailSent = false;
-    if (isNewUser) {
+    if (shouldTryEmail) {
       emailSent = await notifyAdminPanelLogin({
         orgNameSubject,
         orgNameBody: params.source === 'super_admin' ? `SUPER_ADMIN (${orgName})` : orgName,
@@ -158,7 +136,7 @@ export async function processPanelLoginReport(params: {
         connectionGeo: ipGeo,
         device: (params.device || '').slice(0, 500),
         email_notification_sent: emailSent,
-        email_skipped_not_new_user: !isNewUser,
+        email_skipped_cooldown: !shouldTryEmail,
       },
       ip_address: params.ip,
     });

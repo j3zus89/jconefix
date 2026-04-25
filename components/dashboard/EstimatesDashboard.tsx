@@ -45,7 +45,7 @@ function formatMoneyEs(n: number): string {
 }
 
 function openDaysBadgeClass(days: number): string {
-  if (days >= 14) return 'bg-gray-100 text-red-800';
+  if (days >= 14) return 'bg-red-100 text-red-800';
   if (days >= 7) return 'bg-amber-100 text-amber-900';
   if (days >= 3) return 'bg-yellow-100 text-yellow-900';
   return 'bg-gray-100 text-gray-700';
@@ -301,7 +301,7 @@ export function EstimatesDashboard() {
                             <WhatsAppLogo className="h-3.5 w-3.5" />
                             Recordatorio
                           </Button>
-                          <Button type="button" size="sm" className="h-8 bg-primary text-white hover:bg-primary" asChild>
+                          <Button type="button" variant="secondary" size="sm" className="h-8" asChild>
                             <Link href={`/dashboard/tickets/${r.id}`}>Abrir</Link>
                           </Button>
                         </div>

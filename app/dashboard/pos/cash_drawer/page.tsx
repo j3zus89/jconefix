@@ -63,12 +63,12 @@ export default function CashDrawerPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Banknote className="h-7 w-7 text-primary" />
+            <Banknote className="h-7 w-7 text-[#0d9488]" />
             Caja (hoy)
           </h1>
           <p className="text-sm text-gray-500 mt-1">Resumen de ventas POS registradas hoy.</p>
         </div>
-        <Button asChild size="sm" className="bg-primary text-white hover:bg-primary/90">
+        <Button asChild variant="outline" size="sm">
           <Link href="/dashboard/pos">POS</Link>
         </Button>
       </div>

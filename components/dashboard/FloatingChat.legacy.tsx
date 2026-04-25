@@ -41,9 +41,9 @@ type Message = {
 };
 
 const AVATAR_COLORS = [
-  '#F5C518', '#dc2626', '#d97706', '#7c3aed',
+  '#0d9488', '#dc2626', '#d97706', '#7c3aed',
   '#db2777', '#0891b2', '#65a30d', '#ea580c',
-  '#2563eb', '#9333ea', '#b45309', '#D4A915',
+  '#2563eb', '#9333ea', '#b45309', '#0f766e',
   '#be123c', '#4338ca', '#15803d', '#c2410c',
 ];
 
@@ -474,7 +474,7 @@ export function FloatingChatLegacy() {
           }}
           type="button"
           className={cn(
-            'no-ui-hover-grow relative inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-4 py-3 text-white shadow-lg transition-all hover:scale-105 hover:bg-primary/90',
+            'no-ui-hover-grow relative inline-flex shrink-0 items-center gap-2 rounded-full bg-[#0d9488] px-4 py-3 text-white shadow-lg transition-all hover:scale-105 hover:bg-[#0f766e]',
             unreadCount > 0 && 'shadow-md shadow-red-500/35'
           )}
         >
@@ -489,20 +489,97 @@ export function FloatingChatLegacy() {
       )}
 
       {isOpen && (
-        <div className="flex h-96 w-80 min-w-0 max-w-full flex-col overflow-hidden rounded-2xl border border-primary/80 bg-white shadow-2xl">
+        <div className="flex h-96 w-80 min-w-0 max-w-full flex-col overflow-hidden rounded-2xl border border-gray-200/80 bg-white shadow-2xl">
           <div
             className={cn(
               'flex flex-shrink-0 items-center justify-between px-4 py-3 text-white',
               dashboardTealHeaderGradient
             )}
-// ...
+          >
+            <div className="flex items-center gap-2">
+              <MessageCircle className="h-4 w-4 shrink-0" />
+              <span className="text-sm font-semibold">Chat Interno</span>
+            </div>
+            <div className="flex items-center gap-0.5">
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !soundOn;
+                  setSoundOn(next);
+                  setDashboardUiSoundOn(next);
+                  if (next) {
+                    void primeDashboardUiAudio()
+                      .then(() => playDashboardUiSoftPing())
+                      .catch(() => {});
+                  }
+                }}
+                className="rounded p-1.5 transition-colors hover:bg-white/20"
+                title={
+                  soundOn
+                    ? 'Silenciar pitido al recibir mensajes (minimizado)'
+                    : 'Activar pitido suave al recibir mensajes'
+                }
+                aria-pressed={soundOn}
+                aria-label={soundOn ? 'Desactivar sonido de avisos' : 'Activar sonido de avisos'}
+              >
+                {soundOn ? (
+                  <Volume2 className="h-4 w-4 shrink-0 opacity-90" />
+                ) : (
+                  <VolumeX className="h-4 w-4 shrink-0 opacity-70" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="rounded p-1 transition-colors hover:bg-white/20"
+                title="Minimizar"
+              >
+                <Minimize2 className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
 
+          {/* Messages — flex-col-reverse: el navegador mantiene el scroll en el fondo automáticamente */}
+          <div className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-white px-3 py-3 flex flex-col-reverse">
+            {/* bottomRef al inicio del DOM (visualmente abajo por col-reverse) */}
+            <div ref={bottomRef} />
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#0d9488] border-t-transparent" />
+              </div>
+            ) : messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <MessageCircle className="h-8 w-8 text-gray-300 mb-2" />
+                <p className="text-xs text-gray-400">Sin mensajes</p>
+                <p className="text-[10px] text-gray-300">Escribe para empezar</p>
+                <p className="mt-2 text-[9px] text-gray-400">Historial: últimos {CHAT_HISTORY_RETENTION_DAYS} días</p>
+              </div>
+            ) : (
+              /* Revertir para que flex-col-reverse muestre orden cronológico correcto */
+              [...messages].reverse().map((msg) => {
+                const isMe = msg.user_id === currentUserId;
+                const resolvedColor = uniqueColorMap.get(msg.user_id) ?? msg.sender_color;
+                return (
+                  <div key={msg.id} className="mb-3">
+                    <ChatDmMessageRow
+                      senderName={msg.sender_name}
+                      senderColor={resolvedColor}
+                      body={msg.message}
+                      timeLabel={formatTime(msg.created_at)}
+                      isMe={isMe}
+                      mentionHandle={senderName}
+                      avatarUrl={avatarByUserId[msg.user_id]}
+                      roleLabel={roleLabelByUserId.get(msg.user_id)}
+                      size="sm"
+                    />
+                  </div>
+                );
               })
             )}
           </div>
 
           {/* Input */}
-          <div className="p-3 bg-white border-t border-primary/80 flex-shrink-0">
+          <div className="p-3 bg-white border-t border-gray-200/80 flex-shrink-0">
             <div className="flex items-center gap-2">
               <input
                 ref={inputRef}
@@ -511,19 +588,19 @@ export function FloatingChatLegacy() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Escribe un mensaje… (@nombre para mencionar)"
-                className="flex-1 rounded-full border border-primary/35 bg-white px-3 py-2 text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                className="flex-1 rounded-full border border-[#0d9488]/35 bg-white px-3 py-2 text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0d9488]/40"
               />
               <button
                 type="button"
                 onClick={handleSend}
                 disabled={!input.trim()}
-                className="rounded-full bg-primary p-2 text-white transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-full bg-[#0d9488] p-2 text-white transition-colors hover:bg-[#0f766e] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Send className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
-// ...
+        </div>
       )}
     </div>
   );

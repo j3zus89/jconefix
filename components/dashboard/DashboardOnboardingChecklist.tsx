@@ -204,11 +204,11 @@ export function DashboardOnboardingChecklist() {
   const pct = Math.round((doneCount / total) * 100);
 
   return (
-    <Card className="border-primary/80 bg-gradient-to-br from-primary/90 to-white shadow-sm">
+    <Card className="border-teal-200/80 bg-gradient-to-br from-teal-50/90 to-white shadow-sm">
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0d9488]/10 text-[#0d9488]">
               <ListChecks className="h-5 w-5" />
             </div>
             <div className="min-w-0">
@@ -239,14 +239,14 @@ export function DashboardOnboardingChecklist() {
             const cardShell = cn(
               'rounded-lg border text-left transition-colors',
               step.done
-                ? 'border-primary/100 bg-primary/50 text-gray-700'
-                : 'border-gray-200 bg-white hover:border-[#F5C518]/40 hover:bg-primary/30'
+                ? 'border-teal-100 bg-teal-50/50 text-gray-700'
+                : 'border-gray-200 bg-white hover:border-[#0d9488]/40 hover:bg-teal-50/30'
             );
             const badge = (
               <span
                 className={cn(
                   'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold',
-                  step.done ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500'
+                  step.done ? 'bg-[#0d9488] text-white' : 'bg-gray-100 text-gray-500'
                 )}
               >
                 {step.done ? <Check className="h-4 w-4" /> : idx + 1}
@@ -268,14 +268,14 @@ export function DashboardOnboardingChecklist() {
                         </Link>
                         <Link
                           href="/dashboard/recepcion"
-                          className="inline-block text-xs font-medium text-[#F5C518] hover:underline"
+                          className="inline-block text-xs font-medium text-[#0d9488] hover:underline"
                         >
                           o Nuevo ingreso
                         </Link>
                       </div>
                       <Link
                         href={step.href}
-                        className="mt-0.5 shrink-0 text-gray-400 hover:text-[#F5C518]"
+                        className="mt-0.5 shrink-0 text-gray-400 hover:text-[#0d9488]"
                         aria-label="Ir a nuevo ticket"
                       >
                         <ChevronRight className="h-4 w-4" />
@@ -306,7 +306,7 @@ export function DashboardOnboardingChecklist() {
           </Button>
           <Link
             href="/dashboard/guide-ar"
-            className="text-xs font-medium text-[#F5C518] hover:underline"
+            className="text-xs font-medium text-[#0d9488] hover:underline"
           >
             Guía completa del panel
           </Link>

@@ -113,10 +113,11 @@ export function DiagnosticNotesWithAi({
         <div className="flex flex-wrap items-center gap-1.5">
           <Button
             type="button"
+            variant="secondary"
             size="sm"
             onClick={() => void handleImprove()}
             disabled={disabled || improving}
-            className="shrink-0 bg-primary text-white hover:bg-primary"
+            className="shrink-0"
           >
             {improving ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin shrink-0" aria-hidden /> : null}
             Mejorar con IA
@@ -128,7 +129,7 @@ export function DiagnosticNotesWithAi({
               disabled={disabled || improving}
               className={cn(
                 'shrink-0 rounded-md border border-transparent px-2 py-1 text-xs text-muted-foreground',
-                'hover:bg-gray-100 hover:text-foreground disabled:pointer-events-none disabled:opacity-50'
+                'hover:bg-muted/60 hover:text-foreground disabled:pointer-events-none disabled:opacity-50'
               )}
             >
               ↩️ Deshacer

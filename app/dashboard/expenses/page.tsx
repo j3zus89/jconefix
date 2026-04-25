@@ -361,7 +361,7 @@ export default function ExpensesPage() {
             {exportingZip ? <Loader className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             Exportar mes para contador
           </Button>
-          <Button onClick={openNew} className="gap-2 bg-primary text-white hover:bg-primary/90">
+          <Button onClick={openNew} className="gap-2 bg-[#0d9488] text-white hover:bg-[#1d4ed8]">
             <Upload className="h-4 w-4" />
             Subir factura de proveedor
           </Button>
@@ -460,7 +460,7 @@ export default function ExpensesPage() {
           className={cn(
             'rounded-full border px-3 py-1 text-xs transition-colors',
             filterCat === 'all'
-              ? 'border-primary bg-primary text-white'
+              ? 'border-[#0d9488] bg-[#0d9488] text-white'
               : 'border-gray-200 bg-white text-gray-600 hover:border-gray-400'
           )}
         >
@@ -474,7 +474,7 @@ export default function ExpensesPage() {
             className={cn(
               'rounded-full border px-3 py-1 text-xs transition-colors',
               filterCat === cat
-                ? 'border-primary bg-primary text-white'
+                ? 'border-[#0d9488] bg-[#0d9488] text-white'
                 : 'border-gray-200 bg-white text-gray-600 hover:border-gray-400'
             )}
           >
@@ -491,7 +491,7 @@ export default function ExpensesPage() {
         <div className="rounded-xl border border-gray-200 bg-white py-12 text-center">
           <Receipt className="mx-auto mb-3 h-10 w-10 text-gray-200" />
           <p className="font-medium text-gray-600">Sin gastos en este mes</p>
-          <Button onClick={openNew} className="mt-4 gap-2 bg-primary text-white hover:bg-primary/90">
+          <Button onClick={openNew} className="mt-4 gap-2 bg-[#0d9488] text-white hover:bg-[#1d4ed8]">
             <Plus className="h-4 w-4" />
             Subir primera factura de proveedor
           </Button>
@@ -555,7 +555,7 @@ export default function ExpensesPage() {
                           href={href}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                          className="inline-flex items-center gap-1 text-xs font-medium text-[#0d9488] hover:underline"
                         >
                           <FileText className="h-3.5 w-3.5" />
                           Ver
@@ -609,7 +609,7 @@ export default function ExpensesPage() {
             <div
               className={cn(
                 'rounded-lg border-2 border-dashed px-4 py-6 text-center transition-colors',
-                dragOver ? 'border-primary bg-teal-50' : 'border-gray-200 bg-gray-50'
+                dragOver ? 'border-[#0d9488] bg-teal-50' : 'border-gray-200 bg-gray-50'
               )}
               onDragOver={(e) => {
                 e.preventDefault();
@@ -664,7 +664,7 @@ export default function ExpensesPage() {
                       href={expenseReceiptSigned['form:draft']}
                       target="_blank"
                       rel="noreferrer"
-                      className="font-medium text-primary hover:underline"
+                      className="font-medium text-[#0d9488] hover:underline"
                     >
                       Ver comprobante
                     </a>
@@ -736,7 +736,7 @@ export default function ExpensesPage() {
               <Button
                 onClick={() => void handleSave()}
                 disabled={saving}
-                className="gap-2 bg-primary text-white hover:bg-primary/90"
+                className="gap-2 bg-[#0d9488] text-white hover:bg-[#1d4ed8]"
               >
                 {saving && <Loader className="h-4 w-4 animate-spin" />}
                 {editing ? 'Guardar cambios' : 'Guardar'}

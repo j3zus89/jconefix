@@ -230,8 +230,8 @@ export default function EditCustomerPage() {
   const showRgpdSection = shouldShowCustomerRgpdSection(loc.country, form.country);
 
   return (
-    <div className="min-h-full bg-primary text-foreground">
-      <div className="bg-primary border-b border-gray-200 px-6 py-3">
+    <div className="min-h-full bg-background text-foreground">
+      <div className="bg-white border-b border-gray-200 px-6 py-3">
         <div className="flex items-center gap-1.5 text-sm text-gray-500">
           <Link href="/dashboard" className="hover:text-gray-700">Inicio</Link>
           <ChevronRight className="h-3.5 w-3.5" />
@@ -246,7 +246,7 @@ export default function EditCustomerPage() {
           <h1 className="text-2xl font-bold text-gray-900">Editar cliente</h1>
           <Button
             type="button"
-            className="gap-2 shrink-0 bg-primary hover:bg-primary/90 text-white"
+            className="gap-2 shrink-0 bg-[#0d9488] hover:bg-[#1d4ed8] text-white"
             disabled={!form.phone?.trim()}
             title={!form.phone?.trim() ? 'Añade un móvil al cliente' : undefined}
             onClick={() => setWaOpen(true)}
@@ -257,7 +257,7 @@ export default function EditCustomerPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-primary rounded-lg border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className={dashboardFormSectionHeader}>
               <h2 className={dashboardFormSectionTitle}>Información básica</h2>
             </div>
@@ -303,7 +303,7 @@ export default function EditCustomerPage() {
             </div>
           </div>
 
-          <div className="bg-primary rounded-lg border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className={dashboardFormSectionHeader}>
               <h2 className={dashboardFormSectionTitle}>Dirección</h2>
             </div>
@@ -342,7 +342,7 @@ export default function EditCustomerPage() {
             </div>
           </div>
 
-          <div className="bg-primary rounded-lg border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className={dashboardFormSectionHeader}>
               <h2 className={dashboardFormSectionTitle}>Información adicional</h2>
             </div>
@@ -410,7 +410,7 @@ export default function EditCustomerPage() {
             </div>
           </div>
 
-          <div className="bg-primary rounded-lg border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className={dashboardFormSectionHeader}>
               <h2 className={dashboardFormSectionTitle}>Configuración</h2>
             </div>
@@ -435,7 +435,7 @@ export default function EditCustomerPage() {
           </div>
 
           <div className="flex items-center gap-3 pb-8">
-            <Button type="submit" disabled={saving} className="gap-2 bg-primary text-white hover:bg-primary">
+            <Button type="submit" disabled={saving} className="gap-2 bg-[#0d9488] text-white hover:bg-[#0f766e]">
               {saving && <Loader2 className="h-4 w-4 animate-spin" />}
               Guardar cambios
             </Button>

@@ -34,8 +34,8 @@ function buildOwnerReminderHtml(params: {
     <tr><td align="center">
       <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
         <tr>
-          <td style="background:#F5C518;border-radius:12px 12px 0 0;padding:20px 28px;">
-            <p style="margin:0;font-size:12px;color:#F5C518;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;">JC ONE FIX · Renovación</p>
+          <td style="background:#0f766e;border-radius:12px 12px 0 0;padding:20px 28px;">
+            <p style="margin:0;font-size:12px;color:#a7f3d0;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;">JC ONE FIX · Renovación</p>
             <h1 style="margin:8px 0 0;font-size:22px;color:#ffffff;font-weight:700;">Recordatorio: ${daysPhrase} para renovar</h1>
           </td>
         </tr>
@@ -51,7 +51,7 @@ function buildOwnerReminderHtml(params: {
               Tus datos se conservan al menos 12 meses.
             </p>
             <div style="text-align:center;margin-top:24px;">
-              <a href="${checkoutUrl}" style="display:inline-block;background:#F5C518;color:#F5C518;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">
+              <a href="${checkoutUrl}" style="display:inline-block;background:#124c48;color:#a3e635;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">
                 Renovar / Contratar ahora
               </a>
             </div>

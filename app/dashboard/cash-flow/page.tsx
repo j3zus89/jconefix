@@ -107,7 +107,7 @@ export default function CashFlowPage() {
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Entrada/Salida de Efectivo</h1>
 
       {/* Current Balance */}
-      <Card className="mb-6 bg-gradient-to-r from-[#1a1a1a] to-[#2d2d2d]">
+      <Card className="mb-6 bg-gradient-to-r from-[#0d9488] to-[#0f766e]">
         <CardContent className="pt-6 text-white">
           <div className="flex items-center justify-between">
             <div>
@@ -157,7 +157,7 @@ export default function CashFlowPage() {
             </div>
             <Button
               onClick={handleCashIn}
-              className="w-full bg-primary text-white hover:bg-primary/90"
+              className="w-full bg-green-600 hover:bg-green-700"
             >
               <Plus className="h-4 w-4 mr-2" />
               Registrar Entrada
@@ -215,7 +215,7 @@ export default function CashFlowPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <History className="h-5 w-5 text-[#1a1a1a]" />
+            <History className="h-5 w-5 text-[#0d9488]" />
             Movimientos Recientes
           </CardTitle>
         </CardHeader>
@@ -248,7 +248,7 @@ export default function CashFlowPage() {
                     "font-bold",
                     m.type === 'in' ? "text-green-600" : "text-red-600"
                   )}>
-                    {m.type === 'in' ? '+' : '-'} {sym} {m.amount?.toFixed(2)}
+                    {m.type === 'in' ? '+' : '-'} {sym}{m.amount?.toFixed(2)}
                   </span>
                 </div>
               ))}

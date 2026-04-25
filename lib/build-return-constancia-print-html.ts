@@ -57,7 +57,7 @@ function fmtDateTime(iso: string): string {
 export function buildReturnConstanciaPrintDocument(p: ReturnConstanciaPrintInput): { styles: string; body: string } {
   const sym = p.currency_symbol?.trim() || '€';
   const hasAmt = p.amount_money != null && !Number.isNaN(Number(p.amount_money));
-  const amtStr = hasAmt ? `${esc(sym)}${fmtNum(Number(p.amount_money))}` : '—';
+  const amtStr = hasAmt ? `${esc(sym)}&nbsp;${fmtNum(Number(p.amount_money))}` : '—';
 
   const rowLabel = (p.repair_reference_row_label || 'Ticket').trim() || 'Ticket';
   const refSideNote =

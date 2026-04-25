@@ -133,7 +133,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fknzxqfmresrkqpkbfil.supabase.co" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         {/* Sin favicon por defecto - el usuario lo configura desde el panel */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var l=document.querySelectorAll('link[rel*="icon"], link[rel="shortcut icon"]');l.forEach(function(e){e.remove()});})();` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){function r(){var l=document.querySelectorAll('link[rel*="icon"],link[rel="shortcut icon"],link[rel="apple-touch-icon"]');l.forEach(function(e){e.remove()});}r();setTimeout(r,0);setTimeout(r,100);})();` }} />
         <JsonLd />
         {/* Google Ads Global Site Tag (gtag.js) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18084854714"></script>

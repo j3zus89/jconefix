@@ -52,7 +52,7 @@ export default function TransactionsPage() {
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Registro de Transacciones</h1>
-        <Button className="bg-primary hover:bg-primary">
+        <Button className="bg-[#0d9488] hover:bg-[#0f766e]">
           <Plus className="h-4 w-4 mr-2" />
           Nueva Transacción
         </Button>
@@ -83,7 +83,7 @@ export default function TransactionsPage() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-gray-500">Balance</p>
-            <p className="text-2xl font-bold text-primary">
+            <p className="text-2xl font-bold text-[#0d9488]">
               {loc.format(transactions
                 .filter(t => new Date(t.created_at).toDateString() === new Date().toDateString())
                 .reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount), 0))}
@@ -111,7 +111,7 @@ export default function TransactionsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CreditCard className="h-5 w-5 text-primary" />
+            <CreditCard className="h-5 w-5 text-[#0d9488]" />
             Historial de Transacciones
           </CardTitle>
         </CardHeader>
@@ -146,7 +146,7 @@ export default function TransactionsPage() {
                       "font-bold",
                       t.type === 'income' ? "text-green-600" : "text-red-600"
                     )}>
-                      {t.type === 'income' ? '+' : '-'} {sym} {t.amount?.toFixed(2)}
+                      {t.type === 'income' ? '+' : '-'} {sym}{t.amount?.toFixed(2)}
                     </span>
                     <Badge variant={t.status === 'completed' ? 'default' : 'secondary'}>
                       {t.status}

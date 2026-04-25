@@ -62,12 +62,12 @@ export default function PosSalesHistoryPage() {
           <h1 className="text-2xl font-bold text-gray-900">Historial de ventas</h1>
           <p className="text-sm text-gray-500 mt-1">Últimas ventas registradas desde el punto de venta.</p>
         </div>
-        <Button asChild className="bg-primary hover:bg-primary">
+        <Button asChild className="bg-[#0d9488] hover:bg-[#0f766e]">
           <Link href="/dashboard/pos">Nueva venta</Link>
         </Button>
       </div>
 
-      <div className="bg-gray-50 rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {loading ? (
           <div className="flex justify-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-gray-400" />

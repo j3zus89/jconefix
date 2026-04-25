@@ -338,9 +338,12 @@ export default function RepairLaborServicesPage() {
   };
 
   const importTariff2026 = async () => {
-    if (!confirm('¿Importar el catálogo maestro de servicios 2026 a tu organización? Esto copiará todos los servicios disponibles.')) {
+    if (!confirm('¿Importar el tarifario de referencia 2026 para Argentina (ARS)? Son muchas filas (categoría × marca × tipo de reparación).')) {
       return;
     }
+    const alsoReplace = confirm(
+      '¿Eliminar antes las filas importadas por el catálogo en esta región? (Recomendado: Sí, evita duplicados.)'
+    );
     setSeedImporting(true);
     try {
       const { data: sessionData } = await supabase.auth.getSession();
@@ -349,17 +352,16 @@ export default function RepairLaborServicesPage() {
         toast.error('No hay token de sesión. Cierra sesión y vuelve a entrar en el panel.');
         return;
       }
-      // Usar nuevo endpoint que lee desde service_catalog_master en la base de datos
-      const res = await fetch('/api/dashboard/repair-labor-catalog/seed-from-master', {
+      const res = await fetch('/api/dashboard/repair-labor-seed', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ country: LABOR_COUNTRY, replace: alsoReplace }),
       });
       const raw = await res.text();
-      let j: { error?: string; hint?: string; inserted?: number; message?: string } = {};
+      let j: { error?: string; hint?: string; inserted?: number; country?: string } = {};
       try {
         j = JSON.parse(raw) as typeof j;
       } catch {
@@ -372,9 +374,9 @@ export default function RepairLaborServicesPage() {
       }
       const n = j.inserted ?? 0;
       if (n === 0) {
-        toast.message('No se importaron servicios nuevos. Es posible que ya tengas todos los servicios del catálogo.');
+        toast.message('Importación terminada pero 0 filas. Revisa el catálogo o errores en consola del servidor.');
       } else {
-        toast.success(`Se importaron ${n} servicios del catálogo maestro a tu organización.`);
+        toast.success(`Importadas ${n} filas del tarifario Argentina (ARS).`);
       }
       void load();
     } catch (e: unknown) {
@@ -534,19 +536,24 @@ export default function RepairLaborServicesPage() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <nav className="flex items-center gap-1 text-xs text-gray-500 mb-1">
-            <Link href="/dashboard/inventory" className="inline-flex items-center gap-0.5 hover:text-primary">
+            <Link href="/dashboard/inventory" className="inline-flex items-center gap-0.5 hover:text-[#0d9488]">
               <Home className="h-3.5 w-3.5" />
               Inventario
             </Link>
             <span aria-hidden>/</span>
             <span className="text-gray-700 font-medium">Servicio de reparación</span>
           </nav>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Servicio de reparación</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
+            Precios de mano de obra en <strong>pesos argentinos (ARS)</strong>, tarifas de referencia 2026. Categoría, marca,
+            modelo y tipo de reparación.
+          </p>
         </div>
         <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2">
           <Button
             type="button"
+            variant="secondary"
             size="sm"
-            variant="outline"
             className="h-9"
             disabled={seedImporting || loading}
             onClick={() => void importTariff2026()}
@@ -555,8 +562,8 @@ export default function RepairLaborServicesPage() {
             Importar catálogo 2026
           </Button>
           <Button
-            size="sm"
             variant="outline"
+            size="sm"
             onClick={() => void exportXlsx()}
             disabled={exporting || loading}
           >
@@ -567,7 +574,7 @@ export default function RepairLaborServicesPage() {
             )}
             Exportar Excel
           </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-white" size="sm" onClick={openCreate}>
+          <Button className="bg-[#0d9488] hover:bg-[#0f766e] text-white" size="sm" onClick={openCreate}>
             <Plus className="h-4 w-4 mr-1" />
             Crear servicio
           </Button>
@@ -580,11 +587,11 @@ export default function RepairLaborServicesPage() {
           <p className="mt-1 font-mono text-xs break-all opacity-90">{loadError}</p>
           <ul className="mt-2 list-disc pl-5 space-y-1 text-xs">
             <li>
-              Si menciona <code className="bg-white/60 px-1 rounded">service_catalog_master</code>: ejecuta en el SQL Editor la migración{' '}
-              <strong>202604241800_create_service_catalog_master.sql</strong> y recarga esta página.
+              Si menciona <code className="bg-white/60 px-1 rounded">country_code</code>: ejecuta en el SQL Editor la migración{' '}
+              <strong>202604071200_repair_labor_services_region.sql</strong> y recarga esta página.
             </li>
             <li>
-              Si la tabla <code className="bg-white/60 px-1 rounded">repair_labor_services</code> no existe: aplica antes <strong>202604052200_repair_labor_services.sql</strong>.
+              Si la tabla no existe: aplica antes <strong>202604052200_repair_labor_services.sql</strong>.
             </li>
             <li>
               Tras el SQL, espera unos segundos (caché de esquema de Supabase) y pulsa F5.
@@ -642,10 +649,10 @@ export default function RepairLaborServicesPage() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button type="button" size="sm" variant="outline" onClick={resetFilters}>
+            <Button type="button" size="sm" variant="secondary" onClick={resetFilters}>
               Reiniciar
             </Button>
-            <Button type="button" size="sm" className="bg-primary text-white hover:bg-primary/90" onClick={applyFilters}>
+            <Button type="button" size="sm" className="bg-[#124c48] hover:bg-[#0f3d3a] text-white" onClick={applyFilters}>
               Buscar
             </Button>
           </div>
@@ -654,8 +661,8 @@ export default function RepairLaborServicesPage() {
 
       {selected.size > 0 && (
         <div className="flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 bg-slate-50 px-3 py-2 text-sm">
-          <span className="font-medium text-[#2d2d2d]">{selected.size} seleccionado(s)</span>
-          <Button type="button" size="sm" className="bg-red-600 text-white hover:bg-red-700" onClick={() => void removeSelected()}>
+          <span className="font-medium text-[#0f766e]">{selected.size} seleccionado(s)</span>
+          <Button type="button" variant="outline" size="sm" className="text-red-600 border-red-200" onClick={() => void removeSelected()}>
             <Trash2 className="h-4 w-4 mr-1" />
             Eliminar seleccionados
           </Button>
@@ -680,15 +687,19 @@ export default function RepairLaborServicesPage() {
               <p className="font-semibold text-gray-800">Cómo importar el catálogo 2026</p>
               <ol className="list-decimal pl-5 space-y-1.5">
                 <li>
-                  Asegúrate de que la migración{' '}
-                  <code className="text-xs bg-white px-1 rounded border">202604241800_create_service_catalog_master.sql</code>{' '}
-                  esté aplicada en Supabase (crea el catálogo maestro con ~900 servicios).
+                  En Supabase → SQL Editor, ejecuta la migración{' '}
+                  <code className="text-xs bg-white px-1 rounded border">202604071200_repair_labor_services_region.sql</code>{' '}
+                  (y antes la de la tabla, si hace falta:{' '}
+                  <code className="text-xs bg-white px-1 rounded border">202604052200_repair_labor_services.sql</code>).
                 </li>
                 <li>
-                  Pulsa <strong>Importar catálogo 2026</strong> arriba. Esto copiará los servicios del catálogo maestro a tu organización.
+                  En tu proyecto Next, variable de entorno del <strong>servidor</strong>:{' '}
+                  <code className="text-xs bg-white px-1 rounded border">SUPABASE_SERVICE_ROLE_KEY</code> (sin ella la API de
+                  importación no puede escribir).
                 </li>
                 <li>
-                  <strong>Independiente por organización:</strong> cada taller tiene su propia copia. Si modificas precios, no afecta a otros.
+                  Pulsa <strong>Importar catálogo 2026</strong>. Acepta las dos preguntas (la segunda, sustituir, evita
+                  duplicados).
                 </li>
               </ol>
             </div>
@@ -702,7 +713,7 @@ export default function RepairLaborServicesPage() {
                     <Checkbox
                       checked={allPageSelected ? true : somePageSelected ? 'indeterminate' : false}
                       onCheckedChange={() => toggleSelectAllPage()}
-                      className="border-[#0f766e] data-[state=checked]:bg-primary"
+                      className="border-[#0d9488] data-[state=checked]:bg-[#0d9488]"
                       aria-label="Seleccionar página"
                     />
                   </th>
@@ -724,45 +735,45 @@ export default function RepairLaborServicesPage() {
                       <Checkbox
                         checked={selected.has(r.id)}
                         onCheckedChange={() => toggleRow(r.id)}
-                        className="border-[#0f766e] data-[state=checked]:bg-primary"
+                        className="border-[#0d9488] data-[state=checked]:bg-[#0d9488]"
                         aria-label={`Seleccionar ${r.service_name}`}
                       />
                     </td>
-                    <td className="px-2 py-2 font-mono textbg-primary">
+                    <td className="px-2 py-2 font-mono text-[#0d9488]">
                       {(page - 1) * pageSize + i + 1}
                     </td>
                     <td className="px-2 py-2 text-center font-semibold text-gray-600">
                       AR
                     </td>
-                  <td className="px-2 py-2">{r.category || '—'}</td>
-                  <td className="px-2 py-2">{r.brand || '—'}</td>
-                  <td className="px-2 py-2">{r.model || '—'}</td>
-                  <td className="px-2 py-2 font-medium text-gray-900">{r.service_name}</td>
-                  <td className="px-2 py-2 text-right tabular-nums">{fmtMoneyRow(r)}</td>
-                  <td className="px-2 py-2 text-center">
-                    {r.show_in_widget ? (
-                      <Check className="h-5 w-5 text-emerald-600 inline-block" aria-label="Sí" />
-                    ) : (
-                      <X className="h-5 w-5 text-red-500 inline-block" aria-label="No" />
-                    )}
-                  </td>
-                  <td className="px-2 py-2 text-center">
-                    <Button type="button" variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(r)} title="Editar">
-                      <Pencil className="h-4 w-4 text-gray-600" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-red-600"
-                      onClick={() => void removeOne(r.id)}
-                      title="Eliminar"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
+                    <td className="px-2 py-2">{r.category || '—'}</td>
+                    <td className="px-2 py-2">{r.brand || '—'}</td>
+                    <td className="px-2 py-2">{r.model || '—'}</td>
+                    <td className="px-2 py-2 font-medium text-gray-900">{r.service_name}</td>
+                    <td className="px-2 py-2 text-right tabular-nums">{fmtMoneyRow(r)}</td>
+                    <td className="px-2 py-2 text-center">
+                      {r.show_in_widget ? (
+                        <Check className="h-5 w-5 text-emerald-600 inline-block" aria-label="Sí" />
+                      ) : (
+                        <X className="h-5 w-5 text-red-500 inline-block" aria-label="No" />
+                      )}
+                    </td>
+                    <td className="px-2 py-2 text-center">
+                      <Button type="button" variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(r)} title="Editar">
+                        <Pencil className="h-4 w-4 text-gray-600" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-red-600"
+                        onClick={() => void removeOne(r.id)}
+                        title="Eliminar"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -793,8 +804,9 @@ export default function RepairLaborServicesPage() {
             <div className="flex items-center gap-1">
               <Button
                 type="button"
+                variant="outline"
                 size="sm"
-                className="h-8 px-2 bg-primary text-white hover:bg-primary/90"
+                className="h-8 px-2"
                 disabled={page <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
               >
@@ -805,8 +817,9 @@ export default function RepairLaborServicesPage() {
               </span>
               <Button
                 type="button"
+                variant="outline"
                 size="sm"
-                className="h-8 px-2 bg-primary text-white hover:bg-primary/90"
+                className="h-8 px-2"
                 disabled={page >= totalPages}
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               >
@@ -818,7 +831,7 @@ export default function RepairLaborServicesPage() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editing ? 'Editar servicio' : 'Nuevo servicio de reparación'}</DialogTitle>
           </DialogHeader>
@@ -959,16 +972,16 @@ export default function RepairLaborServicesPage() {
               <Checkbox
                 checked={form.show_in_widget}
                 onCheckedChange={(v) => setForm({ ...form, show_in_widget: v === true })}
-                className="border-[#0f766e] data-[state=checked]:bg-primary"
+                className="border-[#0d9488] data-[state=checked]:bg-[#0d9488]"
               />
               Mostrar en el widget (portal / presupuestos públicos)
             </label>
           </div>
           <DialogFooter className="gap-2 sm:gap-0">
-            <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>
               Cancelar
             </Button>
-            <Button className="bg-primary hover:bg-primary/90" disabled={saving} onClick={() => void save()}>
+            <Button className="bg-[#0d9488] hover:bg-[#0f766e]" disabled={saving} onClick={() => void save()}>
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Guardar'}
             </Button>
           </DialogFooter>

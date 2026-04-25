@@ -47,12 +47,12 @@ export default function TechniciansReportsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Users className="h-7 w-7 text-primary" />
+            <Users className="h-7 w-7 text-[#0d9488]" />
             Técnicos y roles
           </h1>
           <p className="text-sm text-gray-500 mt-1">Equipo configurado en tu taller (tabla technicians).</p>
         </div>
-        <Button asChild className="bg-primary text-white hover:bg-primary/90">
+        <Button asChild variant="outline">
           <Link href="/dashboard/reports">Volver a informes</Link>
         </Button>
       </div>

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 
 const SEP = ' > ';
-const accent = 'border-[#F5C518] text-[#F5C518] focus-visible:ring-[#F5C518]';
+const accent = 'border-[#0d9488] text-[#0d9488] focus-visible:ring-[#0d9488]';
 
 export type CategoryNode = {
   segment: string;
@@ -162,7 +162,7 @@ export function InventoryCategoryTreeSelect({
             className={cn(
               'flex h-8 w-full items-center justify-between rounded border bg-white px-2 text-left text-xs',
               accent,
-              open && 'ring-1 ring-[#F5C518]',
+              open && 'ring-1 ring-[#0d9488]',
               disabled && 'opacity-50 cursor-not-allowed'
             )}
           >
@@ -208,9 +208,9 @@ export function InventoryCategoryTreeSelect({
                 allVisibleSelected ? true : someVisibleSelected ? 'indeterminate' : false
               }
               onCheckedChange={() => toggleSelectAllVisible()}
-              className="border-[#F5C518] data-[state=checked]:bg-[#F5C518]"
+              className="border-[#0d9488] data-[state=checked]:bg-[#0d9488]"
             />
-            <span className="text-xs font-semibold uppercase tracking-wide text-[#F5C518]">
+            <span className="text-xs font-semibold uppercase tracking-wide text-[#0d9488]">
               Seleccionar todo
             </span>
           </button>
@@ -255,7 +255,7 @@ export function InventoryCategoryTreeSelect({
                       <Checkbox
                         checked={value.includes(node.path)}
                         onCheckedChange={() => togglePath(node.path)}
-                        className="border-[#F5C518] data-[state=checked]:bg-[#F5C518]"
+                        className="border-[#0d9488] data-[state=checked]:bg-[#0d9488]"
                       />
                       <span className="text-xs text-gray-800 truncate">{node.segment}</span>
                     </label>

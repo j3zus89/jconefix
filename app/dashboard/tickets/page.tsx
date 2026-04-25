@@ -1103,13 +1103,14 @@ export default function TicketsPage() {
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/dashboard/recepcion">
               <Button
-                className="h-auto gap-1 bg-primary px-3 py-1.5 text-sm text-white hover:bg-primary"
+                variant="outline"
+                className="h-auto gap-1 border-primary/40 px-3 py-1.5 text-sm text-primary hover:bg-primary/5"
               >
                 Recepción
               </Button>
             </Link>
             <Link href="/dashboard/tickets/new">
-              <Button className="h-auto gap-0 px-4 py-1.5 text-sm bg-primary text-white hover:bg-primary">
+              <Button className="h-auto gap-0 px-4 py-1.5 text-sm">
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
                 Crear ticket
               </Button>
@@ -1229,11 +1230,11 @@ export default function TicketsPage() {
                       aria-invalid={!!imeiFieldError(formData.imei)}
                     />
                     {imeiFieldError(formData.imei) ? (
-                      <p className="mt-1 text-xs text-primary" role="alert">
+                      <p className="mt-1 text-xs text-red-600" role="alert">
                         {imeiFieldError(formData.imei)}
                       </p>
                     ) : (
-                      <p className="mt-1 text-xs text-gray-500">
+                      <p className="mt-1 text-[11px] text-gray-500">
                         Opcional. Si lo cargás, exactamente 15 dígitos.
                       </p>
                     )}
@@ -1350,7 +1351,7 @@ export default function TicketsPage() {
                 </div>
 
                 <div className="flex justify-end gap-3 pt-2">
-                  <Button type="button" className="bg-primary text-white hover:bg-primary" onClick={() => { setIsDialogOpen(false); resetForm(); }}>
+                  <Button type="button" variant="outline" onClick={() => { setIsDialogOpen(false); resetForm(); }}>
                     Cancelar
                   </Button>
                   <Button type="submit" disabled={saving}>
@@ -1372,8 +1373,8 @@ export default function TicketsPage() {
             className={cn(
               'px-3 py-1.5 text-sm font-medium rounded transition-colors',
               activeFilter === tab
-                ? 'bg-primary text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-gray-600 hover:bg-gray-100'
             )}
           >
             {tab}
@@ -1499,7 +1500,7 @@ export default function TicketsPage() {
                     <tr key={`hdr-${idx}`}>
                       <td colSpan={tableColSpan} className="px-3 py-1.5">
                         <span className={cn(
-                          'inline-flex items-center gap-2 rounded-full border px-3 py-0.5 text-primary font-bold uppercase tracking-wider',
+                          'inline-flex items-center gap-2 rounded-full border px-3 py-0.5 text-[11px] font-bold uppercase tracking-wider',
                           colorMap[row.label] ?? 'bg-gray-50 text-gray-600 border-gray-200'
                         )}>
                           {row.label}
@@ -1625,7 +1626,7 @@ export default function TicketsPage() {
                     {formatDate(ticket.updated_at)}
                   </td>
                   <td className={cn('px-3 py-3 text-xs font-medium text-gray-900', listLayout === 'compact' && 'hidden')}>
-                    {sym} {(ticket.final_cost || ticket.estimated_cost || 0).toFixed(2)}
+                    {sym}{(ticket.final_cost || ticket.estimated_cost || 0).toFixed(2)}
                   </td>
                   <td className="px-3 py-3">
                     <div className="flex items-center gap-1">
@@ -1669,7 +1670,7 @@ export default function TicketsPage() {
                           phone,
                           defaultMessage,
                           deviceCategory: ticket.device_category,
-                          deviceType: ticket.device_type || '',
+                          deviceType: ticket.device_type,
                           deviceBrand: ticket.device_brand,
                           deviceModel: ticket.device_model,
                         });
@@ -1713,8 +1714,9 @@ export default function TicketsPage() {
             <div className="flex items-center gap-2">
               <Button
                 type="button"
+                variant="outline"
                 size="sm"
-                className="h-8 bg-primary text-white hover:bg-primary"
+                className="h-8"
                 disabled={safePage <= 1}
                 onClick={() => setListPage((p) => Math.max(1, p - 1))}
               >
@@ -1725,8 +1727,9 @@ export default function TicketsPage() {
               </span>
               <Button
                 type="button"
+                variant="outline"
                 size="sm"
-                className="h-8 bg-primary text-white hover:bg-primary"
+                className="h-8"
                 disabled={safePage >= pageCount}
                 onClick={() => setListPage((p) => Math.min(pageCount, p + 1))}
               >
@@ -1747,13 +1750,13 @@ export default function TicketsPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="flex items-center justify-between gap-2 border-b border-gray-100 pb-3">
-            <Button type="button" size="icon" className="h-8 w-8 shrink-0 bg-primary text-white hover:bg-primary" onClick={() => shiftCalendarMonth(-1)}>
+            <Button type="button" variant="outline" size="icon" className="h-8 w-8 shrink-0" onClick={() => shiftCalendarMonth(-1)}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <span className="min-w-0 truncate text-center text-sm font-semibold capitalize text-gray-900">
               {calendarGrid.title}
             </span>
-            <Button type="button" size="icon" className="h-8 w-8 shrink-0 bg-primary text-white hover:bg-primary" onClick={() => shiftCalendarMonth(1)}>
+            <Button type="button" variant="outline" size="icon" className="h-8 w-8 shrink-0" onClick={() => shiftCalendarMonth(1)}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
@@ -1779,7 +1782,7 @@ export default function TicketsPage() {
                       ? 'border-primary bg-primary/10'
                       : 'border-gray-100 hover:bg-gray-50',
                     (ticketsByDueDay.get(c.isoKey)?.length ?? 0) > 0
-                      ? 'font-semibold text-primary'
+                      ? 'font-semibold text-[#0d766e]'
                       : 'text-gray-500'
                   )}
                 >
@@ -1823,7 +1826,7 @@ export default function TicketsPage() {
               </ul>
             </div>
           ) : null}
-          <p className="text-xs text-gray-500">
+          <p className="text-[11px] text-gray-500">
             Los tickets sin fecha de entrega no aparecen en el calendario. Asigna entrega en la ficha del ticket.
           </p>
         </DialogContent>

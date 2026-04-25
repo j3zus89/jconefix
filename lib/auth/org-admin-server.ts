@@ -141,18 +141,6 @@ export async function requireOrganizationMemberFromRequest(req: Request): Promis
   const member = memberRows?.[0];
 
   if (member?.organization_id) {
-    // Verificar que la organización exista y no esté eliminada
-    const { data: orgExists } = await adminClient
-      .from('organizations')
-      .select('id')
-      .eq('id', member.organization_id)
-      .is('deleted_at', null)
-      .maybeSingle();
-
-    if (!orgExists) {
-      return { ok: false, status: 403, user: null, organizationId: null, role: null };
-    }
-
     return {
       ok: true,
       status: 200,

@@ -36,12 +36,12 @@ const OPEN_STATUSES = [
 ] as const;
 
 const STATUS_LABEL: Record<string, { label: string; color: string }> = {
-  en_proceso: { label: 'En proceso', color: 'bg-primary' },
-  pending: { label: 'Pendiente', color: 'bg-primary' },
-  diagnostico: { label: 'Diagnóstico', color: 'bg-primary' },
-  entrada: { label: 'Entrada', color: 'bg-primary' },
-  pendiente_pieza: { label: 'Pendiente pieza', color: 'bg-primary' },
-  in_progress: { label: 'En progreso', color: 'bg-primary' },
+  en_proceso: { label: 'En proceso', color: '#0d9488' },
+  pending: { label: 'Pendiente', color: '#64748b' },
+  diagnostico: { label: 'Diagnóstico', color: '#06b6d4' },
+  entrada: { label: 'Entrada', color: '#8b5cf6' },
+  pendiente_pieza: { label: 'Pendiente pieza', color: '#f97316' },
+  in_progress: { label: 'En progreso', color: '#0d9488' },
 };
 
 export default function ReportsPage() {
@@ -139,7 +139,7 @@ export default function ReportsPage() {
       }
       const slices = Array.from(distMap.entries())
         .map(([status, count]) => {
-          const meta = STATUS_LABEL[status] || { label: status, color: 'bg-primary' };
+          const meta = STATUS_LABEL[status] || { label: status, color: '#64748b' };
           return { label: meta.label, count, color: meta.color };
         })
         .filter((s) => s.count > 0)
@@ -265,7 +265,7 @@ export default function ReportsPage() {
                     <circle cx="60" cy="60" r="50" fill="none" stroke="#e5e7eb" strokeWidth="12" />
                     <circle
                       cx="60" cy="60" r="50" fill="none"
-                      stroke="currentColor" strokeWidth="12"
+                      stroke="#0d9488" strokeWidth="12"
                       strokeLinecap="round"
                       strokeDasharray={`${2 * Math.PI * 50}`}
                       strokeDashoffset={`${2 * Math.PI * 50 * (1 - (stats.totalTickets > 0 ? stats.completedTickets / stats.totalTickets : 0))}`}
@@ -281,7 +281,7 @@ export default function ReportsPage() {
                 </div>
                 <div className="ml-8 space-y-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-primary" />
+                    <div className="w-3 h-3 rounded-full bg-[#0d9488]" />
                     <span className="text-xs text-gray-600">Completados: <strong>{stats.completedTickets}</strong></span>
                   </div>
                   <div className="flex items-center gap-2">

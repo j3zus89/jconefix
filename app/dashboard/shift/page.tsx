@@ -104,13 +104,13 @@ export default function ShiftPage() {
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Comienzo de Turno</h1>
 
       {/* Shift Status Card */}
-      <Card className={cn("mb-6", activeShift ? "border-primary" : "border-gray-200")}>
+      <Card className={cn("mb-6", activeShift ? "border-green-500" : "border-gray-200")}>
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className={cn(
                 "w-16 h-16 rounded-full flex items-center justify-center",
-                activeShift ? "bg-primary" : "bg-gray-100 text-gray-500"
+                activeShift ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-500"
               )}>
                 <Clock className="h-8 w-8" />
               </div>
@@ -130,7 +130,7 @@ export default function ShiftPage() {
                 <Button
                   size="lg"
                   onClick={startShift}
-                  className="bg-primary hover:bg-primary"
+                  className="bg-green-600 hover:bg-green-700"
                 >
                   <Play className="h-5 w-5 mr-2" />
                   Iniciar Turno
@@ -155,7 +155,7 @@ export default function ShiftPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              <ClipboardList className="h-5 w-5 text-primary" />
+              <ClipboardList className="h-5 w-5 text-[#0d9488]" />
               Tickets del Día
             </CardTitle>
           </CardHeader>
@@ -168,7 +168,7 @@ export default function ShiftPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              <Users className="h-5 w-5 text-primary" />
+              <Users className="h-5 w-5 text-[#0d9488]" />
               Técnicos Disponibles
             </CardTitle>
           </CardHeader>
@@ -181,7 +181,7 @@ export default function ShiftPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              <Calendar className="h-5 w-5 text-primary" />
+              <Calendar className="h-5 w-5 text-[#0d9488]" />
               Fecha
             </CardTitle>
           </CardHeader>
@@ -200,16 +200,16 @@ export default function ShiftPage() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-3">
-            <Button className="bg-primary text-white hover:bg-primary">
+            <Button variant="outline" className="border-[#0d9488] text-[#0d9488]">
               Ver tickets pendientes
             </Button>
-            <Button className="bg-primary text-white hover:bg-primary">
+            <Button variant="outline" className="border-[#0d9488] text-[#0d9488]">
               Asignar trabajo
             </Button>
-            <Button className="bg-primary text-white hover:bg-primary">
+            <Button variant="outline" className="border-[#0d9488] text-[#0d9488]">
               Ver inventario
             </Button>
-            <Button className="bg-primary text-white hover:bg-primary">
+            <Button variant="outline" className="border-[#0d9488] text-[#0d9488]">
               Reportar incidencia
             </Button>
           </div>

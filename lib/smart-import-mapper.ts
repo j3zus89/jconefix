@@ -338,7 +338,7 @@ export function buildFieldIndexMap(
 
 export function confidenceColor(c: MappingMatch['confidence']): string {
   switch (c) {
-    case 'certain':  return 'text-[#F5C518] bg-[#F5C518]/10 border-[#F5C518]/20';
+    case 'certain':  return 'text-emerald-700 bg-emerald-50 border-emerald-200';
     case 'probable': return 'text-amber-700 bg-amber-50 border-amber-200';
     case 'possible': return 'text-orange-700 bg-orange-50 border-orange-200';
     default:         return 'text-gray-500 bg-gray-50 border-gray-200';

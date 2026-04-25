@@ -89,7 +89,7 @@ const STATUS_COLORS = [
   { hex: '#ec4899', label: 'Rosa' },
   { hex: '#f9a8d4', label: 'Rosa claro' },
   { hex: '#6b7280', label: 'Gris' },
-  { hex: '#1a1a1a', label: 'Azul oscuro' },
+  { hex: '#0d9488', label: 'Azul oscuro' },
   { hex: '#000000', label: 'Negro' },
 ];
 
@@ -274,7 +274,7 @@ function mapTechRoleToOrgRole(techRole: string): string {
 }
 
 const TECH_COLORS = [
-  '#1a1a1a', '#2563eb', '#dc2626', '#d97706',
+  '#0d9488', '#2563eb', '#dc2626', '#d97706',
   '#0891b2', '#059669', '#db2777', '#65a30d',
 ];
 
@@ -545,7 +545,7 @@ export default function SettingsPage() {
   const [editingTech, setEditingTech] = useState<Technician | null>(null);
   const [techForm, setTechForm] = useState({
     name: '', email: '', phone: '', role: 'tech_1',
-    color: '#1a1a1a', is_active: true,
+    color: '#0d9488', is_active: true,
     permissions: { ...ROLE_PRESETS.tech_1 },
     panel_user_id: 'none' as string,
     clock_pin: '',
@@ -566,14 +566,6 @@ export default function SettingsPage() {
   const [repairCatDialog, setRepairCatDialog] = useState(false);
   const [editingRepairCat, setEditingRepairCat] = useState<SimpleItem | null>(null);
   const [repairCatForm, setRepairCatForm] = useState({ name: '', is_active: true });
-
-  const [productCategories, setProductCategories] = useState<string[]>([
-    'Smartphones', 'Tablets', 'Laptops', 'Accesorios', 'Repuestos', 'Cables', 'Fundas', 'Cargadores'
-  ]);
-  const [editingCategory, setEditingCategory] = useState<string | null>(null);
-  const [editCategoryValue, setEditCategoryValue] = useState('');
-  const [newCategoryOpen, setNewCategoryOpen] = useState(false);
-  const [newCategoryValue, setNewCategoryValue] = useState('');
 
   const [rolePerms, setRolePerms] = useState<Record<string, Record<string, boolean>>>({});
   const [savingRolePerms, setSavingRolePerms] = useState(false);
@@ -633,12 +625,6 @@ export default function SettingsPage() {
 
   const [shopLogoUploading, setShopLogoUploading] = useState(false);
   const shopLogoInputRef = useRef<HTMLInputElement>(null);
-
-  // Chat interno: activado/desactivado (persistido en localStorage)
-  const [internalChatEnabled, setInternalChatEnabled] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('jcof_internal_chat_enabled') === 'true';
-  });
 
   const mergedRoleOptions = useMemo(() => {
     const base = ROLE_OPTIONS.map((r) => {
@@ -1318,7 +1304,7 @@ export default function SettingsPage() {
       email: '',
       phone: '',
       role: 'technician',
-      color: '#1a1a1a',
+      color: '#0d9488',
       is_active: true,
       permissions: { ...DEFAULT_PERMISSIONS },
       panel_user_id: 'none',
@@ -2025,7 +2011,7 @@ export default function SettingsPage() {
                   className={cn(
                     'rounded-lg border-2 p-4 text-left transition-colors',
                     shopSettings.panel_ui_mode === 'simple'
-                      ? 'border-[#1a1a1a] bg-teal-50'
+                      ? 'border-[#0d9488] bg-teal-50'
                       : 'border-gray-200 hover:border-gray-300'
                   )}
                 >
@@ -2040,7 +2026,7 @@ export default function SettingsPage() {
                   className={cn(
                     'rounded-lg border-2 p-4 text-left transition-colors',
                     shopSettings.panel_ui_mode === 'full'
-                      ? 'border-[#1a1a1a] bg-teal-50'
+                      ? 'border-[#0d9488] bg-teal-50'
                       : 'border-gray-200 hover:border-gray-300'
                   )}
                 >
@@ -2049,24 +2035,6 @@ export default function SettingsPage() {
                     Todos los módulos (informes, inventario, gastos…).
                   </p>
                 </button>
-              </div>
-
-              {/* Toggle Chat Interno */}
-              <div className="mt-6 flex items-center justify-between rounded-lg border border-gray-200 p-4">
-                <div>
-                  <p className="font-semibold text-gray-900">Chat interno del equipo</p>
-                  <p className="text-xs text-gray-600">
-                    Activa un chat flotante en el panel para comunicación rápida entre técnicos.
-                  </p>
-                </div>
-                <Switch
-                  checked={internalChatEnabled}
-                  onCheckedChange={(checked) => {
-                    setInternalChatEnabled(checked);
-                    localStorage.setItem('jcof_internal_chat_enabled', String(checked));
-                    toast.success(checked ? 'Chat interno activado' : 'Chat interno desactivado');
-                  }}
-                />
               </div>
             </Section>
 
@@ -3405,158 +3373,22 @@ export default function SettingsPage() {
                 <h1 className="text-xl font-bold text-gray-900">Categorías de productos</h1>
                 <p className="text-sm text-gray-500 mt-1">Organiza tu inventario por categorías</p>
               </div>
-              <Button
-                className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2"
-                onClick={() => { setNewCategoryValue(''); setNewCategoryOpen(true); }}
-              >
-                <Plus className="h-4 w-4" />Nueva categoría
-              </Button>
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2"><Plus className="h-4 w-4" />Nueva categoría</Button>
             </div>
             <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
-              {productCategories.map((cat, index) => (
+              {['Smartphones', 'Tablets', 'Laptops', 'Accesorios', 'Repuestos', 'Cables', 'Fundas', 'Cargadores'].map(cat => (
                 <div key={cat} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50">
-                  <div className="flex items-center gap-3 flex-1">
+                  <div className="flex items-center gap-3">
                     <GripVertical className="h-4 w-4 text-gray-300 cursor-grab" />
-                    {editingCategory === cat ? (
-                      <Input
-                        value={editCategoryValue}
-                        onChange={(e) => setEditCategoryValue(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            const trimmed = editCategoryValue.trim();
-                            if (trimmed && trimmed !== cat && !productCategories.includes(trimmed)) {
-                              setProductCategories(prev => prev.map(c => c === cat ? trimmed : c));
-                              toast.success('Categoría actualizada');
-                            } else if (trimmed === cat) {
-                              // No change
-                            } else if (productCategories.includes(trimmed)) {
-                              toast.error('Ya existe una categoría con ese nombre');
-                              return;
-                            }
-                            setEditingCategory(null);
-                          }
-                          if (e.key === 'Escape') setEditingCategory(null);
-                        }}
-                        autoFocus
-                        className="h-8 text-sm flex-1"
-                      />
-                    ) : (
-                      <span className="text-sm font-medium text-gray-800">{cat}</span>
-                    )}
+                    <span className="text-sm font-medium text-gray-800">{cat}</span>
                   </div>
                   <div className="flex gap-1">
-                    {editingCategory === cat ? (
-                      <>
-                        <button
-                          className="p-1.5 hover:bg-emerald-50 rounded text-emerald-600"
-                          onClick={() => {
-                            const trimmed = editCategoryValue.trim();
-                            if (trimmed && trimmed !== cat && !productCategories.includes(trimmed)) {
-                              setProductCategories(prev => prev.map(c => c === cat ? trimmed : c));
-                              toast.success('Categoría actualizada');
-                              setEditingCategory(null);
-                            } else if (trimmed === cat) {
-                              setEditingCategory(null);
-                            } else if (productCategories.includes(trimmed)) {
-                              toast.error('Ya existe una categoría con ese nombre');
-                            }
-                          }}
-                        >
-                          <Check className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          className="p-1.5 hover:bg-gray-100 rounded text-gray-500"
-                          onClick={() => setEditingCategory(null)}
-                        >
-                          <span className="text-xs font-bold">✕</span>
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="p-1.5 hover:bg-gray-100 rounded text-gray-400 hover:text-gray-600"
-                          onClick={() => { setEditingCategory(cat); setEditCategoryValue(cat); }}
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          className="p-1.5 hover:bg-red-50 rounded text-gray-400 hover:text-red-500"
-                          onClick={() => {
-                            if (confirm(`¿Eliminar la categoría "${cat}"?`)) {
-                              setProductCategories(prev => prev.filter(c => c !== cat));
-                              toast.success('Categoría eliminada');
-                            }
-                          }}
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </>
-                    )}
+                    <button className="p-1.5 hover:bg-gray-100 rounded text-gray-400"><Pencil className="h-3.5 w-3.5" /></button>
+                    <button className="p-1.5 hover:bg-red-50 rounded text-gray-400 hover:text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 </div>
               ))}
             </div>
-
-            <Dialog open={newCategoryOpen} onOpenChange={setNewCategoryOpen}>
-              <DialogContent className="max-w-sm">
-                <DialogHeader>
-                  <DialogTitle>Nueva categoría</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-2 py-2">
-                  <Label className="text-xs">Nombre</Label>
-                  <Input
-                    className="h-9"
-                    value={newCategoryValue}
-                    onChange={(e) => setNewCategoryValue(e.target.value)}
-                    placeholder="Ej. Periféricos"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        const trimmed = newCategoryValue.trim();
-                        if (!trimmed) {
-                          toast.error('El nombre no puede estar vacío');
-                          return;
-                        }
-                        if (productCategories.includes(trimmed)) {
-                          toast.error('Ya existe una categoría con ese nombre');
-                          return;
-                        }
-                        setProductCategories(prev => [...prev, trimmed]);
-                        toast.success('Categoría creada');
-                        setNewCategoryOpen(false);
-                        setNewCategoryValue('');
-                      }
-                      if (e.key === 'Escape') setNewCategoryOpen(false);
-                    }}
-                    autoFocus
-                  />
-                </div>
-                <div className="flex justify-end gap-2 mt-4">
-                  <Button variant="outline" onClick={() => setNewCategoryOpen(false)}>
-                    Cancelar
-                  </Button>
-                  <Button
-                    className="bg-primary text-primary-foreground hover:bg-primary/90"
-                    onClick={() => {
-                      const trimmed = newCategoryValue.trim();
-                      if (!trimmed) {
-                        toast.error('El nombre no puede estar vacío');
-                        return;
-                      }
-                      if (productCategories.includes(trimmed)) {
-                        toast.error('Ya existe una categoría con ese nombre');
-                        return;
-                      }
-                      setProductCategories(prev => [...prev, trimmed]);
-                      toast.success('Categoría creada');
-                      setNewCategoryOpen(false);
-                      setNewCategoryValue('');
-                    }}
-                  >
-                    Crear
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
           </div>
         )}
 
@@ -3950,8 +3782,9 @@ export default function SettingsPage() {
                   <div className="flex flex-wrap gap-2 pt-1">
                     <Button
                       type="button"
+                      variant="outline"
                       size="sm"
-                      className="text-xs h-8 bg-primary text-white hover:bg-primary/90"
+                      className="text-xs h-8"
                       onClick={() => {
                         const d = phoneDigitsForWaMe(shopSettings.phone);
                         if (!d) {
@@ -3966,7 +3799,7 @@ export default function SettingsPage() {
                     </Button>
                     {tallerWaUrl ? (
                       <>
-                        <Button type="button" size="sm" className="text-xs h-8 gap-1 bg-primary text-white hover:bg-primary/90" asChild>
+                        <Button type="button" variant="outline" size="sm" className="text-xs h-8 gap-1" asChild>
                           <a href={tallerWaUrl} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="h-3.5 w-3.5" />
                             Probar chat
@@ -3974,8 +3807,9 @@ export default function SettingsPage() {
                         </Button>
                         <Button
                           type="button"
+                          variant="outline"
                           size="sm"
-                          className="text-xs h-8 gap-1 bg-primary text-white hover:bg-primary/90"
+                          className="text-xs h-8 gap-1"
                           onClick={() => {
                             void navigator.clipboard.writeText(tallerWaUrl);
                             toast.success('Enlace copiado');
@@ -4134,7 +3968,7 @@ export default function SettingsPage() {
                     <p className="text-sm font-medium text-gray-800">{t.name}</p>
                     <p className="text-xs text-gray-500">Disparador: {t.trigger}</p>
                   </div>
-                  <Button className="text-xs h-8 bg-primary text-white hover:bg-primary/90">Editar</Button>
+                  <Button variant="outline" className="text-xs h-8">Editar</Button>
                 </div>
               ))}
             </div>
@@ -4305,7 +4139,7 @@ export default function SettingsPage() {
                   <Field label="Contraseña" full>
                     <div className="flex gap-2">
                       <Input className="h-9 flex-1" type="password" placeholder="••••••" autoComplete="new-password" readOnly title="Usa «Olvidé mi contraseña» en el inicio de sesión para cambiarla" />
-                      <Button type="button" className="h-9 bg-primary text-white hover:bg-primary/90" disabled title="Cambio de contraseña desde la pantalla de login">
+                      <Button type="button" variant="outline" className="h-9 border-0 bg-primary text-primary-foreground hover:bg-primary/90" disabled title="Cambio de contraseña desde la pantalla de login">
                         Cambiar
                       </Button>
                     </div>
@@ -4476,7 +4310,7 @@ export default function SettingsPage() {
                 {savingCustomRole && <Loader2 className="h-4 w-4 animate-spin" />}
                 Crear rol
               </Button>
-              <Button type="button" className="bg-primary text-white hover:bg-primary/90" onClick={() => setCustomRoleDialog(false)}>
+              <Button type="button" variant="outline" onClick={() => setCustomRoleDialog(false)}>
                 Cancelar
               </Button>
             </div>
@@ -4574,15 +4408,16 @@ export default function SettingsPage() {
               {editingPredefinedRoleKey && roleLabelOverrides[editingPredefinedRoleKey]?.id ? (
                 <Button
                   type="button"
+                  variant="outline"
                   onClick={handleResetPredefinedRoleLabels}
-                  className="bg-primary text-white hover:bg-primary/90"
+                  className="text-gray-700"
                 >
                   Restaurar textos predeterminados
                 </Button>
               ) : null}
               <Button
                 type="button"
-                className="bg-primary text-white hover:bg-primary/90"
+                variant="outline"
                 onClick={() => {
                   setPredefinedRoleDialog(false);
                   setEditingPredefinedRoleKey(null);
@@ -4683,7 +4518,7 @@ export default function SettingsPage() {
                   {savingUser && <Loader2 className="h-4 w-4 animate-spin" />}
                   Guardar cambios
                 </Button>
-                <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setTeamDialogOpen(false)}>
+                <Button variant="outline" onClick={() => setTeamDialogOpen(false)}>
                   Cancelar
                 </Button>
               </div>
@@ -4902,7 +4737,7 @@ export default function SettingsPage() {
                       : 'Crear ficha de empleado'
                     : 'Guardar cambios'}
                 </Button>
-                <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setTeamDialogOpen(false)}>
+                <Button variant="outline" onClick={() => setTeamDialogOpen(false)}>
                   Cancelar
                 </Button>
               </div>
@@ -4957,7 +4792,7 @@ export default function SettingsPage() {
                 {savingStatus && <Loader2 className="h-4 w-4 animate-spin" />}
                 {editingStatus ? 'Guardar cambios' : 'Crear estado'}
               </Button>
-              <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setStatusDialog(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setStatusDialog(false)}>Cancelar</Button>
             </div>
           </div>
         </DialogContent>
@@ -4977,7 +4812,7 @@ export default function SettingsPage() {
             </div>
             <div className="flex gap-3">
               <Button onClick={() => handleSaveSimpleItem('task_types', taskTypes, editingTaskType, taskTypeForm, setTaskTypes, setTaskTypeDialog, setEditingTaskType)} className="bg-primary text-primary-foreground hover:bg-primary/90">{editingTaskType ? 'Guardar' : 'Crear'}</Button>
-              <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setTaskTypeDialog(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setTaskTypeDialog(false)}>Cancelar</Button>
             </div>
           </div>
         </DialogContent>
@@ -4997,7 +4832,7 @@ export default function SettingsPage() {
             </div>
             <div className="flex gap-3">
               <Button onClick={() => handleSaveSimpleItem('payment_methods', paymentMethods, editingPayMethod, payMethodForm, setPaymentMethods, setPayMethodDialog, setEditingPayMethod)} className="bg-primary text-primary-foreground hover:bg-primary/90">{editingPayMethod ? 'Guardar' : 'Crear'}</Button>
-              <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setPayMethodDialog(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setPayMethodDialog(false)}>Cancelar</Button>
             </div>
           </div>
         </DialogContent>
@@ -5017,7 +4852,7 @@ export default function SettingsPage() {
             </div>
             <div className="flex gap-3">
               <Button onClick={() => handleSaveSimpleItem('repair_categories', repairCats, editingRepairCat, repairCatForm, setRepairCats, setRepairCatDialog, setEditingRepairCat)} className="bg-primary text-primary-foreground hover:bg-primary/90">{editingRepairCat ? 'Guardar' : 'Crear'}</Button>
-              <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setRepairCatDialog(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setRepairCatDialog(false)}>Cancelar</Button>
             </div>
           </div>
         </DialogContent>

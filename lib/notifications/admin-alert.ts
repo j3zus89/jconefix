@@ -8,6 +8,14 @@ function adminAlertInbox(): string {
   return NOTIFICATIONS_INBOX_EMAIL;
 }
 
+export interface SupportMessageAlertParams {
+  userName: string;
+  userEmail: string;
+  message: string;
+  organizationName?: string | null;
+  sentAt?: Date;
+}
+
 export interface NewUserAlertParams {
   shopName: string;
   userName: string;
@@ -50,8 +58,8 @@ function buildHtml(params: Required<NewUserAlertParams>): string {
   });
 
   const isPaid = !planType.toLowerCase().includes('prueba');
-  const planBadgeColor = isPaid ? '#F5C518' : '#F5C518';
-  const planBadgeBg = isPaid ? '#F5C518' : '#F5C518';
+  const planBadgeColor = isPaid ? '#124c48' : '#0f766e';
+  const planBadgeBg = isPaid ? '#a3e635' : '#ccfbf1';
 
   return `<!DOCTYPE html>
 <html lang="es">
@@ -68,8 +76,8 @@ function buildHtml(params: Required<NewUserAlertParams>): string {
 
           <!-- Header -->
           <tr>
-            <td style="background:#F5C518;border-radius:12px 12px 0 0;padding:28px 32px;">
-              <p style="margin:0;font-size:13px;color:#F5C518;letter-spacing:2px;text-transform:uppercase;font-weight:600;">JC ONE FIX · Super Admin</p>
+            <td style="background:#124c48;border-radius:12px 12px 0 0;padding:28px 32px;">
+              <p style="margin:0;font-size:13px;color:#a3e635;letter-spacing:2px;text-transform:uppercase;font-weight:600;">JC ONE FIX · Super Admin</p>
               <h1 style="margin:8px 0 0;font-size:24px;color:#ffffff;font-weight:700;">
                 🚀 Nuevo Registro
               </h1>
@@ -97,7 +105,7 @@ function buildHtml(params: Required<NewUserAlertParams>): string {
                 <tr style="border-bottom:1px solid #f1f5f9;">
                   <td style="padding:12px 0;color:#64748b;font-size:13px;">Email</td>
                   <td style="padding:12px 0;font-size:14px;">
-                    <a href="mailto:${email}" style="color:#F5C518;text-decoration:none;font-weight:600;">${email}</a>
+                    <a href="mailto:${email}" style="color:#124c48;text-decoration:none;font-weight:600;">${email}</a>
                   </td>
                 </tr>
                 <tr style="border-bottom:1px solid #f1f5f9;">
@@ -119,7 +127,7 @@ function buildHtml(params: Required<NewUserAlertParams>): string {
               <!-- CTA -->
               <div style="margin-top:28px;padding-top:24px;border-top:1px solid #e2e8f0;text-align:center;">
                 <a href="mailto:${email}?subject=¡Bienvenido a JC ONE FIX!"
-                   style="display:inline-block;background:#F5C518;color:#F5C518;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">
+                   style="display:inline-block;background:#124c48;color:#a3e635;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">
                   ✉️ Enviar mensaje de bienvenida
                 </a>
               </div>
@@ -134,6 +142,78 @@ function buildHtml(params: Required<NewUserAlertParams>): string {
             </td>
           </tr>
 
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+function buildSupportMessageHtml(params: Required<SupportMessageAlertParams>): string {
+  const { userName, userEmail, message, organizationName, sentAt } = params;
+  const formattedDate = sentAt.toLocaleString('es-AR', {
+    timeZone: 'America/Argentina/Buenos_Aires',
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const safeMessage = message
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/\n/g, '<br/>');
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuevo mensaje de soporte</title>
+</head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+          <tr>
+            <td style="background:#124c48;border-radius:12px 12px 0 0;padding:28px 32px;">
+              <p style="margin:0;font-size:13px;color:#a3e635;letter-spacing:2px;text-transform:uppercase;font-weight:600;">JC ONE FIX · Soporte</p>
+              <h1 style="margin:8px 0 0;font-size:24px;color:#ffffff;font-weight:700;">💬 Nuevo mensaje de soporte</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#ffffff;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:32px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                <tr style="border-bottom:1px solid #f1f5f9;">
+                  <td style="padding:12px 0;color:#64748b;font-size:13px;width:150px;">Usuario</td>
+                  <td style="padding:12px 0;font-weight:700;color:#0f172a;font-size:15px;">${userName}</td>
+                </tr>
+                <tr style="border-bottom:1px solid #f1f5f9;">
+                  <td style="padding:12px 0;color:#64748b;font-size:13px;">Email</td>
+                  <td style="padding:12px 0;font-size:14px;"><a href="mailto:${userEmail}" style="color:#124c48;text-decoration:none;font-weight:600;">${userEmail}</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid #f1f5f9;">
+                  <td style="padding:12px 0;color:#64748b;font-size:13px;">Taller</td>
+                  <td style="padding:12px 0;color:#0f172a;font-size:14px;">${organizationName || 'Sin taller asignado'}</td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0;color:#64748b;font-size:13px;">Fecha y hora</td>
+                  <td style="padding:12px 0;color:#0f172a;font-size:13px;">${formattedDate} (hora Madrid)</td>
+                </tr>
+              </table>
+              <div style="margin-top:24px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc;padding:18px;">
+                <p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;">Mensaje</p>
+                <p style="margin:0;font-size:14px;line-height:1.6;color:#0f172a;">${safeMessage}</p>
+              </div>
+            </td>
+          </tr>
         </table>
       </td>
     </tr>
@@ -172,6 +252,37 @@ export async function notifyAdminNewUser(params: NewUserAlertParams): Promise<vo
   }
 }
 
+export async function notifyAdminSupportMessage(params: SupportMessageAlertParams): Promise<void> {
+  const transporter = createGmailTransporter();
+  if (!transporter) {
+    console.warn('[admin-alert] GMAIL_USER o GMAIL_APP_PASSWORD no configurados — notificación omitida');
+    return;
+  }
+
+  const to = adminAlertInbox();
+  const sentAt = params.sentAt ?? new Date();
+  const fullParams: Required<SupportMessageAlertParams> = {
+    ...params,
+    sentAt,
+    organizationName: params.organizationName ?? null,
+  };
+  const subject = `💬 SOPORTE: ${params.userName}${params.organizationName ? ` · ${params.organizationName}` : ''}`;
+
+  try {
+    await transporter.sendMail({
+      from: gmailSmtpFromHeader(),
+      to,
+      subject,
+      html: buildSupportMessageHtml(fullParams),
+      replyTo: params.userEmail || undefined,
+    });
+    console.info(`[admin-alert] Aviso de soporte enviado a ${to} — ${params.userName}`);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('[admin-alert] Error SMTP (aviso soporte):', msg);
+  }
+}
+
 /** Derive country name from Vercel geo header (ISO 3166-1 alpha-2) or fallback. */
 export function countryFromGeoHeader(header: string | null): string {
   if (!header) return 'Argentina';
@@ -195,137 +306,4 @@ export function countryFromGeoHeader(header: string | null): string {
     PT: 'Portugal',
   };
   return map[header.toUpperCase()] ?? header;
-}
-
-export interface SupportMessageAlertParams {
-  userName: string;
-  userEmail: string;
-  message: string;
-  organizationName: string | null;
-  sentAt?: Date;
-}
-
-function buildSupportAlertHtml(params: Required<SupportMessageAlertParams>): string {
-  const { userName, userEmail, message, organizationName, sentAt } = params;
-  const formattedDate = sentAt.toLocaleString('es-AR', {
-    timeZone: 'America/Argentina/Buenos_Aires',
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-
-  const orgInfo = organizationName ? `<span style="color:#64748b;">(${organizationName})</span>` : '';
-
-  return `<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nuevo mensaje de soporte - JC ONE FIX</title>
-</head>
-<body style="margin:0;padding:0;background:#f1f5f9;font-family:Arial,Helvetica,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:32px 16px;">
-    <tr>
-      <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
-
-          <!-- Header -->
-          <tr>
-            <td style="background:#F5C518;border-radius:12px 12px 0 0;padding:28px 32px;">
-              <p style="margin:0;font-size:13px;color:#F5C518;letter-spacing:2px;text-transform:uppercase;font-weight:600;">JC ONE FIX · Super Admin</p>
-              <h1 style="margin:8px 0 0;font-size:24px;color:#ffffff;font-weight:700;">
-                Nuevo mensaje de soporte
-              </h1>
-            </td>
-          </tr>
-
-          <!-- Body -->
-          <tr>
-            <td style="background:#ffffff;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;padding:32px;">
-
-              <p style="margin:0 0 24px;font-size:15px;color:#334155;">
-                Un cliente ha enviado un mensaje al chat de soporte:
-              </p>
-
-              <!-- Data table -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                <tr style="border-bottom:1px solid #f1f5f9;">
-                  <td style="padding:12px 0;color:#64748b;font-size:13px;width:130px;">Cliente</td>
-                  <td style="padding:12px 0;font-weight:700;color:#0f172a;font-size:15px;">${userName}</td>
-                </tr>
-                <tr style="border-bottom:1px solid #f1f5f9;">
-                  <td style="padding:12px 0;color:#64748b;font-size:13px;">Email</td>
-                  <td style="padding:12px 0;font-size:14px;">
-                    <a href="mailto:${userEmail}" style="color:#F5C518;text-decoration:none;font-weight:600;">${userEmail}</a>
-                  </td>
-                </tr>
-                <tr style="border-bottom:1px solid #f1f5f9;">
-                  <td style="padding:12px 0;color:#64748b;font-size:13px;">Fecha</td>
-                  <td style="padding:12px 0;color:#0f172a;font-size:13px;">${formattedDate} (hora Madrid)</td>
-                </tr>
-              </table>
-
-              <!-- Message -->
-              <div style="margin-top:24px;padding:20px;background:#f8fafc;border-radius:8px;border-left:4px solid #F5C518;">
-                <p style="margin:0 0 8px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:1px;">Mensaje</p>
-                <p style="margin:0;font-size:15px;color:#0f172a;line-height:1.5;white-space:pre-wrap;">${message}</p>
-              </div>
-
-              <!-- CTA -->
-              <div style="margin-top:28px;padding-top:24px;border-top:1px solid #e2e8f0;text-align:center;">
-                <a href="https://jconefix.com.ar/admin/app/soporte"
-                   style="display:inline-block;background:#F5C518;color:#F5C518;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">
-                  Ir al panel de soporte
-                </a>
-              </div>
-
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td style="padding:16px 0;text-align:center;">
-              <p style="margin:0;font-size:11px;color:#94a3b8;">JC ONE FIX · Notificación automática para Super Admin</p>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
-}
-
-/**
- * Sends an email alert to the Super Admin when a customer sends a support message.
- * Runs fire-and-forget — never throws to the caller.
- */
-export async function notifyAdminSupportMessage(params: SupportMessageAlertParams): Promise<void> {
-  const transporter = createGmailTransporter();
-  if (!transporter) {
-    console.warn('[admin-alert] GMAIL_USER o GMAIL_APP_PASSWORD no configurados — notificación de soporte omitida');
-    return;
-  }
-
-  const to = adminAlertInbox();
-  const sentAt = params.sentAt ?? new Date();
-  const fullParams: Required<SupportMessageAlertParams> = { ...params, sentAt };
-  const subject = ` Nuevo mensaje de soporte: ${params.userName}`;
-
-  try {
-    await transporter.sendMail({
-      from: gmailSmtpFromHeader(),
-      to,
-      subject,
-      html: buildSupportAlertHtml(fullParams),
-    });
-    console.info(`[admin-alert] Notificación de soporte enviada a ${to} — ${params.userName}`);
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error('[admin-alert] Error SMTP al enviar notificación de soporte:', msg);
-  }
 }

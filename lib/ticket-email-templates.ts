@@ -57,7 +57,7 @@ function companyFooterBlock(shop: ShopEmailSettings): string {
 
   const mailHref = mail ? `mailto:${mail.replace(/[\s<>"']/g, '')}` : '';
   const mailRow = mail
-    ? `<a href="${mailHref}" style="color:#F5C518;text-decoration:none;">${escapeHtml(mail)}</a>`
+    ? `<a href="${mailHref}" style="color:#99f6e4;text-decoration:none;">${escapeHtml(mail)}</a>`
     : '<span style="color:#64748b;">—</span>';
   const phoneRow = phone
     ? `<a href="tel:${phone.replace(/\s/g, '')}" style="color:#e2e8f0;text-decoration:none;">${phone}</a>`
@@ -65,8 +65,8 @@ function companyFooterBlock(shop: ShopEmailSettings): string {
 
   return `
   <tr>
-    <td style="background:linear-gradient(180deg,#0f172a 0%,#020617 100%);padding:28px 36px;border-radius:0 0 16px 16px;border-top:3px solid #F5C518;">
-      <p style="margin:0 0 12px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#F5C518;font-weight:600;">Datos del taller</p>
+    <td style="background:linear-gradient(180deg,#0f172a 0%,#020617 100%);padding:28px 36px;border-radius:0 0 16px 16px;border-top:3px solid #0d9488;">
+      <p style="margin:0 0 12px;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#5eead4;font-weight:600;">Datos del taller</p>
       <p style="margin:0 0 8px;font-size:17px;font-weight:700;color:#f8fafc;letter-spacing:-0.02em;">${name}</p>
       ${addr ? `<p style="margin:0 0 10px;font-size:13px;line-height:1.55;color:#94a3b8;">${addr}</p>` : ''}
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:12px;">
@@ -90,7 +90,7 @@ function customerBlock(ctx: TicketEmailContext): string {
   const lines: string[] = [];
   if (ctx.customerEmail?.trim()) {
     lines.push(
-      `<tr><td style="padding:2px 0;font-size:13px;color:#334155;"><span style="color:#64748b;width:72px;display:inline-block;">Email</span> <a href="mailto:${escapeHtml(ctx.customerEmail.trim())}" style="color:#F5C518;text-decoration:none;">${escapeHtml(ctx.customerEmail.trim())}</a></td></tr>`
+      `<tr><td style="padding:2px 0;font-size:13px;color:#334155;"><span style="color:#64748b;width:72px;display:inline-block;">Email</span> <a href="mailto:${escapeHtml(ctx.customerEmail.trim())}" style="color:#0d9488;text-decoration:none;">${escapeHtml(ctx.customerEmail.trim())}</a></td></tr>`
     );
   }
   if (ctx.customerPhone?.trim()) {
@@ -114,7 +114,7 @@ function customerBlock(ctx: TicketEmailContext): string {
     <td style="padding:0 36px 8px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
         <tr>
-          <td style="background:linear-gradient(90deg,#F5C518 0%,#D4A915 100%);padding:10px 18px;">
+          <td style="background:linear-gradient(90deg,#0d9488 0%,#0f766e 100%);padding:10px 18px;">
             <p style="margin:0;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.9);">Cliente</p>
           </td>
         </tr>
@@ -302,7 +302,7 @@ export function buildTicketEmailTemplates(): EmailTemplateDef[] {
       html: (ctx, shop) => {
         const inner = `
 ${heroRow(
-          'linear-gradient(145deg, #F5C518 0%, #0e7490 42%, #0369a1 100%)',
+          'linear-gradient(145deg, #0d9488 0%, #0e7490 42%, #0369a1 100%)',
           ILLU.success,
           'Buenas noticias',
           `¡Hola, ${ctx.customerName}!`,
@@ -377,7 +377,7 @@ ${deviceAndTotalsRow(ctx, {
       html: (ctx, shop) => {
         const inner = `
 ${heroRow(
-          'linear-gradient(145deg, #0891b2 0%, #F5C518 50%, #155e75 100%)',
+          'linear-gradient(145deg, #0891b2 0%, #0d9488 50%, #155e75 100%)',
           ILLU.work,
           'Actualización',
           'Tu equipo está en el taller',

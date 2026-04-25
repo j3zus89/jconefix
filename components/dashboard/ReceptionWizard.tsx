@@ -457,18 +457,15 @@ export function ReceptionWizard() {
         toast.error('Busca y selecciona un cliente o cambia a «Cliente nuevo».');
         return;
       }
-      // Para clientes EXISTENTES: flexibilidad total - solo verificar que tenga documento cargado
-      // pero NO validar dígito verificador CUIT ni condición IVA para permitir continuar con datos antiguos
-      if (loc.isAR && selectedCustomer.id) {
-        const idNum = (selectedCustomer.id_number || '').trim();
-        // Solo verificar que tenga algún documento cargado (mínimo indispensable)
-        if (!idNum) {
-          toast.error('El cliente no tiene documento cargado. Editá la ficha del cliente primero.');
+      if (loc.isAR) {
+        if (
+          !assertArCustomerFiscal(
+            selectedCustomer.id_type || loc.defaultIdType,
+            selectedCustomer.id_number,
+            selectedCustomer.tax_class,
+          )
+        )
           return;
-        }
-        // NOTA: No validamos condición IVA ni dígito verificador CUIT aquí para permitir
-        // la recepción de equipos de clientes antiguos con datos incompletos.
-        // Estos datos se validarán al momento de emitir la factura legal.
       }
       setForm((prev) => ({ ...prev, customer_id: selectedCustomer.id }));
       setStep(2);
@@ -577,9 +574,16 @@ export function ReceptionWizard() {
       toast.error('Falta el cliente.');
       return;
     }
-    // NOTA: No validamos condición IVA ni CUIT para clientes EXISTENTES al guardar ticket.
-    // Estos datos se validarán al momento de emitir la factura legal, no en la recepción.
-    // Esto permite trabajar con clientes antiguos que tienen datos fiscales incompletos.
+    if (loc.isAR && selectedCustomer?.id === cid) {
+      if (
+        !assertArCustomerFiscal(
+          selectedCustomer.id_type || loc.defaultIdType,
+          selectedCustomer.id_number,
+          selectedCustomer.tax_class,
+        )
+      )
+        return;
+    }
     if (!form.device_type) {
       toast.error('Indica el dispositivo');
       return;
@@ -1274,7 +1278,7 @@ export function ReceptionWizard() {
                     Continuar al equipo
                   </Button>
                   <Link href="/dashboard/customers">
-                    <Button type="button" className="bg-[#0f766e] text-white hover:bg-[#115e59]">
+                    <Button type="button" variant="outline">
                       Ver todos los clientes
                     </Button>
                   </Link>
@@ -1304,8 +1308,9 @@ export function ReceptionWizard() {
                 </div>
                 <Button
                   type="button"
+                  variant="outline"
                   size="sm"
-                  className="shrink-0 gap-1 bg-[#0f766e] text-white hover:bg-[#115e59]"
+                  className="shrink-0 gap-1"
                   onClick={() => setStep(1)}
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
@@ -1730,7 +1735,7 @@ export function ReceptionWizard() {
               </Button>
               <Button
                 type="button"
-                className="bg-[#0f766e] text-white hover:bg-[#115e59]"
+                variant="outline"
                 disabled={savingTicket}
                 onClick={(e) => handleSubmitTicket(e, true)}
               >

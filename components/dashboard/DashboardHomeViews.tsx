@@ -362,7 +362,7 @@ function DashboardSharedBody({ props }: { props: DashboardHomeViewProps }) {
                   <BarChart3 className="h-4 w-4 text-primary" />
                   {isAR ? 'Ingresos diarios (POS + reparaciones)' : 'Sales vs. COGS'}
                 </CardTitle>
-                <Button size="sm" className="h-7 gap-1 text-xs bg-[#0f766e] text-white hover:bg-[#115e59]">
+                <Button variant="outline" size="sm" className="h-7 gap-1 text-xs">
                   <Download className="h-3 w-3" />
                   {isAR ? 'Ver detalle' : 'Ver informe'}
                 </Button>
@@ -448,8 +448,9 @@ function DashboardSharedBody({ props }: { props: DashboardHomeViewProps }) {
                   <p className="text-xs text-gray-500">{periodUiShort(activePeriod)} · según el período arriba</p>
                 </div>
                 <Button
+                  variant="outline"
                   size="sm"
-                  className="h-7 bg-[#0f766e] text-xs text-white hover:bg-[#115e59]"
+                  className="h-7 border-transparent bg-primary text-xs text-primary-foreground hover:bg-primary/90"
                 >
                   {isAR ? 'Descargar' : 'Descargar informe'}
                 </Button>
@@ -524,7 +525,7 @@ function DashboardSharedBody({ props }: { props: DashboardHomeViewProps }) {
                 {[
                   { label: 'Pendientes', count: s.pendingTickets, color: 'bg-yellow-400' },
                   { label: 'En progreso', count: s.inProgressTickets, color: 'bg-blue-400' },
-                  { label: 'Completados', count: s.completedTickets, color: 'bg-primary' },
+                  { label: 'Completados', count: s.completedTickets, color: 'bg-green-500' },
                 ].map((item) => (
                   <div key={item.label}>
                     <div className="mb-1 flex justify-between text-sm">
@@ -555,7 +556,7 @@ function DashboardSharedBody({ props }: { props: DashboardHomeViewProps }) {
                 <CardTitle className="text-base font-semibold">
                   {isAR ? 'Formas de pago (caja)' : 'Métodos de pago (POS)'}
                 </CardTitle>
-                <Button size="sm" className="h-7 text-xs bg-[#0f766e] text-white hover:bg-[#115e59]">
+                <Button variant="outline" size="sm" className="h-7 text-xs">
                   {isAR ? 'Ver detalle' : 'Ver informe'}
                 </Button>
               </div>
@@ -743,19 +744,19 @@ function ClassicHeaderBar(props: DashboardHomeViewProps) {
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
           <Link href="/dashboard/recepcion">
-            <Button size="sm" className="gap-2 bg-primary text-white shadow-sm hover:bg-primary">
+            <Button size="sm" className="gap-2 shadow-sm">
               <ClipboardSignature className="h-4 w-4" />
               Nuevo ingreso
             </Button>
           </Link>
           <WorkshopReportPdfMenu shopName={organizationName} currencySymbol={loc.symbol} />
-          <Button size="sm" className="gap-2 bg-[#0f766e] text-white hover:bg-[#115e59]" onClick={() => window.print()}>
+          <Button variant="outline" size="sm" className="gap-2" onClick={() => window.print()}>
             <Printer className="h-4 w-4" />
             {isAR ? 'Imprimir resumen' : 'Ejecutar informe'}
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button type="button" size="sm" className="h-8 w-8 p-0 bg-[#0f766e] text-white hover:bg-[#115e59]" aria-label="Más acciones del resumen">
+              <Button type="button" variant="outline" size="sm" className="h-8 w-8 p-0" aria-label="Más acciones del resumen">
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

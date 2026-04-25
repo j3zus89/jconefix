@@ -105,9 +105,9 @@ export function WelcomeModal() {
             ))}
           </div>
 
-          <div className="mt-5 rounded-xl border border-gray-200 bg-gradient-to-b from-primary/10 to-white px-4 py-4 sm:px-5">
+          <div className="mt-5 rounded-xl border border-gray-200 bg-gradient-to-b from-slate-50/90 to-white px-4 py-4 sm:px-5">
             <div className="mb-3 flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-white shadow-sm">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-white shadow-sm">
                 <LayoutGrid className="h-5 w-5" aria-hidden />
               </div>
               <div className="min-w-0 pt-0.5">

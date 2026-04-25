@@ -72,7 +72,7 @@ export default function LeadsPage() {
           <Button asChild variant="outline">
             <Link href="/dashboard/customers">Todos los clientes</Link>
           </Button>
-          <Button asChild className="bg-primary hover:bg-primary">
+          <Button asChild className="bg-[#0d9488] hover:bg-[#0f766e]">
             <Link href="/dashboard/customers/new">Nuevo cliente</Link>
           </Button>
         </div>

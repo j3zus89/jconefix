@@ -174,8 +174,9 @@ export function WarrantyReintakeCard({
             <div className="flex flex-wrap gap-2">
               <Button
                 type="button"
+                variant="outline"
                 size="sm"
-                className="h-8 bg-[#0f766e] text-white hover:bg-[#115e59] text-xs"
+                className="h-8 border-teal-200 text-xs"
                 onClick={() => onCopyDeviceFrom(linked)}
               >
                 Copiar datos del equipo

@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 
-const accent = 'border-[#F5C518] text-[#F5C518] focus-visible:ring-[#F5C518]';
+const accent = 'border-[#0d9488] text-[#0d9488] focus-visible:ring-[#0d9488]';
 
 export type InventoryMultiOption = {
   value: string;
@@ -90,7 +90,7 @@ export function InventoryMultiSelect({
             className={cn(
               'flex h-8 w-full items-center justify-between rounded border bg-white px-2 text-left text-xs',
               accent,
-              open && 'ring-1 ring-[#F5C518]',
+              open && 'ring-1 ring-[#0d9488]',
               disabled && 'opacity-50 cursor-not-allowed'
             )}
           >
@@ -125,9 +125,9 @@ export function InventoryMultiSelect({
                 allFilteredSelected ? true : someFilteredSelected ? 'indeterminate' : false
               }
               onCheckedChange={() => toggleSelectAllFiltered()}
-              className="border-[#F5C518] data-[state=checked]:bg-[#F5C518]"
+              className="border-[#0d9488] data-[state=checked]:bg-[#0d9488]"
             />
-            <span className="text-xs font-semibold uppercase tracking-wide text-[#F5C518]">
+            <span className="text-xs font-semibold uppercase tracking-wide text-[#0d9488]">
               Seleccionar todo
             </span>
           </button>
@@ -143,11 +143,11 @@ export function InventoryMultiSelect({
                   <Checkbox
                     checked={value.includes(o.value)}
                     onCheckedChange={() => toggleValue(o.value)}
-                    className="border-[#F5C518] data-[state=checked]:bg-[#F5C518]"
+                    className="border-[#0d9488] data-[state=checked]:bg-[#0d9488]"
                   />
                   <span className="text-xs text-gray-800 flex-1 truncate">{o.label}</span>
                   {o.badge ? (
-                    <span className="shrink-0 rounded bg-[#F5C518] px-1.5 py-0 text-[10px] font-medium text-white">
+                    <span className="shrink-0 rounded bg-[#0d9488] px-1.5 py-0 text-[10px] font-medium text-white">
                       {o.badge}
                     </span>
                   ) : null}

@@ -168,13 +168,13 @@ export default function ProfilePage() {
                   {profile.avatar_url ? (
                     <AvatarImage src={profile.avatar_url} alt="" className="object-cover" />
                   ) : null}
-                  <AvatarFallback className="bg-primary text-white text-2xl">{initials}</AvatarFallback>
+                  <AvatarFallback className="bg-[#0d9488] text-white text-2xl">{initials}</AvatarFallback>
                 </Avatar>
                 <button
                   type="button"
                   disabled={uploadingAvatar}
                   onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full hover:bg-primary/90 disabled:opacity-50 shadow-md"
+                  className="absolute bottom-0 right-0 bg-[#0d9488] text-white p-1.5 rounded-full hover:bg-[#0f766e] disabled:opacity-50 shadow-md"
                   title="Cambiar foto de perfil"
                 >
                   {uploadingAvatar ? (
@@ -200,7 +200,7 @@ export default function ProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5 text-primary" />
+              <User className="h-5 w-5 text-[#0d9488]" />
               Información personal
             </CardTitle>
           </CardHeader>
@@ -249,7 +249,7 @@ export default function ProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Building className="h-5 w-5 text-primary" />
+              <Building className="h-5 w-5 text-[#0d9488]" />
               Empresa / taller
             </CardTitle>
           </CardHeader>
@@ -281,7 +281,7 @@ export default function ProfilePage() {
           <Button
             onClick={handleSave}
             disabled={saving}
-            className="bg-primary hover:bg-primary/90"
+            className="bg-[#0d9488] hover:bg-[#0f766e]"
           >
             <Save className="h-4 w-4 mr-2" />
             {saving ? 'Guardando…' : 'Guardar cambios'}

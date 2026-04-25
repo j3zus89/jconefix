@@ -111,7 +111,6 @@ export function FloatingTeamChatMessageRow({
       <PanelChatMessageBlock
         variant={isOwnMessage ? 'outgoing' : 'incoming'}
         senderName={isOwnMessage ? 'Vos' : senderName}
-        senderColor={senderColor}
         timeShort={timeLabel}
         avatar={avatar}
       >

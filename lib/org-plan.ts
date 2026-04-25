@@ -17,7 +17,7 @@ export type OrgPlanFeatures = {
 };
 
 /** Prueba gratuita pública (días). Debe coincidir con middleware y alta automática. */
-export const PUBLIC_TRIAL_DAYS = 30;
+export const PUBLIC_TRIAL_DAYS = 15;
 
 /** Fin de prueba desde `from` (misma hora + N días en ms). */
 export function computePublicTrialEndsAt(from: Date = new Date()): string {

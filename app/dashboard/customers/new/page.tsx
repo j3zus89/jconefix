@@ -190,118 +190,349 @@ export default function NewCustomerPage() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 xl:items-stretch">
               <div className="min-w-0 order-1 xl:order-none xl:col-start-1 xl:row-start-1">
-                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                  <div className={cn(dashboardFormSectionHeader, 'px-3 py-2')}>
-                    <h2 className="text-xs font-semibold text-white">Información básica</h2>
-                  </div>
-                  <div className="p-3 grid grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-2">
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className={cn(dashboardFormSectionHeader, 'px-3 py-2')}>
+                <h2 className="text-xs font-semibold text-white">Información básica</h2>
+              </div>
+              <div className="p-3 grid grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-2">
+                <FormField
+                  control={form.control}
+                  name="customer_group"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Grupo de clientes
+                      </FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="mt-0.5 h-8">
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Particular">Particular</SelectItem>
+                          <SelectItem value="Empresa">Empresa</SelectItem>
+                          <SelectItem value="VIP">VIP</SelectItem>
+                          <SelectItem value="Mayorista">Mayorista</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="organization"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Organización
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="mt-0.5 h-8"
+                          placeholder="Nombre de la empresa..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="first_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Nombre <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input className="mt-0.5 h-8" placeholder="Juan" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="last_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Apellido
+                      </FormLabel>
+                      <FormControl>
+                        <Input className="mt-0.5 h-8" placeholder="García" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Correo electrónico
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="mt-0.5 h-8"
+                          type="email"
+                          placeholder="juan@ejemplo.com"
+                          autoComplete="email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2 md:col-span-3">
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Móvil
+                      </FormLabel>
+                      <div className="flex mt-0.5 gap-2">
+                        <div className="flex items-center gap-1.5 border border-gray-200 rounded-md px-2.5 h-8 text-sm text-gray-600 bg-gray-50 flex-shrink-0">
+                          <span className="text-base">{loc.phoneFlag}</span>
+                          <span>{loc.phonePrefix}</span>
+                        </div>
+                        <FormControl>
+                          <Input
+                            className="h-8 flex-1"
+                            type="tel"
+                            placeholder={loc.phonePlaceholder}
+                            {...field}
+                          />
+                        </FormControl>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="how_did_you_find_us"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        ¿Cómo nos conociste?
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value || undefined}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="mt-0.5 h-8">
+                            <SelectValue placeholder="Seleccionar..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Google">Google</SelectItem>
+                          <SelectItem value="Redes sociales">Redes sociales</SelectItem>
+                          <SelectItem value="Recomendación">Recomendación</SelectItem>
+                          <SelectItem value="Publicidad">Publicidad</SelectItem>
+                          <SelectItem value="Otro">Otro</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="tax_class"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Clase de impuestos
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value || undefined}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="mt-0.5 h-8">
+                            <SelectValue placeholder="Seleccionar..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Sin impuesto">Sin impuesto</SelectItem>
+                          <SelectItem value="IVA 10%">IVA 10%</SelectItem>
+                          <SelectItem value="IVA 21%">IVA 21%</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="tags"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2 md:col-span-3">
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Etiquetas
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="mt-0.5 h-8"
+                          placeholder="VIP, frecuente, corporativo…"
+                          {...field}
+                        />
+                      </FormControl>
+                      <p className="text-[10px] text-gray-400 mt-0.5 leading-tight">
+                        Separá con comas
+                      </p>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+            </div>
+
+            <div className="min-w-0 order-3 xl:order-none xl:col-start-2 xl:row-start-1 xl:row-span-2 flex flex-col">
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col h-full min-h-0">
+              <div className={cn(dashboardFormSectionHeader, 'px-3 py-2 shrink-0')}>
+                <h2 className="text-xs font-semibold text-white">
+                  Información adicional y alertas
+                </h2>
+              </div>
+              <div className="p-3 grid grid-cols-2 gap-x-3 gap-y-2 flex-1 min-h-0">
+                <FormField
+                  control={form.control}
+                  name="id_type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Tipo de ID
+                      </FormLabel>
+                      <Select
+                        onValueChange={(v) => {
+                          field.onChange(v);
+                          if (orgCountry === 'AR') {
+                            const cur = form.getValues('id_number');
+                            form.setValue('id_number', formatArgentinaIdInput(v, cur), {
+                              shouldValidate: true,
+                            });
+                          }
+                        }}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="mt-0.5 h-8">
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {orgCountry === 'AR' ? (
+                            <>
+                              <SelectItem value="CUIT">CUIT</SelectItem>
+                              <SelectItem value="CUIL">CUIL</SelectItem>
+                              <SelectItem value="DNI">DNI</SelectItem>
+                              <SelectItem value="Pasaporte">Pasaporte</SelectItem>
+                              <SelectItem value="Otro">Otro</SelectItem>
+                            </>
+                          ) : (
+                            <>
+                              <SelectItem value="DNI">DNI</SelectItem>
+                              <SelectItem value="NIE">NIE</SelectItem>
+                              <SelectItem value="NIF">NIF</SelectItem>
+                              <SelectItem value="CIF">CIF</SelectItem>
+                              <SelectItem value="Pasaporte">Pasaporte</SelectItem>
+                              <SelectItem value="Número de seguro social">
+                                Número de seguro social
+                              </SelectItem>
+                              <SelectItem value="Otro">Otro</SelectItem>
+                            </>
+                          )}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="id_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        {fiscalIdLabel(orgCountry)}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="mt-0.5 h-8"
+                          placeholder={orgCountry === 'AR' ? '20-12345678-9' : '12345678A'}
+                          name={field.name}
+                          ref={field.ref}
+                          value={field.value}
+                          onBlur={field.onBlur}
+                          onChange={(e) => {
+                            const idType = form.watch('id_type');
+                            field.onChange(
+                              orgCountry === 'AR'
+                                ? formatArgentinaIdInput(idType, e.target.value)
+                                : e.target.value
+                            );
+                          }}
+                          inputMode={
+                            orgCountry === 'AR' &&
+                            ['CUIT', 'CUIL', 'DNI'].includes(form.watch('id_type'))
+                              ? 'numeric'
+                              : undefined
+                          }
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="col-span-2">
+                  <p className="text-[10px] font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                    Persona de contacto
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <FormField
                       control={form.control}
-                      name="customer_group"
+                      name="contact_person"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-xs font-medium text-gray-600">
-                            Grupo de clientes
-                          </FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="mt-0.5 h-8">
-                                <SelectValue />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Particular">Particular</SelectItem>
-                              <SelectItem value="Empresa">Empresa</SelectItem>
-                              <SelectItem value="VIP">VIP</SelectItem>
-                              <SelectItem value="Mayorista">Mayorista</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="organization"
-                      render={({ field }) => (
-                        <FormItem className="md:col-span-2">
-                          <FormLabel className="text-xs font-medium text-gray-600">
-                            Organización
+                            Persona de contacto
                           </FormLabel>
                           <FormControl>
-                            <Input
-                              className="mt-0.5 h-8"
-                              placeholder="Nombre de la empresa..."
-                              {...field}
-                            />
+                            <Input className="mt-0.5 h-8" placeholder="María García" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-
                     <FormField
                       control={form.control}
-                      name="first_name"
+                      name="contact_phone"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-xs font-medium text-gray-600">
-                            Nombre <span className="text-red-500">*</span>
-                          </FormLabel>
-                          <FormControl>
-                            <Input className="mt-0.5 h-8" placeholder="Juan" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="last_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-xs font-medium text-gray-600">
-                            Apellido
-                          </FormLabel>
-                          <FormControl>
-                            <Input className="mt-0.5 h-8" placeholder="García" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-xs font-medium text-gray-600">
-                            Correo electrónico
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              className="mt-0.5 h-8"
-                              type="email"
-                              placeholder="juan@ejemplo.com"
-                              autoComplete="email"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem className="col-span-2 md:col-span-3">
-                          <FormLabel className="text-xs font-medium text-gray-600">
-                            Móvil
+                            Teléfono
                           </FormLabel>
                           <div className="flex mt-0.5 gap-2">
                             <div className="flex items-center gap-1.5 border border-gray-200 rounded-md px-2.5 h-8 text-sm text-gray-600 bg-gray-50 flex-shrink-0">
@@ -321,6 +552,48 @@ export default function NewCustomerPage() {
                         </FormItem>
                       )}
                     />
+                    <FormField
+                      control={form.control}
+                      name="contact_relation"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-xs font-medium text-gray-600">
+                            Relación
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              className="mt-0.5 h-8"
+                              placeholder="Cónyuge, Familiar..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="notes"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2">
+                      <FormLabel className="text-xs font-medium text-gray-600">
+                        Notas internas
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          className="mt-0.5 min-h-[19rem] w-full resize-y text-sm"
+                          rows={12}
+                          placeholder="Notas adicionales sobre el cliente…"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <div className="col-span-2 border-t border-gray-100 pt-2.5 mt-0.5 space-y-2.5">
                   {showRgpdSection && (
@@ -518,7 +791,7 @@ export default function NewCustomerPage() {
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting}
-                className="gap-2 bg-primary text-white hover:bg-primary"
+                className="gap-2 bg-[#0d9488] text-white hover:bg-[#0f766e]"
               >
                 {form.formState.isSubmitting && (
                   <Loader2 className="h-4 w-4 animate-spin" />

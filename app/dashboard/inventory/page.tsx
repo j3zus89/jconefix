@@ -688,11 +688,11 @@ export default function ProductsPage() {
         <h1 className="text-2xl font-bold text-gray-800">Gestión de Repuestos</h1>
         <div className="flex items-center gap-2">
           <Button
-            size="sm"
             variant="outline"
+            size="sm"
             className={cn(
-              'gap-1.5',
-              autoLoadSaved && 'bg-primary/10 text-primary border-primary/30'
+              'text-[#0d9488] border-[#0d9488] hover:bg-[#0d9488]/10',
+              autoLoadSaved && 'bg-[#0d9488]/10'
             )}
             onClick={() => togglePinSavedFilters()}
             title={
@@ -708,20 +708,22 @@ export default function ProductsPage() {
             )}
             {autoLoadSaved ? 'Filtros fijados' : 'Fijar filtros'}
           </Button>
-          <Button size="sm" variant="outline">
+          <Button variant="outline" size="sm" className="text-gray-600">
             Resumen
           </Button>
           <Button
-            size="sm"
             variant="outline"
+            size="sm"
+            className="text-[#0d9488] border-[#0d9488] hover:bg-[#0d9488]/10"
             onClick={() => void exportProductsXlsx()}
           >
             <FileDown className="h-4 w-4 mr-1" />
             Exportar Excel
           </Button>
           <Button 
+            variant="outline" 
             size="sm" 
-            variant="outline"
+            className="text-gray-600"
             onClick={() => setIsImportModalOpen(true)}
           >
             <Upload className="h-4 w-4 mr-1" />
@@ -729,7 +731,7 @@ export default function ProductsPage() {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="sm" variant="outline">
+              <Button variant="outline" size="sm" className="text-gray-600">
                 Acciones
                 <ChevronDown className="h-3 w-3 ml-1" />
               </Button>
@@ -769,7 +771,7 @@ export default function ProductsPage() {
           </DropdownMenu>
           <Button 
             size="sm" 
-            className="bg-primary hover:bg-primary/90 text-white"
+            className="bg-[#0d9488] hover:bg-[#0f766e] text-white"
             onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus className="h-4 w-4 mr-1" />
@@ -789,7 +791,7 @@ export default function ProductsPage() {
                   placeholder="Introducir ID"
                   value={filters.id}
                   onChange={(e) => setFilters({ ...filters, id: e.target.value })}
-                  className="h-8 text-xs border-gray-300 focus-visible:ring-primary"
+                  className="h-8 text-xs border-[#0d9488]/40 focus-visible:ring-[#0d9488]"
                 />
               </div>
 
@@ -799,7 +801,7 @@ export default function ProductsPage() {
                   placeholder="Introducir nombre"
                   value={filters.name}
                   onChange={(e) => setFilters({ ...filters, name: e.target.value })}
-                  className="h-8 text-xs border-gray-300 focus-visible:ring-primary"
+                  className="h-8 text-xs border-[#0d9488]/40 focus-visible:ring-[#0d9488]"
                 />
               </div>
 
@@ -842,7 +844,7 @@ export default function ProductsPage() {
                   placeholder="SKU o UPC"
                   value={filters.skuUpc}
                   onChange={(e) => setFilters({ ...filters, skuUpc: e.target.value })}
-                  className="h-8 text-xs border-gray-300 focus-visible:ring-primary"
+                  className="h-8 text-xs border-[#0d9488]/40 focus-visible:ring-[#0d9488]"
                 />
               </div>
             </div>
@@ -854,7 +856,7 @@ export default function ProductsPage() {
                   placeholder="Introducir IMEI"
                   value={filters.imei}
                   onChange={(e) => setFilters({ ...filters, imei: e.target.value })}
-                  className="h-8 text-xs border-gray-300 focus-visible:ring-primary"
+                  className="h-8 text-xs border-[#0d9488]/40 focus-visible:ring-[#0d9488]"
                 />
               </div>
 
@@ -864,7 +866,7 @@ export default function ProductsPage() {
                   placeholder="Introducir número de serie"
                   value={filters.serial}
                   onChange={(e) => setFilters({ ...filters, serial: e.target.value })}
-                  className="h-8 text-xs border-gray-300 focus-visible:ring-primary"
+                  className="h-8 text-xs border-[#0d9488]/40 focus-visible:ring-[#0d9488]"
                 />
               </div>
 
@@ -884,7 +886,7 @@ export default function ProductsPage() {
                 <select
                   value={filters.condition}
                   onChange={(e) => setFilters({ ...filters, condition: e.target.value })}
-                  className="w-full h-8 text-xs border border-gray-300 rounded px-2 bg-white focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full h-8 text-xs border border-[#0d9488]/40 rounded px-2 bg-white focus:outline-none focus:ring-1 focus:ring-[#0d9488]"
                 >
                   <option value="">Cualquiera</option>
                   <option value="New">Nuevo</option>
@@ -911,7 +913,7 @@ export default function ProductsPage() {
                     onCheckedChange={(c) =>
                       setFilters({ ...filters, hideOutOfStock: c === true })
                     }
-                    className="border-gray-300 data-[state=checked]:bg-primary"
+                    className="border-[#0d9488] data-[state=checked]:bg-[#0d9488]"
                   />
                   Ocultar sin stock
                 </label>
@@ -921,7 +923,7 @@ export default function ProductsPage() {
             {(filters.criteria.includes('storage_location') ||
               filters.criteria.includes('date_from') ||
               filters.criteria.includes('date_to')) && (
-              <div className="grid grid-cols-12 gap-3 mt-3 rounded-md border border-dashed border-gray-300 bg-primary/5 p-3">
+              <div className="grid grid-cols-12 gap-3 mt-3 rounded-md border border-dashed border-[#0d9488]/30 bg-[#0d9488]/5 p-3">
                 {filters.criteria.includes('storage_location') ? (
                   <div className="col-span-12 sm:col-span-4">
                     <label className="text-xs text-gray-600 block mb-1">Ubicación física</label>
@@ -929,7 +931,7 @@ export default function ProductsPage() {
                       placeholder="Filtrar por ubicación en almacén"
                       value={filters.storageLocation}
                       onChange={(e) => setFilters({ ...filters, storageLocation: e.target.value })}
-                      className="h-8 text-xs border-gray-300 focus-visible:ring-primary"
+                      className="h-8 text-xs border-[#0d9488]/50 focus-visible:ring-[#0d9488]"
                     />
                   </div>
                 ) : null}
@@ -940,7 +942,7 @@ export default function ProductsPage() {
                       type="date"
                       value={filters.dateFrom}
                       onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
-                      className="h-8 text-xs border-gray-300 focus-visible:ring-primary"
+                      className="h-8 text-xs border-[#0d9488]/50 focus-visible:ring-[#0d9488]"
                     />
                   </div>
                 ) : null}
@@ -951,7 +953,7 @@ export default function ProductsPage() {
                       type="date"
                       value={filters.dateTo}
                       onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
-                      className="h-8 text-xs border-gray-300 focus-visible:ring-primary"
+                      className="h-8 text-xs border-[#0d9488]/50 focus-visible:ring-[#0d9488]"
                     />
                   </div>
                 ) : null}
@@ -974,7 +976,7 @@ export default function ProductsPage() {
                   variant="ghost"
                   size="sm"
                   onClick={clearFilters}
-                  className="text-primary hover:text-primary hover:bg-primary/10"
+                  className="text-[#0d9488] hover:text-[#0f766e] hover:bg-[#0d9488]/10"
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1" />
                   Reiniciar
@@ -983,14 +985,14 @@ export default function ProductsPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => persistSavedFilters()}
-                  className="text-primary hover:text-primary hover:bg-primary/10"
+                  className="text-[#0d9488] hover:text-[#0f766e] hover:bg-[#0d9488]/10"
                 >
                   <Save className="h-3.5 w-3.5 mr-1" />
                   Guardar filtro
                 </Button>
                 <Button
                   size="sm"
-                  className="bg-primary hover:bg-primary/90 text-white"
+                  className="bg-[#0d9488] hover:bg-[#0f766e] text-white"
                   onClick={() => runSearch()}
                 >
                   <Search className="h-3.5 w-3.5 mr-1" />
@@ -1006,7 +1008,7 @@ export default function ProductsPage() {
         <button
           type="button"
           onClick={() => setShowFilters(!showFilters)}
-          className="text-xs text-primary hover:underline flex items-center"
+          className="text-xs text-[#0d9488] hover:underline flex items-center"
         >
           <Filter className="h-3 w-3 mr-1" />
           {showFilters ? 'Ocultar filtros' : 'Mostrar filtros'}
@@ -1014,7 +1016,7 @@ export default function ProductsPage() {
         <span className="text-xs text-gray-400">|</span>
         <button
           type="button"
-          className="text-xs text-primary hover:underline"
+          className="text-xs text-[#0d9488] hover:underline"
           onClick={() => persistSavedFilters()}
         >
           Guardar filtros
@@ -1032,18 +1034,19 @@ export default function ProductsPage() {
                   allPageSelected ? true : somePageSelected ? 'indeterminate' : false
                 }
                 onCheckedChange={() => toggleSelectAllPage()}
-                className="border-primary data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                className="border-[#0d9488] data-[state=checked]:bg-[#0d9488] data-[state=checked]:border-[#0d9488]"
               />
               <label htmlFor="inv-select-all" className="text-sm text-gray-800 cursor-pointer select-none">
-                <span className="font-semibold text-primary">{selectedProductIds.size}</span>{' '}
+                <span className="font-semibold text-[#0d766e]">{selectedProductIds.size}</span>{' '}
                 seleccionado{selectedProductIds.size === 1 ? '' : 's'} · esta página
               </label>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
+                  variant="outline"
                   size="sm"
-                  className="h-8 text-xs bg-primary text-white hover:bg-primary/90"
+                  className="h-8 text-xs border-gray-300"
                   disabled={selectedProductIds.size === 0}
                 >
                   Acciones masivas
@@ -1106,7 +1109,7 @@ export default function ProductsPage() {
               {loading ? (
                 <tr>
                   <td colSpan={17} className="text-center py-8">
-                    <Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" />
+                    <Loader2 className="h-6 w-6 animate-spin mx-auto text-[#0d9488]" />
                   </td>
                 </tr>
               ) : products.length === 0 ? (
@@ -1122,7 +1125,7 @@ export default function ProductsPage() {
                       <Checkbox
                         checked={selectedProductIds.has(product.id)}
                         onCheckedChange={(v) => toggleRowSelected(product.id, v === true)}
-                        className="border-primary data-[state=checked]:bg-primary data-[state=checked]:border-primary mx-auto"
+                        className="border-[#0d9488] data-[state=checked]:bg-[#0d9488] data-[state=checked]:border-[#0d9488] mx-auto"
                         aria-label={`Seleccionar ${product.name}`}
                       />
                     </td>
@@ -1131,35 +1134,35 @@ export default function ProductsPage() {
                       {product.image_url ? (
                         <img src={product.image_url} alt="" className="w-8 h-8 object-cover rounded mx-auto" />
                       ) : (
-                        <button className="text-primary hover:underline text-xs">Añadir</button>
+                        <button className="text-[#0d9488] hover:underline text-xs">Añadir</button>
                       )}
                     </td>
                     <td className="px-2 py-2">
                       {product.sku ? (
                         <span className="text-gray-700">{product.sku}</span>
                       ) : (
-                        <button className="text-primary hover:underline text-xs">Añadir</button>
+                        <button className="text-[#0d9488] hover:underline text-xs">Añadir</button>
                       )}
                     </td>
                     <td className="px-2 py-2">
                       {product.upc ? (
                         <span className="text-gray-700">{product.upc}</span>
                       ) : (
-                        <button className="text-primary hover:underline text-xs">Añadir</button>
+                        <button className="text-[#0d9488] hover:underline text-xs">Añadir</button>
                       )}
                     </td>
                     <td className="px-2 py-2">
-                      <span className="text-primary hover:underline cursor-pointer">
+                      <span className="text-[#0d9488] hover:underline cursor-pointer">
                         {product.category || 'Seleccionar'}
                       </span>
                     </td>
                     <td className="px-2 py-2">
-                      <span className="text-primary hover:underline cursor-pointer">
+                      <span className="text-[#0d9488] hover:underline cursor-pointer">
                         {product.brand || 'Seleccionar'}
                       </span>
                     </td>
                     <td className="px-2 py-2">
-                      <span className="text-primary hover:underline cursor-pointer">
+                      <span className="text-[#0d9488] hover:underline cursor-pointer">
                         {product.model || 'Seleccionar'}
                       </span>
                     </td>
@@ -1168,7 +1171,7 @@ export default function ProductsPage() {
                     </td>
                     <td className="px-2 py-2">
                       <span className={cn(
-                        "text-primary hover:underline cursor-pointer",
+                        "text-[#0d9488] hover:underline cursor-pointer",
                         product.condition === 'New' && "text-green-600",
                         product.condition === 'Used' && "text-amber-600",
                       )}>
@@ -1188,10 +1191,10 @@ export default function ProductsPage() {
                     <td className="px-2 py-2 text-center text-gray-700">{product.stock_warning}</td>
                     <td className="px-2 py-2 text-center text-gray-700">{product.reorder_level}</td>
                     <td className="px-2 py-2 text-right text-gray-700">
-                      {sym} {product.price.toFixed(2)}
+                      {sym}{product.price.toFixed(2)}
                     </td>
                     <td className="px-2 py-2 text-right text-gray-700">
-                      {sym} {product.unit_cost.toFixed(2)}
+                      {sym}{product.unit_cost.toFixed(2)}
                     </td>
                     <td className="px-2 py-2">
                       {product.storage_location ? (
@@ -1253,8 +1256,9 @@ export default function ProductsPage() {
             <div className="flex items-center gap-1">
               <Button
                 type="button"
+                variant="outline"
                 size="sm"
-                className="h-8 px-2 bg-primary text-white hover:bg-primary/90"
+                className="h-8 px-2"
                 disabled={page <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
               >
@@ -1265,8 +1269,9 @@ export default function ProductsPage() {
               </span>
               <Button
                 type="button"
+                variant="outline"
                 size="sm"
-                className="h-8 px-2 bg-primary text-white hover:bg-primary/90"
+                className="h-8 px-2"
                 disabled={page >= totalPages}
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               >
@@ -1278,7 +1283,7 @@ export default function ProductsPage() {
       </Card>
 
       {/* Help Button */}
-      <button className="fixed bottom-4 right-4 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary/90 transition-colors">
+      <button className="fixed bottom-4 right-4 bg-[#0d9488] text-white p-3 rounded-full shadow-lg hover:bg-[#0f766e] transition-colors">
         <span className="font-bold">?</span>
       </button>
 
@@ -1425,7 +1430,7 @@ function ProductModal({
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Package className="h-5 w-5 text-[#2d2d2d]" />
+            <Package className="h-5 w-5 text-[#0d9488]" />
             {product ? 'Editar Repuesto' : 'Crear Nuevo Repuesto'}
           </DialogTitle>
         </DialogHeader>
@@ -1676,13 +1681,13 @@ function ProductModal({
         </div>
 
         <DialogFooter>
-          <Button className="bg-primary text-white hover:bg-primary/90" onClick={onClose} disabled={saving}>
+          <Button variant="outline" onClick={onClose} disabled={saving}>
             Cancelar
           </Button>
           <Button 
             onClick={handleSave} 
             disabled={saving}
-            className="bg-primary hover:bg-primary/90 text-white"
+            className="bg-[#0d9488] hover:bg-[#0f766e] text-white"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
             {product ? 'Guardar Cambios' : 'Crear Repuesto'}

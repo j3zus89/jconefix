@@ -31,8 +31,6 @@ export type VisualPreferencesState = {
   compactTables: boolean;
   /** data URL (png/jpeg/webp) o null */
   brandingLogoDataUrl: string | null;
-  /** URL del favicon personalizado o null */
-  faviconUrl: string | null;
 };
 
 export const DEFAULT_VISUAL_PREFERENCES: VisualPreferencesState = {
@@ -41,7 +39,6 @@ export const DEFAULT_VISUAL_PREFERENCES: VisualPreferencesState = {
   primaryHex: '#0d9488',
   compactTables: false,
   brandingLogoDataUrl: null,
-  faviconUrl: null,
 };
 
 export const PANEL_DESIGN_OPTIONS: {
@@ -66,7 +63,7 @@ export const PANEL_DESIGN_OPTIONS: {
   {
     id: 'aurora',
     label: 'Aurora',
-    hint: 'Tono enterprise: fríos y esmeralda en oscuro, claros nítidos; barra más "nocturna".',
+    hint: 'Tono enterprise: fríos y esmeralda en oscuro, claros nítidos; barra más “nocturna”.',
     suggestedPrimary: '#10b981',
   },
   {
@@ -150,11 +147,7 @@ function parseVisualPreferencesJson(raw: string): VisualPreferencesState | null 
       typeof j.brandingLogoDataUrl === 'string' && j.brandingLogoDataUrl.startsWith('data:image/')
         ? j.brandingLogoDataUrl
         : null;
-    const faviconUrl =
-      typeof j.faviconUrl === 'string' && (j.faviconUrl.startsWith('data:image/') || j.faviconUrl.startsWith('http'))
-        ? j.faviconUrl
-        : null;
-    return { design, theme, primaryHex, compactTables, brandingLogoDataUrl, faviconUrl };
+    return { design, theme, primaryHex, compactTables, brandingLogoDataUrl };
   } catch {
     return null;
   }

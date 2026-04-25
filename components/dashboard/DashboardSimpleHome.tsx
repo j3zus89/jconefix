@@ -49,12 +49,12 @@ export function DashboardSimpleHome({
           <p className="text-xs font-medium uppercase tracking-wide text-teal-700">
             Panel sencillo
           </p>
-          <h1 className="mt-1 text-2xl font-bold text-primary">{organizationName}</h1>
+          <h1 className="mt-1 text-2xl font-bold text-gray-900">{organizationName}</h1>
           <p className="mt-1 text-sm text-gray-600">
             Lo esencial para el día a día. Activa el panel completo en{' '}
             <Link
               href="/dashboard/settings?tab=config_general"
-              className="font-medium text-primary hover:underline"
+              className="font-medium text-[#0d9488] hover:underline"
             >
               Configuración → Configuración general
             </Link>
@@ -63,7 +63,7 @@ export function DashboardSimpleHome({
         </div>
 
         <Link href="/dashboard/recepcion" className="block">
-          <div className="rounded-2xl bg-gradient-to-br from-primary to-[#D4A915] p-6 text-white shadow-lg shadow-teal-900/15 transition-transform hover:scale-[1.01] active:scale-[0.99]">
+          <div className="rounded-2xl bg-gradient-to-br from-[#0d9488] to-[#0f766e] p-6 text-white shadow-lg shadow-teal-900/15 transition-transform hover:scale-[1.01] active:scale-[0.99]">
             <div className="flex items-start gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white/15">
                 <ClipboardSignature className="h-7 w-7" />
@@ -82,19 +82,19 @@ export function DashboardSimpleHome({
         <div className="grid grid-cols-3 gap-3">
           <Card className="border-gray-200 shadow-sm">
             <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-primary">{pendingTickets}</p>
+              <p className="text-2xl font-bold text-gray-900">{pendingTickets}</p>
               <p className="text-xs text-gray-600">Pendientes</p>
             </CardContent>
           </Card>
           <Card className="border-gray-200 shadow-sm">
             <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-primary">{inProgressTickets}</p>
+              <p className="text-2xl font-bold text-gray-900">{inProgressTickets}</p>
               <p className="text-xs text-gray-600">En curso</p>
             </CardContent>
           </Card>
           <Card className="border-gray-200 shadow-sm">
             <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-primary">{totalTickets}</p>
+              <p className="text-2xl font-bold text-gray-900">{totalTickets}</p>
               <p className="text-xs text-gray-600">Activos en taller</p>
             </CardContent>
           </Card>
@@ -106,19 +106,19 @@ export function DashboardSimpleHome({
             currencySymbol={currencySymbol}
             compact
           />
-          <Button asChild className="gap-2 bg-[#0f766e] text-white hover:bg-[#115e59]">
+          <Button asChild variant="outline" className="gap-2 border-gray-300">
             <Link href="/dashboard/tickets">
-              <Wrench className="h-4 w-4" />
+              <Wrench className="h-4 w-4 text-[#0d9488]" />
               Ver tickets
             </Link>
           </Button>
-          <Button asChild className="gap-2 bg-[#0f766e] text-white hover:bg-[#115e59]">
+          <Button asChild variant="outline" className="gap-2 border-gray-300">
             <Link href="/dashboard/customers">
-              <Users className="h-4 w-4" />
+              <Users className="h-4 w-4 text-[#0d9488]" />
               Clientes
             </Link>
           </Button>
-          <Button asChild className="gap-2 bg-[#0f766e] text-white hover:bg-[#115e59]">
+          <Button asChild variant="outline" className="gap-2 border-gray-300">
             <Link href="/dashboard/pos">Nueva venta</Link>
           </Button>
         </div>
@@ -129,7 +129,7 @@ export function DashboardSimpleHome({
               <CardTitle className="text-base font-semibold">Últimos tickets</CardTitle>
               <Link
                 href="/dashboard/tickets"
-                className="text-xs font-medium text-primary hover:underline"
+                className="text-xs font-medium text-[#0d9488] hover:underline"
               >
                 Ver todos
               </Link>
@@ -148,14 +148,14 @@ export function DashboardSimpleHome({
                     <li key={t.id}>
                       <Link
                         href={`/dashboard/tickets/${t.id}`}
-                        className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-primary/90"
+                        className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-gray-50"
                       >
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="font-medium text-primary">
+                            <span className="font-medium text-[#0d9488]">
                               {t.ticket_number}
                             </span>
-                            <span className="truncate text-sm text-primary">
+                            <span className="truncate text-sm text-gray-900">
                               {t.device_type}
                             </span>
                           </div>
@@ -171,7 +171,7 @@ export function DashboardSimpleHome({
                         >
                           {sc.label}
                         </span>
-                        <span className="shrink-0 text-sm font-medium text-primary">
+                        <span className="shrink-0 text-sm font-medium text-gray-900">
                           {formatCurrency(t.final_cost ?? t.estimated_cost ?? 0)}
                         </span>
                       </Link>

@@ -98,12 +98,12 @@ export default function OutboxPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Bandeja de Salida</h1>
         <div className="flex gap-2">
-          <Button className="bg-primary text-white hover:bg-primary/90" onClick={loadEmails}>
+          <Button variant="outline" onClick={loadEmails}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Actualizar
           </Button>
           <Button
-            className="bg-primary hover:bg-primary"
+            className="bg-[#0d9488] hover:bg-[#0f766e]"
             onClick={() => setShowCompose(!showCompose)}
           >
             <Edit3 className="h-4 w-4 mr-2" />
@@ -146,11 +146,11 @@ export default function OutboxPage() {
               />
             </div>
             <div className="flex justify-end gap-2">
-              <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setShowCompose(false)}>
+              <Button variant="outline" onClick={() => setShowCompose(false)}>
                 Cancelar
               </Button>
               <Button
-                className="bg-primary hover:bg-primary"
+                className="bg-[#0d9488] hover:bg-[#0f766e]"
                 onClick={sendEmail}
               >
                 <Send className="h-4 w-4 mr-2" />
@@ -180,7 +180,7 @@ export default function OutboxPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Send className="h-5 w-5 text-primary" />
+            <Send className="h-5 w-5 text-[#0d9488]" />
             Correos Enviados
           </CardTitle>
         </CardHeader>

@@ -8,14 +8,6 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    screens: {
-      'xs': '480px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
     extend: {
       fontFamily: {
         sans: [
@@ -79,16 +71,16 @@ const config: Config = {
           '5': 'hsl(var(--chart-5))',
         },
         repairdesk: {
-          50: '#F5C518',
-          100: '#F5C518',
-          200: '#F5C518',
-          300: '#F5C518',
-          400: '#F5C518',
-          500: '#F5C518',
-          600: '#D4A915',
-          700: '#B89212',
-          800: '#9C7B0F',
-          900: '#80640C',
+          50: '#f0fdf9',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf',
+          500: '#14b8a6',
+          600: '#124c48', // Nuevo color teal oscuro
+          700: '#0f3d3a',
+          800: '#0c2e2b',
+          900: '#091f1d',
         },
       },
       keyframes: {

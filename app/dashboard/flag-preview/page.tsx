@@ -85,7 +85,7 @@ function FlagDemo({
   return (
     <div
       className={cn(
-        'flex items-center justify-center rounded-xl bg-primary ring-1 ring-white/10',
+        'flex items-center justify-center rounded-xl bg-slate-900 ring-1 ring-white/10',
         large ? 'h-28 px-6' : 'h-20 px-4'
       )}
     >
@@ -121,13 +121,13 @@ export default function FlagPreviewPage() {
         <div>
           <Link
             href="/dashboard"
-            className="mb-3 inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+            className="mb-3 inline-flex items-center gap-1.5 text-sm text-[#0d9488] hover:underline"
           >
             <ArrowLeft className="h-4 w-4" />
             Volver al panel
           </Link>
-          <h1 className="text-2xl font-bold text-primary">Efectos de bandera</h1>
-          <p className="mt-1 max-w-xl text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900">Efectos de bandera</h1>
+          <p className="mt-1 max-w-xl text-sm text-gray-600">
             Compara 10 animaciones (Argentina y España). Pulsa <strong>Elegir</strong> en la que te guste;
             luego copia las clases o indica el <strong>número</strong> para aplicarlo en el panel.
           </p>
@@ -178,13 +178,13 @@ export default function FlagPreviewPage() {
               key={fx.id}
               className={cn(
                 'rounded-xl border bg-white p-4 shadow-sm transition-shadow',
-                isChosen ? 'border-primary ring-2 ring-primary/25' : 'border-gray-200 hover:border-gray-300'
+                isChosen ? 'border-[#0d9488] ring-2 ring-[#0d9488]/25' : 'border-gray-200 hover:border-gray-300'
               )}
             >
               <div className="mb-2 flex items-start justify-between gap-2">
                 <div>
-                  <h3 className="font-semibold text-primary">
-                    <span className="text-primary">{fx.id}.</span> {fx.title}
+                  <h3 className="font-semibold text-gray-900">
+                    <span className="text-[#0d9488]">{fx.id}.</span> {fx.title}
                   </h3>
                   <p className="mt-1 text-xs text-gray-600">{fx.desc}</p>
                   <code className="mt-2 block text-[10px] text-gray-500">{fx.className}</code>
@@ -193,7 +193,7 @@ export default function FlagPreviewPage() {
                   type="button"
                   size="sm"
                   variant={isChosen ? 'default' : 'secondary'}
-                  className={cn('shrink-0', isChosen && 'bg-primary text-white hover:bg-primary/90')}
+                  className={cn('shrink-0', isChosen && 'bg-[#0d9488] hover:bg-[#0f766e]')}
                   onClick={() => setChosen(fx.id)}
                 >
                   {isChosen ? (
@@ -216,7 +216,7 @@ export default function FlagPreviewPage() {
       </div>
 
       <section className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4 text-sm text-gray-700">
-        <p className="font-medium text-primary">Vista grande del efecto elegido</p>
+        <p className="font-medium text-gray-900">Vista grande del efecto elegido</p>
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <FlagDemo effectClass={chosenMeta.className} country="AR" large />
           <FlagDemo effectClass={chosenMeta.className} country="ES" large />

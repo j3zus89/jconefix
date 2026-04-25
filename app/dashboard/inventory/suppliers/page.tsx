@@ -94,7 +94,7 @@ export default function SuppliersPage() {
           <h1 className="text-2xl font-bold text-gray-900">Proveedores</h1>
           <p className="text-sm text-gray-500 mt-1">Directorio de proveedores de repuestos y servicios.</p>
         </div>
-        <Button className="bg-primary hover:bg-primary/90" onClick={() => setOpen(true)}>
+        <Button className="bg-[#0d9488] hover:bg-[#0f766e]" onClick={() => setOpen(true)}>
           <Plus className="h-4 w-4 mr-1" />
           Nuevo proveedor
         </Button>
@@ -161,10 +161,10 @@ export default function SuppliersPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setOpen(false)}>
+            <Button variant="outline" onClick={() => setOpen(false)}>
               Cancelar
             </Button>
-            <Button className="bg-primary hover:bg-primary/90" onClick={save} disabled={saving}>
+            <Button className="bg-[#0d9488]" onClick={save} disabled={saving}>
               Guardar
             </Button>
           </DialogFooter>

@@ -395,7 +395,7 @@
   }
 
   /*
-   * Hover "crece" en botones nativos (no solo <Button />). Excluye .no-ui-hover-grow
+   * Hover “crece” en botones nativos (no solo <Button />). Excluye .no-ui-hover-grow
    * (switch, checkbox, etc.). Respeta prefers-reduced-motion y puntero finito.
    */
   @media (prefers-reduced-motion: no-preference) {
@@ -587,7 +587,7 @@
 }
 
 /*
- * Panel (dashboard / admin): sin "zoom" al pasar el ratón sobre botones, tarjetas,
+ * Panel (dashboard / admin): sin “zoom” al pasar el ratón sobre botones, tarjetas,
  * menús y diálogos. `data-app-panel` se pone en <html> desde los layouts del panel
  * para que también cubra portales de Radix (modales, dropdowns).
  */
@@ -604,6 +604,17 @@ html[data-app-panel] .group:hover .group-hover\:scale-105,
 html[data-app-panel] .group:hover .group-hover\:scale-110,
 html[data-app-panel] .group:hover .group-hover\:scale-\[1\.03\],
 html[data-app-panel] .group:hover .group-hover\:scale-\[1\.07\] {
+  --tw-scale-x: 1 !important;
+  --tw-scale-y: 1 !important;
+  transform: none !important;
+}
+
+html[data-app-panel] [class*='transition-[transform'],
+html[data-app-panel] [class*='transition-transform'],
+html[data-app-panel] [class*='hover:scale-'],
+html[data-app-panel] [class*='active:scale-'],
+html[data-app-panel] [class*='group-hover:scale-'] {
+  transform: none !important;
   --tw-scale-x: 1 !important;
   --tw-scale-y: 1 !important;
 }
@@ -633,6 +644,9 @@ html.cap-native {
   max-height: 100dvh;
   overflow: hidden !important;
   background-color: #004d40;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
   /* APK: header alineado a marca y status bar nativa (#004d40). */
   --panel-header-bg: #004d40;
 }
@@ -652,6 +666,7 @@ html.cap-native body {
   overflow: hidden !important;
   overscroll-behavior: none !important;
   background-color: #004d40;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* Una sola columna con scroll: login y páginas sin data-cap-app-shell */
@@ -739,7 +754,7 @@ html.cap-native [data-web-chrome] {
   display: none !important;
 }
 
-/* Barra superior: aire bajo notch + menos "sitio web" en móvil */
+/* Barra superior: aire bajo notch + menos “sitio web” en móvil */
 @media (max-width: 640px) {
   html.cap-native header[data-cap-safe-top] {
     padding-bottom: 0.45rem;
@@ -766,7 +781,7 @@ html.cap-native [data-cap-app-main] {
   padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
 }
 
-/* Campana de notificaciones del panel: balanceo tipo "tintineo" */
+/* Campana de notificaciones del panel: balanceo tipo “tintineo” */
 @keyframes panel-bell-shake {
   0%,
   100% {
@@ -802,14 +817,10 @@ html.cap-native [data-cap-app-main] {
 
 /* ── PWA / móvil: safe areas, pull-to-refresh, tap highlight, fuentes sistema (Tailwind font-sans) ── */
 html {
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-left: env(safe-area-inset-left, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
   overscroll-behavior-y: none;
 }
 
@@ -831,63 +842,3 @@ body {
   }
 }
 
-/* Mejoras adicionales para responsive en móviles pequeños */
-@media (max-width: 480px) {
-  html {
-    font-size: 14px;
-  }
-
-  /* Ajustes para inputs en móviles pequeños */
-  input, select, textarea {
-    font-size: 16px !important; /* Evita zoom en iOS */
-  }
-
-  /* Scroll horizontal suavizado */
-  .overflow-x-auto {
-    -webkit-overflow-scrolling: touch;
-  }
-}
-
-/* Tablets y dispositivos medianos */
-@media (min-width: 481px) and (max-width: 1024px) {
-  html {
-    font-size: 15px;
-  }
-}
-
-/* Desktop grande - optimización */
-@media (min-width: 1920px) {
-  html {
-    font-size: 18px;
-  }
-}
-
-/* Fix para overflow horizontal en móviles */
-html, body {
-  max-width: 100vw;
-  overflow-x: clip;
-}
-
-/* Mejoras táctiles en móviles */
-@media (hover: none) and (pointer: coarse) {
-  button, a, [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  /* Feedback táctil más rápido */
-  button:active, a:active {
-    opacity: 0.8;
-    transform: scale(0.98);
-  }
-}
-
-/* Optimización para móviles pequeños */
-@media (max-width: 640px) {
-  /* Reduce animaciones en móviles para mejor performance */
-  .animate-marquee,
-  .animate-slide-cards,
-  .animate-marquee-industries {
-    animation-duration: 45s;
-  }
-}

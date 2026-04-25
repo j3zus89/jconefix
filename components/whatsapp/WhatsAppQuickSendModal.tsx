@@ -165,7 +165,7 @@ export function WhatsAppQuickSendModal({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-lg">
             <span
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F5C518]/15 text-[#F5C518]"
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0d9488]/15 text-[#0d9488]"
               aria-hidden
             >
               <WhatsAppLogo className="h-5 w-5" />
@@ -179,7 +179,7 @@ export function WhatsAppQuickSendModal({
         </p>
 
         {deviceLine ? (
-          <p className="text-xs text-[#F5C518] rounded-md border border-[#F5C518]/20 bg-[#F5C518]/10 px-2.5 py-1.5">
+          <p className="text-xs text-emerald-900/90 rounded-md border border-emerald-100 bg-emerald-50/80 px-2.5 py-1.5">
             <span className="font-medium text-gray-700">Equipo: </span>
             {deviceLine}
           </p>
@@ -194,7 +194,7 @@ export function WhatsAppQuickSendModal({
                 type="button"
                 variant="outline"
                 size="sm"
-                className="text-[#F5C518] border-[#F5C518]/30 hover:bg-[#F5C518]/10"
+                className="text-xs h-8 border-emerald-200/80 hover:bg-emerald-50"
                 disabled={improving}
                 onClick={() => {
                   clearWaUndo();
@@ -224,7 +224,7 @@ export function WhatsAppQuickSendModal({
                 {improving ? (
                   <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin shrink-0" aria-hidden />
                 ) : (
-                  <Sparkles className="mr-1.5 h-3.5 w-3.5 shrink-0 text-[#F5C518]" aria-hidden />
+                  <Sparkles className="mr-1.5 h-3.5 w-3.5 shrink-0 text-emerald-700" aria-hidden />
                 )}
                 Pulir con IA
               </Button>
@@ -258,7 +258,7 @@ export function WhatsAppQuickSendModal({
           </Button>
           <Button
             type="button"
-            className="gap-2 bg-[#F5C518] hover:bg-[#D4A915] text-[#0D1117] text-white"
+            className="gap-2 bg-[#0d9488] hover:bg-[#1d4ed8] text-white"
             onClick={handleSend}
             disabled={improving}
           >

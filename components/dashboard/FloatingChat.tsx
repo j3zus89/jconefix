@@ -36,10 +36,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { PanelChatComposer } from '@/components/dashboard/PanelChatShell';
-import {
-  internalChatSideBySideRightStyle,
-  useDashboardFloatingChats,
-} from '@/components/dashboard/DashboardFloatingChatsContext';
+import { useDashboardFloatingChats } from '@/components/dashboard/DashboardFloatingChatsContext';
 import { profileDisplayName, profileMentionHandle } from '@/lib/profile-display-name';
 import { humanizeInternalChatMessagesError } from '@/lib/supabase-setup-hints';
 import { resolveShopDisplayName } from '@/lib/resolve-shop-display-name';
@@ -207,10 +204,6 @@ export function FloatingChat() {
   const lastAutoScrolledOwnMessageIdRef = useRef<string | null>(null);
   const [uploadingAttachment, setUploadingAttachment] = useState(false);
   const [clearingChat, setClearingChat] = useState(false);
-
-  const rootStyle = useMemo(() => {
-    return undefined;
-  }, []);
 
   const teamChatAttachmentEntries = useMemo(
     () =>
@@ -763,7 +756,7 @@ export function FloatingChat() {
   };
 
   return (
-    <div style={rootStyle} className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50 w-max max-w-[calc(100vw-2rem)]">
       {!isOpen && (
         <button
           onClick={() => {
@@ -772,14 +765,14 @@ export function FloatingChat() {
           }}
           type="button"
           className={cn(
-            'no-ui-hover-grow relative inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all hover:scale-110 hover:shadow-xl hover:bg-primary/90',
+            'no-ui-hover-grow relative inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-4 py-3 text-primary-foreground shadow-lg transition-all hover:scale-105 hover:bg-primary/90',
             unreadCount > 0 && 'shadow-md shadow-red-500/35'
           )}
-          title="Chat interno"
         >
-          <MessageCircle className="h-6 w-6" />
+          <MessageCircle className="h-5 w-5" />
+          <span className="text-sm font-medium">Chat</span>
           {unreadCount > 0 ? (
-            <span className="absolute -right-1 -top-1 flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-red-600 px-1 text-[11px] font-bold leading-none text-white shadow-md ring-2 ring-white">
+            <span className="absolute -right-1 -top-1 flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-red-600 px-1 text-[11px] font-bold leading-none text-white shadow-md">
               {unreadCount > 99 ? '99+' : unreadCount}
             </span>
           ) : null}
@@ -789,7 +782,7 @@ export function FloatingChat() {
       {isOpen && (
         <div
           className={cn(
-            'fixed bottom-4 right-4 flex min-w-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl',
+            'flex min-w-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl',
             'h-[min(70vh,520px)] w-[min(100vw-2rem,420px)]'
           )}
         >

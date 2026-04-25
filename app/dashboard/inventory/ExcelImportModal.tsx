@@ -239,7 +239,7 @@ function ExcelImportModal({
       <DialogContent className="max-w-5xl max-h-[92vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Upload className="h-5 w-5 text-primary" />
+            <Upload className="h-5 w-5 text-[#0d9488]" />
             Importar productos desde Excel / CSV
           </DialogTitle>
         </DialogHeader>
@@ -249,11 +249,11 @@ function ExcelImportModal({
           <div className="py-6 space-y-4">
             <label
               htmlFor="excel-upload"
-              className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-gray-300 rounded-xl p-10 cursor-pointer hover:border-primary hover:bg-primary/5 transition-all"
+              className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-gray-300 rounded-xl p-10 cursor-pointer hover:border-[#0d9488] hover:bg-[#0d9488]/5 transition-all"
             >
               <Upload className="h-10 w-10 text-gray-400" />
               <p className="text-sm text-gray-600 text-center">
-                Arrastra tu archivo aquí o <span className="text-primary font-medium">haz clic para seleccionar</span>
+                Arrastra tu archivo aquí o <span className="text-[#0d9488] font-medium">haz clic para seleccionar</span>
               </p>
               <p className="text-xs text-gray-400">Soporta .xlsx y .xls de cualquier software (Square, Shopify, Odoo, QuickBooks…)</p>
             </label>
@@ -375,10 +375,10 @@ function ExcelImportModal({
             )}
 
             <DialogFooter>
-              <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setStep('upload')}>Volver</Button>
+              <Button variant="outline" onClick={() => setStep('upload')}>Volver</Button>
               <Button
                 onClick={() => setStep('preview')}
-                className="bg-primary hover:bg-primary/90 text-white"
+                className="bg-[#0d9488] hover:bg-[#0f766e] text-white"
                 disabled={!userMapping['name'] && userMapping['name'] !== 0}
               >
                 Continuar
@@ -420,11 +420,11 @@ function ExcelImportModal({
             )}
 
             <DialogFooter>
-              <Button className="bg-primary text-white hover:bg-primary/90" onClick={() => setStep('mapping')} disabled={importing}>Volver</Button>
+              <Button variant="outline" onClick={() => setStep('mapping')} disabled={importing}>Volver</Button>
               <Button
                 onClick={handleImport}
                 disabled={importing || (userMapping['name'] ?? -1) < 0}
-                className="bg-primary hover:bg-primary/90 text-white"
+                className="bg-[#0d9488] hover:bg-[#0f766e] text-white"
               >
                 {importing ? (
                   <><Loader2 className="h-4 w-4 animate-spin mr-2" />Importando…</>

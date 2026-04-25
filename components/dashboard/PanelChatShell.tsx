@@ -27,7 +27,6 @@ export const panelChatOutgoingBubbleClass =
 export function PanelChatMessageBlock({
   variant,
   senderName,
-  senderColor,
   timeShort,
   children,
   className,
@@ -36,7 +35,6 @@ export function PanelChatMessageBlock({
 }: {
   variant: 'incoming' | 'outgoing';
   senderName: string;
-  senderColor?: string;
   timeShort: string;
   children: ReactNode;
   className?: string;
@@ -60,10 +58,9 @@ export function PanelChatMessageBlock({
               out ? 'justify-end text-slate-400' : 'text-left text-slate-400'
             )}
           >
-            <span style={{ color: senderColor }}>
-              {senderName}
+            <span>
+              {senderName} · {timeShort}
             </span>
-            <span>· {timeShort}</span>
             {out && readReceipt ? (
               <PanelChatReadReceipt read={readReceipt === 'read'} />
             ) : null}
@@ -136,7 +133,7 @@ export function PanelChatComposer({
           onClick={() => void onSend()}
           disabled={!canSend}
           className={cn(
-            'mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-md transition-transform hover:bg-emerald-700 active:scale-95 disabled:pointer-events-none disabled:opacity-35'
+            'mb-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md transition-transform hover:bg-primary/90 active:scale-95 disabled:pointer-events-none disabled:opacity-35'
           )}
           aria-label="Enviar"
         >

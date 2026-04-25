@@ -90,9 +90,3 @@ export function supportChatStackedBottomStyle(): CSSProperties {
     bottom: `calc(1rem + min(70vh, 520px) + ${GAP_REM}rem)`,
   };
 }
-
-export function internalChatSideBySideRightStyle(): CSSProperties {
-  return {
-    right: `calc(1rem + min(${DASHBOARD_INTERNAL_CHAT_MAX_W_PX}px, 100vw - 2rem) + ${GAP_REM}rem)`,
-  };
-}

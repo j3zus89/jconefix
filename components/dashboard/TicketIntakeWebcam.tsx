@@ -280,7 +280,7 @@ export function TicketIntakeWebcam({
           <select
             id={selectId}
             className={cn(
-              'w-full max-w-full rounded-md border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary',
+              'w-full max-w-full rounded-md border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-[#0d9488] focus:outline-none focus:ring-1 focus:ring-[#0d9488]',
               compact ? 'py-1 pl-2 pr-6 text-[11px]' : 'py-1.5 pl-2 pr-8 text-sm',
             )}
             disabled={disabled || starting}
@@ -343,7 +343,7 @@ export function TicketIntakeWebcam({
             type="button"
             variant={active ? 'outline' : 'default'}
             size="sm"
-            className={cn(!active && 'bg-primary hover:bg-primary/90 text-white')}
+            className={cn(!active && 'bg-[#0d9488] hover:bg-[#0f766e] text-white')}
             disabled={disabled || starting}
             onClick={() => void (active ? stopStream() : startCamera())}
           >
@@ -359,7 +359,7 @@ export function TicketIntakeWebcam({
           <Button
             type="button"
             size="sm"
-            className="bg-primary hover:bg-primary/90 text-white"
+            className="bg-[#0d9488] hover:bg-[#0f766e] text-white"
             disabled={disabled || !active || value.length >= maxPhotos || starting}
             onClick={capture}
           >

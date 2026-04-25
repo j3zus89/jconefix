@@ -52,8 +52,8 @@ const TAG_LABEL: Record<string, { label: string; color: string }> = {
 
 function Tip({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-2.5 rounded-lg bg-primary/10 border border-primary/20 px-4 py-3 my-3">
-      <Zap className="h-4 w-4 mt-0.5 shrink-0 text-primary" />
+    <div className="flex items-start gap-2.5 rounded-lg bg-[#0d9488]/8 border border-[#0d9488]/20 px-4 py-3 my-3">
+      <Zap className="h-4 w-4 mt-0.5 shrink-0 text-[#0d9488]" />
       <span className="text-sm text-gray-700 leading-relaxed">{children}</span>
     </div>
   );
@@ -73,7 +73,7 @@ function Steps({ items }: { items: string[] }) {
     <ol className="mt-2 space-y-2">
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-3 text-sm text-gray-700">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white mt-0.5">
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0d9488] text-[10px] font-bold text-white mt-0.5">
             {i + 1}
           </span>
           <span className="leading-relaxed">{item}</span>
@@ -127,7 +127,7 @@ function GuideFigureBlock({ figure }: { figure: GuideFigure }) {
   return (
     <figure className="my-6 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm ring-1 ring-gray-900/5">
       <div className="flex items-center gap-2 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-white px-3 py-2">
-        <Camera className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+        <Camera className="h-4 w-4 shrink-0 text-[#0d9488]" aria-hidden />
         <span className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
           Referencia visual del panel
         </span>
@@ -433,7 +433,7 @@ const GUIDE_SECTIONS: Section[] = [
     id: 'inicio',
     icon: Home,
     title: 'Primeros pasos',
-    color: '#1a1a1a',
+    color: '#0d9488',
     content: [
       {
         id: 'bienvenida',
@@ -511,11 +511,9 @@ const GUIDE_SECTIONS: Section[] = [
                 ],
               ]}
             />
-            <p className="text-sm font-semibold text-gray-800 mt-4 mb-1">
-              Dónde cambiarlo:
-            </p>
-            <p className="text-sm text-gray-700 leading-relaxed">
-              <Link href="/dashboard/settings?tab=config_general" className="font-medium text-primary hover:underline">
+            <p className="text-sm text-gray-700 leading-relaxed mt-3">
+              <strong>Dónde cambiarlo:</strong>{' '}
+              <Link href="/dashboard/settings?tab=config_general" className="font-medium text-[#0d9488] hover:underline">
                 Configuración → Configuración general
               </Link>
               {' '}(pantalla «Ajustes generales»), sección <strong>Experiencia del panel</strong>. Al elegir Sencillo o Completo el valor se guarda al instante; no hace falta pulsar el botón general de guardar de la página solo por este cambio.
@@ -675,7 +673,7 @@ const GUIDE_SECTIONS: Section[] = [
     id: 'tickets',
     icon: Wrench,
     title: 'Reparaciones & Tickets',
-    color: '#1a1a1a',
+    color: '#0d9488',
     content: [
       {
         id: 'ticket-concepto',
@@ -827,7 +825,7 @@ const GUIDE_SECTIONS: Section[] = [
             <div className="flex flex-wrap items-center gap-2 my-3">
               {['Entrada', 'En estudio', 'Presupuesto', 'En proceso', 'Esperando piezas', 'Reparado', 'No reparado', 'Entregado'].map((s, i, arr) => (
                 <div key={s} className="flex items-center gap-1.5">
-                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary border border-primary/20">{s}</span>
+                  <span className="rounded-full bg-[#0d9488]/10 px-2.5 py-1 text-xs font-semibold text-[#0d9488] border border-[#0d9488]/20">{s}</span>
                   {i < arr.length - 1 && <ArrowRight className="h-3 w-3 text-gray-400" />}
                 </div>
               ))}
@@ -861,7 +859,7 @@ const GUIDE_SECTIONS: Section[] = [
               'Con efectivo puedes indicar lo entregado y el sistema calcula el cambio.',
               'La factura pasa a Pagada y puedes marcar el ticket como Entregado.',
             ]} />
-            <p className="text-sm font-semibold text-gray-800 mt-4 mb-1">
+            <p className="text-sm text-gray-700 leading-relaxed mt-4 mb-1 font-semibold text-gray-800">
               Argentina (ARS) con certificados ARCA en el panel
             </p>
             <p className="text-sm text-gray-700 leading-relaxed">
@@ -934,7 +932,7 @@ const GUIDE_SECTIONS: Section[] = [
               [
                 'Listado global',
                 <>
-                  <Link href="/dashboard/devoluciones" className="font-medium text-primary hover:underline">
+                  <Link href="/dashboard/devoluciones" className="font-medium text-[#0d9488] hover:underline">
                     Finanzas → Devoluciones al cliente
                   </Link>
                   {' '}muestra todas las constancias con enlace al ticket e impresión.
@@ -1036,7 +1034,7 @@ const GUIDE_SECTIONS: Section[] = [
             ]} />
             <Tip>
               Página pública con orientación y palabras clave para buscadores:{' '}
-              <Link href="/ayuda/importar-datos-taller" className="font-medium text-primary hover:underline">
+              <Link href="/ayuda/importar-datos-taller" className="font-medium text-[#0d9488] hover:underline">
                 /ayuda/importar-datos-taller
               </Link>
               .
@@ -1396,7 +1394,7 @@ const GUIDE_SECTIONS: Section[] = [
     id: 'facturacion',
     icon: Receipt,
     title: 'Facturas',
-    color: '#1a1a1a',
+    color: '#0d9488',
     content: [
       {
         id: 'factura-crear',
@@ -1453,7 +1451,7 @@ const GUIDE_SECTIONS: Section[] = [
               ],
               [
                 'Comprobante interno (AR)',
-                'Si la factura es solo registro interno (sin CAE), el impreso muestra un banner claro en el PDF: «Este documento es un comprobante interno del taller. No tiene CAE ni validez fiscal ante ARCA/AFIP.»',
+                'Si la factura es solo registro interno (sin CAE), el impreso muestra un aviso claro de que no es comprobante electrónico AFIP.',
               ],
             ]} />
           </>
@@ -1843,7 +1841,7 @@ const GUIDE_SECTIONS: Section[] = [
           <>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">
               En organizaciones con moneda <strong>ARS</strong>, en{' '}
-              <Link href="/dashboard/settings?tab=config_impuestos" className="font-medium text-primary hover:underline">
+              <Link href="/dashboard/settings?tab=config_impuestos" className="font-medium text-[#0d9488] hover:underline">
                 Configuración → Impuestos y AFIP
               </Link>
               {' '}encontrarás la sección <strong>Certificados y entorno ARCA</strong>. Es el punto central de toda la integración
@@ -1903,8 +1901,8 @@ const GUIDE_SECTIONS: Section[] = [
               headers={['Bloqueo', 'Cómo resolverlo']}
               rows={[
                 ['No hay certificado guardado', 'Subí el .p12 o los archivos PEM en esta sección.'],
-                ['Certificado vencido', 'Renová el certificado en la web de AFIP y subílo.'],
-                ['CUIT desajustado', 'Corregí el CUIT en Configuración general o subí el certificado correspondiente a ese CUIT.'],
+                ['Certificado vencido', 'Renová el certificado en la web de AFIP y subí el nuevo archivo.'],
+                ['CUIT desajustado', 'Corregí el CUIT en Configuración general o subí el certificado correcto.'],
                 ['Sin punto de venta', 'Ingresá el número de PV habilitado en AFIP (paso 2 de esta sección).'],
               ]}
             />
@@ -2347,7 +2345,7 @@ const GUIDE_SECTIONS: Section[] = [
                   'Necesitas ayuda con la configuración inicial del sistema.',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-xs text-gray-600">
-                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary mt-0.5" />
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#0d9488] mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -2415,7 +2413,7 @@ function UserGuidePageInner() {
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0d9488]">
               <BookOpen className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -2439,7 +2437,7 @@ function UserGuidePageInner() {
                 placeholder="Buscar en la guía…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="h-8 rounded-lg border border-gray-200 bg-white pl-8 pr-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30 w-48"
+                className="h-8 rounded-lg border border-gray-200 bg-white pl-8 pr-3 text-sm focus:border-[#0d9488] focus:outline-none focus:ring-1 focus:ring-[#0d9488]/30 w-48"
               />
             </div>
           </div>
@@ -2461,11 +2459,11 @@ function UserGuidePageInner() {
                   className={cn(
                     'flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm transition-colors',
                     active
-                      ? 'bg-primary/10 text-primary font-semibold border-l-2 border-primary'
+                      ? 'bg-[#0d9488]/8 text-[#0d9488] font-semibold border-l-2 border-[#0d9488]'
                       : 'text-gray-600 hover:bg-gray-50'
                   )}
                 >
-                  <Icon className={cn('h-4 w-4 shrink-0', active ? 'text-primary' : 'text-gray-400')} />
+                  <Icon className={cn('h-4 w-4 shrink-0', active ? 'text-[#0d9488]' : 'text-gray-400')} />
                   <span className="truncate">{sec.title}</span>
                 </button>
               );
@@ -2485,7 +2483,7 @@ function UserGuidePageInner() {
                   onClick={() => setActiveSectionId(sec.id)}
                   className={cn(
                     'flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap',
-                    active ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    active ? 'bg-[#0d9488] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   )}
                 >
                   <Icon className="h-3.5 w-3.5" />
@@ -2511,7 +2509,7 @@ function UserGuidePageInner() {
                   className={cn(
                     'flex w-full items-start gap-2 px-4 py-2 text-left text-xs transition-colors',
                     t.id === activeTopicId
-                      ? 'bg-white text-primary font-semibold shadow-sm rounded-lg mx-1 w-[calc(100%-8px)] px-3'
+                      ? 'bg-white text-[#0d9488] font-semibold shadow-sm rounded-lg mx-1 w-[calc(100%-8px)] px-3'
                       : 'text-gray-600 hover:text-gray-900'
                   )}
                 >
@@ -2559,7 +2557,7 @@ function UserGuidePageInner() {
                         {prev ? (
                           <button
                             onClick={() => setActiveTopicId(prev.id)}
-                            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-primary transition-colors"
+                            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#0d9488] transition-colors"
                           >
                             <ChevronRight className="h-4 w-4 rotate-180" />
                             <span>{prev.emoji} {prev.title}</span>
@@ -2568,7 +2566,7 @@ function UserGuidePageInner() {
                         {next ? (
                           <button
                             onClick={() => setActiveTopicId(next.id)}
-                            className="flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary transition-colors"
+                            className="flex items-center gap-1.5 text-sm text-[#0d9488] font-medium hover:text-[#0f766e] transition-colors"
                           >
                             <span>{next.emoji} {next.title}</span>
                             <ChevronRight className="h-4 w-4" />
@@ -2581,7 +2579,7 @@ function UserGuidePageInner() {
                             return nextSec ? (
                               <button
                                 onClick={() => setActiveSectionId(nextSec.id)}
-                                className="flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary transition-colors"
+                                className="flex items-center gap-1.5 text-sm text-[#0d9488] font-medium hover:text-[#0f766e] transition-colors"
                               >
                                 <span>Siguiente sección: {nextSec.title}</span>
                                 <ChevronRight className="h-4 w-4" />
@@ -2610,7 +2608,7 @@ function UserGuidePageInner() {
       </div>
 
       {/* ── Temas en acordeón para tablet (< lg) ── */}
-      <div className="lg:hidden border-t border-gray-200 bg-white px-4 py-2 flex-shrink-0 overflow-x-auto">
+      <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-2 flex-shrink-0 overflow-x-auto">
         <div className="flex gap-2">
           {activeSection.content.map((t) => (
             <button
@@ -2619,7 +2617,7 @@ function UserGuidePageInner() {
               className={cn(
                 'flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap border',
                 t.id === activeTopicId
-                  ? 'bg-primary text-white border-primary'
+                  ? 'bg-[#0d9488] text-white border-[#0d9488]'
                   : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
               )}
             >

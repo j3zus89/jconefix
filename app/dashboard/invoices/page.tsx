@@ -493,12 +493,12 @@ export default function InvoicesPage() {
     <div className="h-full bg-gray-50 overflow-y-auto relative">
       {invoiceDocBusy ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/25"
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/25"
           role="status"
           aria-live="polite"
         >
           <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-lg">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <Loader2 className="h-6 w-6 animate-spin text-[#0d9488]" />
             <p className="text-sm font-medium text-gray-800">Generando documento…</p>
           </div>
         </div>
@@ -640,7 +640,7 @@ export default function InvoicesPage() {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <Label className="text-xs text-gray-600">Líneas de factura</Label>
-                <Button type="button" size="sm" className="h-8 text-xs bg-primary text-white hover:bg-primary/90" onClick={addLineRow}>
+                <Button type="button" variant="outline" size="sm" className="h-8 text-xs" onClick={addLineRow}>
                   Añadir línea
                 </Button>
               </div>
@@ -648,7 +648,7 @@ export default function InvoicesPage() {
                 {lineRows.map((row, idx) => (
                   <div key={row.id} className="grid grid-cols-12 gap-2 items-end">
                     <div className="col-span-12 sm:col-span-4">
-                      <Label className="text-gray-500">Concepto {idx + 1}</Label>
+                      <Label className="text-[10px] text-gray-500">Concepto {idx + 1}</Label>
                       <Input
                         className="h-9 mt-0.5"
                         value={row.description}
@@ -657,7 +657,7 @@ export default function InvoicesPage() {
                       />
                     </div>
                     <div className="col-span-4 sm:col-span-2">
-                      <Label className="text-gray-500">Cant.</Label>
+                      <Label className="text-[10px] text-gray-500">Cant.</Label>
                       <Input
                         type="number"
                         min={1}
@@ -667,7 +667,7 @@ export default function InvoicesPage() {
                       />
                     </div>
                     <div className="col-span-4 sm:col-span-2">
-                      <Label className="text-gray-500">P. unit.</Label>
+                      <Label className="text-[10px] text-gray-500">P. unit.</Label>
                       <Input
                         type="number"
                         min={0}
@@ -678,7 +678,7 @@ export default function InvoicesPage() {
                       />
                     </div>
                     <div className="col-span-4 sm:col-span-3">
-                      <Label className="text-gray-500">ID producto (stock)</Label>
+                      <Label className="text-[10px] text-gray-500">ID producto (stock)</Label>
                       <Input
                         className="h-9 mt-0.5 font-mono text-[11px]"
                         value={row.product_id}
@@ -736,9 +736,10 @@ export default function InvoicesPage() {
             <div className="flex flex-wrap gap-2 items-center">
               <Button
                 type="button"
+                variant="outline"
                 onClick={() => void runVerification()}
                 disabled={verifying}
-                className={cn('bg-primary text-white hover:bg-primary/90', 
+                className={cn(
                   invoiceVerified && 'border-emerald-600 bg-emerald-50 text-emerald-900 hover:bg-emerald-100'
                 )}
               >
@@ -764,7 +765,7 @@ export default function InvoicesPage() {
               <Button
                 onClick={() => void createInvoice()}
                 disabled={saving || verifying}
-                className="bg-primary hover:bg-primary text-white disabled:opacity-50"
+                className="bg-[#0d9488] hover:bg-[#0f766e] text-white disabled:opacity-50"
               >
                 {saving ? (
                   <>

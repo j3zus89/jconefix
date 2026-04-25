@@ -453,7 +453,7 @@ export default function ChatPage() {
               type="button"
               onClick={handleSend}
               disabled={!input.trim()}
-              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary transition-colors hover:bg-primary disabled:opacity-40"
+              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#0d9488] transition-colors hover:bg-[#1d4ed8] disabled:opacity-40"
             >
               <Send className="h-4 w-4 text-white" />
             </button>

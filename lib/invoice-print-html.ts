@@ -258,8 +258,8 @@ export function buildInvoicePrintParts(payload: InvoicePrintPayload): { styles: 
     .t-grand { display: flex; justify-content: space-between; align-items: center; border: 2px solid #111; padding: 10px 14px; margin-top: 10px; font-size: 15px; font-weight: 800; color: #111; }
 
     /* ── 6. NOTAS / FISCAL ── */
-    .warranty-summary-box { border: 1.5px solid #F5C518; background: #F5C518/10; padding: 10px 14px; font-size: 11.5px; color: #0D1117; margin-bottom: 16px; border-radius: 4px; line-height: 1.5; }
-    .warranty-summary-box strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #F5C518; margin-bottom: 4px; }
+    .warranty-summary-box { border: 1.5px solid #0d9488; background: #f0fdfa; padding: 10px 14px; font-size: 11.5px; color: #134e4a; margin-bottom: 16px; border-radius: 4px; line-height: 1.5; }
+    .warranty-summary-box strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #0f766e; margin-bottom: 4px; }
     .notes-box { border-left: 3px solid #ccc; padding: 8px 14px; font-size: 11.5px; color: #555; margin-bottom: 20px; }
     .notes-box strong { color: #111; }
     .aux-block { border: 1px solid #ddd; border-radius: 3px; padding: 10px 14px; margin-bottom: 16px; }
@@ -291,8 +291,8 @@ export function buildInvoicePrintParts(payload: InvoicePrintPayload): { styles: 
     <tr>
       <td class="main">${esc(line.description)}</td>
       <td class="r">${line.quantity}</td>
-      <td class="r">${sym}${fmtNum(line.unit_price)}</td>
-      <td class="r">${sym}${fmtNum(line.total_price)}</td>
+      <td class="r">${sym}&nbsp;${fmtNum(line.unit_price)}</td>
+      <td class="r">${sym}&nbsp;${fmtNum(line.total_price)}</td>
     </tr>`).join('');
 
   const ledgerRows = inv.payment_ledger?.filter((r) => r.amount > 0.005) ?? [];
@@ -316,13 +316,13 @@ export function buildInvoicePrintParts(payload: InvoicePrintPayload): { styles: 
                 ${r.date_display ? `<span style="color:#888;font-size:10px"> · ${esc(r.date_display)}</span>` : ''}
                 ${r.method_display ? `<br/><span style="color:#666;font-size:10px">${esc(r.method_display)}</span>` : ''}
               </td>
-              <td class="r">${sym}${fmtNum(r.amount)}</td>
+              <td class="r">${sym}&nbsp;${fmtNum(r.amount)}</td>
             </tr>`
               )
               .join('')}
             <tr style="font-weight:700">
               <td class="main">Suma seña + cobros</td>
-              <td class="r">${sym}${fmtNum(ledgerSum)}</td>
+              <td class="r">${sym}&nbsp;${fmtNum(ledgerSum)}</td>
             </tr>
           </tbody>
         </table>
@@ -434,12 +434,12 @@ export function buildInvoicePrintParts(payload: InvoicePrintPayload): { styles: 
     ...(due ? [{ label: 'Vencimiento', value: esc(due) }] : []),
     ...(inv.external_reference?.trim() ? [{ label: 'Referencia', value: esc(inv.external_reference.trim()) }] : []),
     { label: 'Forma de pago', value: payMethodLine },
-    { label: 'Importe total', value: `${sym}${fmtNum(inv.total_amount)}` },
+    { label: 'Importe total', value: `${sym}&nbsp;${fmtNum(inv.total_amount)}` },
     ...(paidNum != null
       ? [
-          { label: 'Pagado (acum.)', value: `${sym}${fmtNum(paidNum)}` },
+          { label: 'Pagado (acum.)', value: `${sym}&nbsp;${fmtNum(paidNum)}` },
           ...(pendingNum != null && pendingNum > 0.009
-            ? [{ label: 'Pendiente', value: `${sym}${fmtNum(pendingNum)}` }]
+            ? [{ label: 'Pendiente', value: `${sym}&nbsp;${fmtNum(pendingNum)}` }]
             : []),
         ]
       : []),
@@ -518,19 +518,19 @@ export function buildInvoicePrintParts(payload: InvoicePrintPayload): { styles: 
     <!-- TOTALES -->
     <div class="totals-wrap">
       <div class="totals">
-        <div class="t-row"><span>Subtotal</span><span>${sym}${fmtNum(inv.subtotal)}</span></div>
-        ${inv.discount_amount > 0 ? `<div class="t-row red"><span>Descuento</span><span>−${sym}${fmtNum(inv.discount_amount)}</span></div>` : ''}
-        ${inv.discount_amount > 0 ? `<div class="t-row"><span>Base imponible</span><span>${sym}${fmtNum(baseImponible)}</span></div>` : ''}
-        ${inv.tax_amount > 0 ? `<div class="t-row"><span>IVA / Impuestos</span><span>${sym}${fmtNum(inv.tax_amount)}</span></div>` : ''}
-        <div class="t-grand"><span>TOTAL</span><span>${sym}${fmtNum(inv.total_amount)}</span></div>
+        <div class="t-row"><span>Subtotal</span><span>${sym}&nbsp;${fmtNum(inv.subtotal)}</span></div>
+        ${inv.discount_amount > 0 ? `<div class="t-row red"><span>Descuento</span><span>−${sym}&nbsp;${fmtNum(inv.discount_amount)}</span></div>` : ''}
+        ${inv.discount_amount > 0 ? `<div class="t-row"><span>Base imponible</span><span>${sym}&nbsp;${fmtNum(baseImponible)}</span></div>` : ''}
+        ${inv.tax_amount > 0 ? `<div class="t-row"><span>IVA / Impuestos</span><span>${sym}&nbsp;${fmtNum(inv.tax_amount)}</span></div>` : ''}
+        <div class="t-grand"><span>TOTAL</span><span>${sym}&nbsp;${fmtNum(inv.total_amount)}</span></div>
         ${
           paidNum != null
-            ? `<div class="t-row" style="font-weight:600;color:#F5C518"><span>Total cobrado</span><span>${sym}${fmtNum(paidNum)}</span></div>`
+            ? `<div class="t-row" style="font-weight:600;color:#0d9488"><span>Total cobrado</span><span>${sym}&nbsp;${fmtNum(paidNum)}</span></div>`
             : ''
         }
         ${
           pendingNum != null && pendingNum > 0.009
-            ? `<div class="t-row" style="color:#b45309"><span>Saldo pendiente</span><span>${sym}${fmtNum(pendingNum)}</span></div>`
+            ? `<div class="t-row" style="color:#b45309"><span>Saldo pendiente</span><span>${sym}&nbsp;${fmtNum(pendingNum)}</span></div>`
             : ''
         }
       </div>

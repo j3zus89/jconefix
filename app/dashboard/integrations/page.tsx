@@ -87,7 +87,7 @@ export default function IntegrationsPage() {
       <div className="grid grid-cols-3 gap-4 mb-6">
         <Card>
           <CardContent className="pt-6">
-            <p className="text-3xl font-bold text-primary">
+            <p className="text-3xl font-bold text-[#0d9488]">
               {integrations.filter(i => i.status === 'connected').length}
             </p>
             <p className="text-sm text-gray-500">Conectadas</p>
@@ -119,8 +119,8 @@ export default function IntegrationsPage() {
             <Card key={integration.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Icon className="h-6 w-6 text-[#0f766e]" />
+                  <div className="w-12 h-12 bg-[#0d9488]/10 rounded-lg flex items-center justify-center">
+                    <Icon className="h-6 w-6 text-[#0d9488]" />
                   </div>
                   <Badge 
                     variant={integration.status === 'connected' ? 'default' : 'secondary'}
@@ -141,14 +141,16 @@ export default function IntegrationsPage() {
                 {integration.status === 'connected' ? (
                   <div className="flex gap-2">
                     <Button 
-                      className="flex-1 bg-primary text-white hover:bg-primary/90"
+                      variant="outline" 
+                      className="flex-1"
                       onClick={() => handleConnect(integration.id)}
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Configurar
                     </Button>
                     <Button 
-                      className="bg-red-600 text-white hover:bg-red-700"
+                      variant="outline" 
+                      className="text-red-600 hover:bg-red-50"
                       onClick={() => handleDisconnect(integration.id)}
                     >
                       <X className="h-4 w-4" />
@@ -156,7 +158,7 @@ export default function IntegrationsPage() {
                   </div>
                 ) : (
                   <Button 
-                    className="w-full bg-primary hover:bg-primary/90"
+                    className="w-full bg-[#0d9488] hover:bg-[#0f766e]"
                     onClick={() => handleConnect(integration.id)}
                   >
                     <Puzzle className="h-4 w-4 mr-2" />
@@ -170,7 +172,7 @@ export default function IntegrationsPage() {
       </div>
 
       {/* Custom Integration CTA */}
-      <Card className="mt-6 bg-gradient-to-r from-primary/10 to-transparent border-primary/20">
+      <Card className="mt-6 bg-gradient-to-r from-[#0d9488]/10 to-transparent border-[#0d9488]/20">
         <CardContent className="pt-6 flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-lg">¿Necesitas una integración personalizada?</h3>
@@ -178,7 +180,7 @@ export default function IntegrationsPage() {
               Contacta con nuestro equipo para desarrollar integraciones a medida
             </p>
           </div>
-          <Button className="bg-primary hover:bg-primary/90">
+          <Button className="bg-[#0d9488] hover:bg-[#0f766e]">
             Solicitar Integración
           </Button>
         </CardContent>

@@ -15,6 +15,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import {
+  supportChatSideBySideRightStyle,
+  supportChatStackedBottomStyle,
+  useDashboardFloatingChats,
+} from '@/components/dashboard/DashboardFloatingChatsContext';
+import {
   SUPPORT_TYPING_BROADCAST_EVENT,
   supportTypingChannelId,
 } from '@/lib/support-chat-typing';
@@ -99,6 +104,7 @@ export function SupportContactDialog({
   onOpenChange: (v: boolean) => void;
 }) {
   const supabase = createClient();
+  const { dockMode } = useDashboardFloatingChats();
 
   const [loading,     setLoading]     = useState(false);
   const [sending,     setSending]     = useState(false);
@@ -393,15 +399,40 @@ export function SupportContactDialog({
       if (serverMsgs.length > 0) {
         if (!cancelled) setMessages(serverMsgs);
       } else {
-        const greeting: Msg = {
-          id: `__greeting__${Date.now()}`,
-          sender: 'admin',
-          body: `¡Hola, ${name}! Bienvenido. 👋 Soy MARI, tu asistente virtual.\n\nEstoy aquí para que aproveches al máximo tu panel. Si necesitas soporte técnico o tienes una duda específica, nuestro equipo humano te responderá por este mismo chat.\n\n¿Cómo puedo ayudarte hoy?`,
-          created_at: new Date().toISOString(),
-          is_bot_message: true,
-          _local: true,
-        };
-        if (!cancelled) setMessages([greeting]);
+        // MARI genera su propio saludo humano vía Groq al abrir
+        if (!cancelled) {
+          setMessages([]);
+          // Obtener saludo natural de MARI
+          fetch('/api/dashboard/support-chat/greeting', { method: 'POST' })
+            .then(r => r.json())
+            .then((g: { greeting?: string }) => {
+              if (g.greeting && !cancelled) {
+                const greetingMsg: Msg = {
+                  id: `__greeting__${Date.now()}`,
+                  sender: 'admin',
+                  body: g.greeting,
+                  created_at: new Date().toISOString(),
+                  is_bot_message: true,
+                  _local: true,
+                };
+                setMessages([greetingMsg]);
+              }
+            })
+            .catch(() => {
+              // Fallback si falla
+              if (!cancelled) {
+                const fallbackGreeting: Msg = {
+                  id: `__greeting__${Date.now()}`,
+                  sender: 'admin',
+                  body: `¡Hola! 👋 Soy Mari del equipo de JC ONE FIX. ¿En qué te ayudo hoy?`,
+                  created_at: new Date().toISOString(),
+                  is_bot_message: true,
+                  _local: true,
+                };
+                setMessages([fallbackGreeting]);
+              }
+            });
+        }
       }
 
       if (!cancelled) setLoading(false);
@@ -506,6 +537,17 @@ export function SupportContactDialog({
       void sendMessage(v);
     }
   };
+
+  const supportDockStyle = useMemo(() => {
+    if (!open) return undefined;
+    if (dockMode === 'sideBySide') {
+      return { ...supportChatSideBySideRightStyle(), bottom: '1rem' };
+    }
+    if (dockMode === 'stacked') {
+      return { ...supportChatStackedBottomStyle(), right: '1rem' };
+    }
+    return undefined;
+  }, [open, dockMode]);
 
   const supportAttachmentEntries = useMemo(
     () =>
@@ -663,11 +705,13 @@ export function SupportContactDialog({
   return (
     <div
       className={cn(
-        // Posición fija abajo a la derecha, al lado del chat interno
-        'flex min-w-0 h-[min(70vh,520px)] w-[min(100vw-2rem,420px)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl animate-in slide-in-from-bottom-4 fade-in duration-150'
+        // Un poco más alto para leer el hilo con fluidez
+        'fixed z-[55] flex min-w-0 h-[min(78vh,580px)] w-[min(100vw-2rem,420px)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl animate-in slide-in-from-bottom-4 fade-in duration-150',
+        dockMode === 'single' && 'bottom-[5.75rem] right-4'
       )}
+      style={supportDockStyle ?? undefined}
     >
-      <div className="flex shrink-0 items-center gap-2 border-b border-white/20 bg-primary px-2 py-2.5 text-white sm:px-3">
+      <div className="flex shrink-0 items-center gap-2 border-b border-white/20 bg-primary px-2 py-2.5 text-primary-foreground sm:px-3">
         <button
           type="button"
           onClick={() => void handleClose()}
@@ -695,7 +739,7 @@ export function SupportContactDialog({
             <SupportAssistantMascot fill title="MARI" />
           )}
           <span
-            className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-primary bg-white/90"
+            className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-primary bg-emerald-400"
             aria-hidden
           />
         </div>
@@ -709,8 +753,8 @@ export function SupportContactDialog({
             {sending || botThinking
               ? 'Escribiendo…'
               : threadHumanAgent
-                ? 'Soporte · agente humano'
-                : 'Soporte · equipo humano'}
+                ? 'Soporte JC ONE FIX · agente humano'
+                : 'Soporte JC ONE FIX · equipo humano'}
           </p>
         </div>
         <DropdownMenu modal={false}>

@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { JcOneFixAppIcon } from '@/components/jc-one-fix-mark';
 import { ChevronDown, Archive } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { displayOrgOrShopName } from '@/lib/display-name';
@@ -204,6 +203,8 @@ export function DashboardTopNav({ searchSlot }: { searchSlot?: ReactNode }) {
     '[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
   );
 
+  const shopInitial = (shopName || 'M').trim().charAt(0).toUpperCase() || 'M';
+
   return (
     <div className="flex min-w-0 w-full max-w-full flex-wrap items-center gap-2 sm:flex-nowrap sm:gap-2">
       <Link href="/dashboard" className="flex shrink-0 items-center gap-2 rounded-lg py-1 pr-2 transition-opacity hover:opacity-95">
@@ -218,7 +219,9 @@ export function DashboardTopNav({ searchSlot }: { searchSlot?: ReactNode }) {
                 referrerPolicy="no-referrer"
               />
             ) : (
-              <JcOneFixAppIcon hideRing className="h-full w-full min-h-0 min-w-0 shrink-0" />
+              <span className="text-sm font-semibold uppercase text-white">
+                {shopInitial}
+              </span>
             )}
           </span>
           {/* Móvil: bandera junto al logo (el nombre del taller va oculto) */}

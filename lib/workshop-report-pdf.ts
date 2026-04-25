@@ -101,9 +101,9 @@ export async function downloadWorkshopReportPdf(payload: WorkshopReportPayload):
     ['No reparados', String(s.notRepaired)],
     ['Cancelados', String(s.cancelled)],
     ['Aun en taller / en proceso', String(s.inProgress)],
-    [`Cobrado en reparaciones (${sym})`, `${sym} ${s.ticketRevenue.toFixed(2)}`],
-    [`Ventas mostrador / POS (${sym})`, `${sym} ${s.posTotal.toFixed(2)}`],
-    [`Total gastos registrados (${sym})`, `${sym} ${s.expensesTotal.toFixed(2)}`],
+    [`Cobrado en reparaciones (${sym})`, s.ticketRevenue.toFixed(2)],
+    [`Ventas mostrador / POS (${sym})`, s.posTotal.toFixed(2)],
+    [`Total gastos registrados (${sym})`, s.expensesTotal.toFixed(2)],
   ];
 
   autoTable(doc, {

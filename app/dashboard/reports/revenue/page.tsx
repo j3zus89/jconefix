@@ -147,7 +147,7 @@ export default function RevenueReportsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <TrendingUp className="h-7 w-7 text-primary" />
+            <TrendingUp className="h-7 w-7 text-[#0d9488]" />
             Ingresos (30 días)
           </h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -156,7 +156,7 @@ export default function RevenueReportsPage() {
             del cobrado por IVA o pagos parciales). El coste final en tickets es otra métrica (ver tarjeta inferior).
           </p>
         </div>
-        <Button asChild className="bg-primary text-white hover:bg-primary/90">
+        <Button asChild variant="outline">
           <Link href="/dashboard/reports">Volver a informes</Link>
         </Button>
       </div>
