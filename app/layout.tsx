@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     locale: 'es_AR',
     images: [
       {
-        url: `${APP_URL}/og-image.png?v=3`,
+        url: `${APP_URL}/og-image1.png`,
         width: 1200,
         height: 630,
         alt: 'JC ONE FIX - Software de Gestión para Talleres',
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     description: OG_DESC,
     images: [
       {
-        url: `${APP_URL}/og-image.png?v=3`,
+        url: `${APP_URL}/og-image1.png`,
         width: 1200,
         height: 630,
         alt: 'JC ONE FIX - Software de Gestión para Talleres',
