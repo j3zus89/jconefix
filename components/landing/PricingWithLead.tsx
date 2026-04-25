@@ -320,17 +320,32 @@ export function PricingWithLead() {
             </p>
 
             <div className="mb-3 flex-1 min-h-0 flex flex-col">
-              <ul className="grid grid-cols-1 xs:grid-cols-2 gap-x-4 gap-y-3">
-                {planFeaturesSimple.map((f) => (
-                  <li key={f.text} className="flex items-start gap-2">
-                    <span className="text-base shrink-0" aria-hidden>{f.emoji}</span>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-slate-200 leading-tight">{f.text}</p>
-                      <p className="text-[10px] text-slate-500 leading-tight">{f.sub}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
+                {/* Primera columna: primeros 7 items */}
+                <ul className="space-y-2">
+                  {planFeaturesSimple.slice(0, 7).map((f) => (
+                    <li key={f.text} className="flex items-start gap-2">
+                      <span className="text-base shrink-0" aria-hidden>{f.emoji}</span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-slate-200 leading-tight">{f.text}</p>
+                        <p className="text-[10px] text-slate-500 leading-tight">{f.sub}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                {/* Segunda columna: últimos 7 items */}
+                <ul className="space-y-2">
+                  {planFeaturesSimple.slice(7, 14).map((f) => (
+                    <li key={f.text} className="flex items-start gap-2">
+                      <span className="text-base shrink-0" aria-hidden>{f.emoji}</span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-slate-200 leading-tight">{f.text}</p>
+                        <p className="text-[10px] text-slate-500 leading-tight">{f.sub}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             <div className="mt-auto space-y-2.5 pt-3 border-t border-white/10">

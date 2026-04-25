@@ -386,11 +386,13 @@ export default async function HomePage() {
 
       <QueIncluyeSection modules={modulosOferta} />
 
-      <ImportDemoInteractive />
+      <div className="hidden lg:block">
+        <ImportDemoInteractive />
+      </div>
 
       <section
         id="modulos-detalle"
-        className="scroll-mt-[5.5rem] border-y border-white/5 bg-[#0a0e14]/95 py-14 text-white sm:scroll-mt-28 sm:py-20"
+        className="hidden lg:block scroll-mt-[5.5rem] border-y border-white/5 bg-[#0a0e14]/95 py-14 text-white sm:scroll-mt-28 sm:py-20"
       >
         <div className="w-full min-w-0 px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
           <div className="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
@@ -423,7 +425,9 @@ export default async function HomePage() {
       </section>
 
 
-      <FeaturesSection />
+      <div className="hidden lg:block">
+        <FeaturesSection />
+      </div>
 
       <section id="pricing" className="relative scroll-mt-[5.5rem] py-14 sm:scroll-mt-24 sm:py-20">
         <div className="w-full min-w-0 px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
@@ -500,7 +504,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="relative min-h-[min(28rem,85svh)] overflow-hidden border-y border-white/5 bg-[#0D1117] py-14 sm:py-20 lg:min-h-[420px]">
+      <section className="hidden lg:block relative min-h-[min(28rem,85svh)] overflow-hidden border-y border-white/5 bg-[#0D1117] py-14 sm:py-20 lg:min-h-[420px]">
         {/* Oscuro + halos suaves Gold (sin rejilla de rombos) */}
         <div className="pointer-events-none absolute inset-0 z-0">
           <div className="absolute -top-36 -right-24 h-[22rem] w-[22rem] rounded-full bg-[#F5C518]/15 blur-[110px] opacity-75" />
@@ -557,9 +561,21 @@ function HeroSellingVisual() {
     <div className="relative w-full min-h-[500px] sm:min-h-[600px] lg:min-h-[720px] overflow-visible">
       <div className="relative z-10 w-full flex items-start justify-center overflow-visible px-2 pt-8 sm:pt-12">
         <div className="relative w-auto flex justify-center items-start overflow-visible">
-          {/* Resplandor amarillo suave detrás de los dispositivos (iMac + tablet) */}
-          <div className="pointer-events-none absolute top-[10%] left-1/2 h-[60%] w-[80%] -translate-x-1/2 rounded-full bg-[#F5C518] opacity-[0.12] blur-[60px] -z-10" />
-          <div className="pointer-events-none absolute bottom-[15%] left-1/2 h-[40%] w-[70%] -translate-x-1/2 rounded-full bg-[#F5C518] opacity-[0.10] blur-[50px] -z-10" />
+          {/* Efectos de iluminación tipo TechFlow - múltiples halos dorados difuminados */}
+          {/* Halo principal superior - luz más intensa */}
+          <div className="pointer-events-none absolute top-[5%] left-1/2 h-[50%] w-[90%] -translate-x-1/2 rounded-full bg-[#F5C518] opacity-[0.18] blur-[80px] -z-10" />
+          {/* Halo secundario superior izquierdo */}
+          <div className="pointer-events-none absolute top-[8%] left-[20%] h-[35%] w-[45%] rounded-full bg-[#F5C518] opacity-[0.14] blur-[60px] -z-10" />
+          {/* Halo secundario superior derecho */}
+          <div className="pointer-events-none absolute top-[12%] right-[15%] h-[30%] w-[40%] rounded-full bg-[#D4A915] opacity-[0.12] blur-[55px] -z-10" />
+          {/* Halo central - iluminación general del iMac */}
+          <div className="pointer-events-none absolute top-[25%] left-1/2 h-[45%] w-[75%] -translate-x-1/2 rounded-full bg-[#F5C518] opacity-[0.10] blur-[70px] -z-10" />
+          {/* Halo inferior - resplandor de la base/tablet */}
+          <div className="pointer-events-none absolute bottom-[10%] left-1/2 h-[35%] w-[65%] -translate-x-1/2 rounded-full bg-[#E6B800] opacity-[0.13] blur-[55px] -z-10" />
+          {/* Halo sutil inferior izquierdo */}
+          <div className="pointer-events-none absolute bottom-[20%] left-[25%] h-[25%] w-[35%] rounded-full bg-[#F5C518] opacity-[0.09] blur-[45px] -z-10" />
+          {/* Halo sutil inferior derecho */}
+          <div className="pointer-events-none absolute bottom-[15%] right-[20%] h-[20%] w-[30%] rounded-full bg-[#D4A915] opacity-[0.08] blur-[40px] -z-10" />
 
           <HeroFloatIcon Icon={Package} className="top-[12%] left-0 z-20 sm:-top-1 sm:-left-1" />
           <HeroFloatIcon Icon={Calendar} className="top-[16%] -right-2 z-20 sm:-right-3" />

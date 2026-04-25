@@ -135,7 +135,7 @@ export default function ResetPasswordPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="rounded-2xl border border-white/10 bg-[#070f18]/80 backdrop-blur-xl p-8 sm:p-10 shadow-2xl shadow-black/40">
           <div className="flex items-center gap-3 mb-8">
-            <JcOneFixAppIcon className="rounded-xl ring-1 ring-white/10" />
+            <JcOneFixAppIcon className="h-10 w-10 rounded-full" />
             <div>
               <JcOneFixMark tone="onDark" className="text-xl font-bold tracking-tight" />
               <p className="text-[11px] uppercase tracking-widest text-slate-500 mt-1">Nueva contraseña</p>

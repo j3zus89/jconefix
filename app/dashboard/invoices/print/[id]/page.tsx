@@ -261,8 +261,43 @@ export default function InvoicePrintPage() {
       </div>
       <div dangerouslySetInnerHTML={{ __html: parts.body }} />
       <style>{`
+        @page {
+          margin: 1cm 1.2cm;
+          size: auto;
+        }
+        html, body {
+          height: auto !important;
+          min-height: auto !important;
+          overflow: visible !important;
+        }
         @media print {
-          .no-print { display: none !important; }
+          .no-print,
+          header,
+          nav,
+          footer,
+          [data-web-chrome],
+          .url-print,
+          [class*='url'] {
+            display: none !important;
+          }
+          body {
+            margin: 0 !important;
+            padding: 0 !important;
+            height: auto !important;
+            min-height: auto !important;
+          }
+          .min-h-screen {
+            min-height: auto !important;
+          }
+          /* Compactar espaciado de la factura */
+          .invoice-container, .invoice-wrapper, [class*='invoice'] {
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
         }
       `}</style>
     </div>

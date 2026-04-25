@@ -258,7 +258,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="flex h-full flex-col pt-[env(safe-area-inset-top,0px)]">
             <div className="border-b border-white/10 px-5 pb-4 pt-5">
               <Link href="/admin" className="flex items-center gap-3" onClick={() => setMobileNavOpen(false)}>
-                <JcOneFixAppIcon className="h-9 w-9 shrink-0 rounded-xl" />
+                <JcOneFixAppIcon className="h-8 w-8 shrink-0 rounded-full" />
                 <div className="min-w-0 leading-tight">
                   <JcOneFixMark tone="onDark" className="text-sm font-bold" />
                   <p className="mt-0.5 text-[10px] text-slate-500">Panel SUPER_ADMIN</p>

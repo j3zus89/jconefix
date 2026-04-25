@@ -1389,10 +1389,11 @@ export default function TicketsPage() {
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
             <input
+              type="text"
               placeholder="Buscar..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8 pr-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary w-48"
+              className="pl-8 pr-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary w-48 bg-white"
             />
           </div>
           <button className="p-1.5 hover:bg-gray-100 rounded">
@@ -1543,11 +1544,11 @@ export default function TicketsPage() {
                       return (
                         <Link
                           href={`/dashboard/tickets/${ticket.id}`}
-                          className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold ring-1 ring-inset transition-opacity hover:opacity-80"
+                          className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold ring-1 ring-inset transition-opacity hover:opacity-80 bg-white"
                           style={{
-                            backgroundColor: bg,
                             color: fg,
                             outline: `1px solid ${fg}33`,
+                            border: `1px solid ${bg}`,
                           }}
                           title={getStatusLabel(ticket.status)}
                         >

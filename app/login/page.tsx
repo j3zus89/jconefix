@@ -94,21 +94,21 @@ export default function LoginPage() {
           </Link>
 
           <div className="rounded-2xl border border-white/10 bg-[#070f18]/75 backdrop-blur-xl p-8 sm:p-10 shadow-2xl shadow-black/40">
-            <div className="flex items-center gap-3 mb-8">
+            <Link href="/" className="flex items-center gap-3 mb-8 group">
               {brandingLogo ? (
                 <img
                   src={brandingLogo}
                   alt=""
-                  className="h-16 w-16 sm:h-[4.5rem] sm:w-[4.5rem] shrink-0 rounded-full object-contain"
+                  className="h-16 w-16 sm:h-[4.5rem] sm:w-[4.5rem] shrink-0 rounded-full object-contain group-hover:ring-2 group-hover:ring-[#F5C518]/50 transition-all"
                 />
               ) : (
-                <JcOneFixAppIcon className="h-16 w-16 sm:h-[4.5rem] sm:w-[4.5rem] transition-all" />
+                <JcOneFixAppIcon className="h-10 w-10 sm:h-11 sm:w-11 rounded-full transition-all group-hover:ring-2 group-hover:ring-[#F5C518]/50" />
               )}
               <div>
-                <JcOneFixMark tone="onDark" className="text-xl sm:text-2xl font-bold tracking-tight" />
+                <JcOneFixMark tone="onDark" className="text-xl sm:text-2xl font-bold tracking-tight group-hover:text-[#F5C518] transition-colors" />
                 <p className="text-[11px] uppercase tracking-widest text-slate-500 mt-1">Acceso al panel</p>
               </div>
-            </div>
+            </Link>
 
             <div className="mb-8">
               <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white leading-tight mb-2">

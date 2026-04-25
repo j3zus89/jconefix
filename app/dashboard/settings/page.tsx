@@ -344,6 +344,8 @@ type ShopSettings = {
   ticket_repairs_settings: TicketRepairsSettings;
   /** full = menú e inicio completos; simple = panel reducido para tiendas pequeñas */
   panel_ui_mode: 'full' | 'simple';
+  /** Chat interno entre miembros del equipo */
+  chat_enabled: boolean;
 };
 
 type CustomStatus = {
@@ -443,6 +445,7 @@ const DEFAULT_SHOP: ShopSettings = {
   portal_show_invoices: false,
   ticket_repairs_settings: { ...DEFAULT_TICKET_REPAIRS_SETTINGS },
   panel_ui_mode: 'full',
+  chat_enabled: false,
 };
 
 type SimpleItem = { id: string; name: string; is_active: boolean; sort_order: number };
@@ -566,6 +569,12 @@ export default function SettingsPage() {
   const [repairCatDialog, setRepairCatDialog] = useState(false);
   const [editingRepairCat, setEditingRepairCat] = useState<SimpleItem | null>(null);
   const [repairCatForm, setRepairCatForm] = useState({ name: '', is_active: true });
+
+  const [productCategories, setProductCategories] = useState<Array<{id: string; name: string; description: string | null; is_active: boolean; sort_order: number}>>([]);
+  const [productCategoryDialog, setProductCategoryDialog] = useState(false);
+  const [editingProductCategory, setEditingProductCategory] = useState<{id: string; name: string; description: string | null; is_active: boolean; sort_order: number} | null>(null);
+  const [productCategoryForm, setProductCategoryForm] = useState({ name: '', description: '', is_active: true });
+  const [savingProductCategory, setSavingProductCategory] = useState(false);
 
   const [rolePerms, setRolePerms] = useState<Record<string, Record<string, boolean>>>({});
   const [savingRolePerms, setSavingRolePerms] = useState(false);
@@ -696,6 +705,7 @@ export default function SettingsPage() {
       { data: pm },
       { data: rc },
       { data: rp },
+      { data: pc },
     ] = await Promise.all([
       (supabase as any).from('shop_settings').select('*').eq('user_id', user.id).maybeSingle(),
       (supabase as any).from('custom_ticket_statuses').select('*').eq('user_id', user.id).order('sort_order'),
@@ -704,6 +714,7 @@ export default function SettingsPage() {
       (supabase as any).from('payment_methods').select('*').eq('user_id', user.id).order('sort_order'),
       (supabase as any).from('repair_categories').select('*').eq('user_id', user.id).order('sort_order'),
       (supabase as any).from('role_permissions').select('*').eq('user_id', user.id),
+      (supabase as any).from('product_categories').select('*').order('sort_order'),
     ]);
 
     // Load organization name (primary source) and country
@@ -938,6 +949,27 @@ export default function SettingsPage() {
       setRepairCats(freshRc || []);
     } else {
       setRepairCats(rc);
+    }
+
+    if (!pc || pc.length === 0) {
+      const seeds = [
+        { name: 'Smartphones', description: 'Teléfonos móviles y smartphones', sort_order: 1, is_active: true },
+        { name: 'Tablets', description: 'Tablets e iPads', sort_order: 2, is_active: true },
+        { name: 'Laptops', description: 'Computadoras portátiles', sort_order: 3, is_active: true },
+        { name: 'Accesorios', description: 'Accesorios generales', sort_order: 4, is_active: true },
+        { name: 'Repuestos', description: 'Repuestos y piezas de repuesto', sort_order: 5, is_active: true },
+        { name: 'Cables', description: 'Cables y conectores', sort_order: 6, is_active: true },
+        { name: 'Fundas', description: 'Fundas y protectores', sort_order: 7, is_active: true },
+        { name: 'Cargadores', description: 'Cargadores y adaptadores', sort_order: 8, is_active: true },
+      ].map((s, i) => ({ ...s, user_id: user.id, sort_order: i }));
+      await (supabase as any).from('product_categories').upsert(seeds, listSeedUpsert);
+      const { data: freshPc } = await (supabase as any)
+        .from('product_categories')
+        .select('*')
+        .order('sort_order');
+      setProductCategories(freshPc || []);
+    } else {
+      setProductCategories(pc);
     }
 
     const permsMap: Record<string, Record<string, boolean>> = {};
@@ -1650,6 +1682,67 @@ export default function SettingsPage() {
     setItems(items.map(i => i.id === item.id ? { ...i, is_active: !i.is_active } : i));
   };
 
+  const handleSaveProductCategory = async () => {
+    if (!productCategoryForm.name.trim()) {
+      toast.error('El nombre de la categoría es obligatorio');
+      return;
+    }
+    setSavingProductCategory(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      if (editingProductCategory) {
+        const { error } = await (supabase as any)
+          .from('product_categories')
+          .update({
+            name: productCategoryForm.name.trim(),
+            description: productCategoryForm.description.trim() || null,
+            is_active: productCategoryForm.is_active,
+          })
+          .eq('id', editingProductCategory.id);
+        if (error) throw error;
+        toast.success('Categoría actualizada');
+        setProductCategories(productCategories.map(c => c.id === editingProductCategory.id ? { ...c, name: productCategoryForm.name.trim(), description: productCategoryForm.description.trim() || null, is_active: productCategoryForm.is_active } : c));
+      } else {
+        const { data, error } = await (supabase as any)
+          .from('product_categories')
+          .insert([{
+            user_id: user.id,
+            name: productCategoryForm.name.trim(),
+            description: productCategoryForm.description.trim() || null,
+            is_active: productCategoryForm.is_active,
+            sort_order: productCategories.length,
+          }])
+          .select()
+          .single();
+        if (error) throw error;
+        toast.success('Categoría creada');
+        setProductCategories([...productCategories, data]);
+      }
+      setProductCategoryDialog(false);
+      setEditingProductCategory(null);
+      setProductCategoryForm({ name: '', description: '', is_active: true });
+    } catch (e: any) {
+      toast.error(e.message || 'Error al guardar la categoría');
+    } finally {
+      setSavingProductCategory(false);
+    }
+  };
+
+  const handleDeleteProductCategory = async (id: string) => {
+    if (!confirm('¿Eliminar esta categoría?')) return;
+    const { error } = await (supabase as any).from('product_categories').delete().eq('id', id);
+    if (error) { toast.error(error.message); return; }
+    setProductCategories(productCategories.filter(c => c.id !== id));
+    toast.success('Categoría eliminada');
+  };
+
+  const handleToggleProductCategory = async (cat: typeof productCategories[0]) => {
+    const { error } = await (supabase as any).from('product_categories').update({ is_active: !cat.is_active }).eq('id', cat.id);
+    if (error) { toast.error(error.message); return; }
+    setProductCategories(productCategories.map(c => c.id === cat.id ? { ...c, is_active: !c.is_active } : c));
+  };
+
   const handleSaveRolePerms = async () => {
     setSavingRolePerms(true);
     try {
@@ -2035,6 +2128,25 @@ export default function SettingsPage() {
                     Todos los módulos (informes, inventario, gastos…).
                   </p>
                 </button>
+              </div>
+
+              {/* Toggle Chat interno */}
+              <div className="mt-6 flex items-center justify-between max-w-xl">
+                <div>
+                  <p className="font-semibold text-gray-900">Chat interno del equipo</p>
+                  <p className="text-xs text-gray-600">
+                    Mensajería entre miembros del taller. Por defecto desactivado.
+                  </p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={shopSettings.chat_enabled}
+                    onChange={(e) => shopSet('chat_enabled', e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+                </label>
               </div>
             </Section>
 
@@ -3373,22 +3485,106 @@ export default function SettingsPage() {
                 <h1 className="text-xl font-bold text-gray-900">Categorías de productos</h1>
                 <p className="text-sm text-gray-500 mt-1">Organiza tu inventario por categorías</p>
               </div>
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2"><Plus className="h-4 w-4" />Nueva categoría</Button>
+              <Button
+                onClick={() => {
+                  setEditingProductCategory(null);
+                  setProductCategoryForm({ name: '', description: '', is_active: true });
+                  setProductCategoryDialog(true);
+                }}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2"
+              >
+                <Plus className="h-4 w-4" />Nueva categoría
+              </Button>
             </div>
             <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
-              {['Smartphones', 'Tablets', 'Laptops', 'Accesorios', 'Repuestos', 'Cables', 'Fundas', 'Cargadores'].map(cat => (
-                <div key={cat} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50">
-                  <div className="flex items-center gap-3">
-                    <GripVertical className="h-4 w-4 text-gray-300 cursor-grab" />
-                    <span className="text-sm font-medium text-gray-800">{cat}</span>
+              {productCategories.length === 0 ? (
+                <div className="px-4 py-8 text-center text-sm text-gray-400">
+                  No hay categorías. Crea la primera para organizar tu inventario.
+                </div>
+              ) : (
+                productCategories.map(cat => (
+                  <div key={cat.id} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50">
+                    <div className="flex items-center gap-3">
+                      <GripVertical className="h-4 w-4 text-gray-300 cursor-grab" />
+                      <span className={cn('text-sm font-medium', cat.is_active ? 'text-gray-800' : 'text-gray-400 line-through')}>
+                        {cat.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handleToggleProductCategory(cat)}
+                        className={cn('text-xs px-2 py-0.5 rounded-full mr-2', cat.is_active ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200')}
+                      >
+                        {cat.is_active ? 'Activo' : 'Inactivo'}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditingProductCategory(cat);
+                          setProductCategoryForm({ name: cat.name, description: cat.description || '', is_active: cat.is_active });
+                          setProductCategoryDialog(true);
+                        }}
+                        className="p-1.5 hover:bg-gray-100 rounded text-gray-400 hover:text-gray-700"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProductCategory(cat.id)}
+                        className="p-1.5 hover:bg-red-50 rounded text-gray-400 hover:text-red-500"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex gap-1">
-                    <button className="p-1.5 hover:bg-gray-100 rounded text-gray-400"><Pencil className="h-3.5 w-3.5" /></button>
-                    <button className="p-1.5 hover:bg-red-50 rounded text-gray-400 hover:text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                ))
+              )}
+            </div>
+
+            <Dialog open={productCategoryDialog} onOpenChange={setProductCategoryDialog}>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>{editingProductCategory ? 'Editar categoría' : 'Nueva categoría'}</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <div>
+                    <Label className="text-xs font-medium text-gray-600">Nombre <span className="text-red-500">*</span></Label>
+                    <Input
+                      className="mt-1 h-9"
+                      value={productCategoryForm.name}
+                      onChange={(e) => setProductCategoryForm(p => ({ ...p, name: e.target.value }))}
+                      placeholder="Ej: Smartphones"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs font-medium text-gray-600">Descripción</Label>
+                    <Input
+                      className="mt-1 h-9"
+                      value={productCategoryForm.description}
+                      onChange={(e) => setProductCategoryForm(p => ({ ...p, description: e.target.value }))}
+                      placeholder="Descripción opcional"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="cat_is_active"
+                      checked={productCategoryForm.is_active}
+                      onCheckedChange={(v) => setProductCategoryForm(p => ({ ...p, is_active: v === true }))}
+                    />
+                    <label htmlFor="cat_is_active" className="text-sm cursor-pointer">Activo</label>
                   </div>
                 </div>
-              ))}
-            </div>
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" onClick={() => setProductCategoryDialog(false)}>Cancelar</Button>
+                  <Button
+                    onClick={handleSaveProductCategory}
+                    disabled={savingProductCategory || !productCategoryForm.name.trim()}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2"
+                  >
+                    {savingProductCategory && <Loader2 className="h-4 w-4 animate-spin" />}
+                    {editingProductCategory ? 'Guardar cambios' : 'Crear categoría'}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         )}
 

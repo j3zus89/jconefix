@@ -3546,7 +3546,7 @@ export default function TicketDetailPage() {
                 <div>
                   <label className="text-xs font-medium text-gray-600">Tipo de actuación</label>
                   <Select value={returnScenario} onValueChange={setReturnScenario}>
-                    <SelectTrigger className="mt-1 h-9">
+                    <SelectTrigger className="mt-1 h-9 bg-white">
                       <SelectValue placeholder="Elige" />
                     </SelectTrigger>
                     <SelectContent>
@@ -3561,7 +3561,7 @@ export default function TicketDetailPage() {
                 <div>
                   <label className="text-xs font-medium text-gray-600">Forma de liquidación</label>
                   <Select value={returnSettlement} onValueChange={setReturnSettlement}>
-                    <SelectTrigger className="mt-1 h-9">
+                    <SelectTrigger className="mt-1 h-9 bg-white">
                       <SelectValue placeholder="Elige" />
                     </SelectTrigger>
                     <SelectContent>
@@ -3585,7 +3585,7 @@ export default function TicketDetailPage() {
                   value={returnRelatedInvoiceId || '__none__'}
                   onValueChange={(v) => setReturnRelatedInvoiceId(v === '__none__' ? '' : v)}
                 >
-                  <SelectTrigger className="mt-1 h-9">
+                  <SelectTrigger className="mt-1 h-9 bg-white">
                     <SelectValue placeholder="Sin vincular" />
                   </SelectTrigger>
                   <SelectContent>
@@ -3604,7 +3604,7 @@ export default function TicketDetailPage() {
               <div>
                 <label className="text-xs font-medium text-gray-600">Descripción (obligatorio)</label>
                 <Textarea
-                  className="mt-1 min-h-[100px]"
+                  className="mt-1 min-h-[100px] bg-white"
                   placeholder={`Ej.: ${ticket.device_type} · pieza sustituida en garantía · entrega de equipo sin reparar`}
                   value={returnDraftNote}
                   onChange={(e) => setReturnDraftNote(e.target.value)}
@@ -3615,7 +3615,7 @@ export default function TicketDetailPage() {
                   Importe en dinero ({currSym}, opcional)
                 </label>
                 <Input
-                  className="mt-1 h-9"
+                  className="mt-1 h-9 bg-white"
                   type="text"
                   inputMode="decimal"
                   placeholder="Vacío si no hay importe monetario"
@@ -3817,7 +3817,7 @@ export default function TicketDetailPage() {
                           <div className="p-2 border-b border-gray-100">
                             <div className="relative">
                               <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
-                              <input autoFocus value={statusSearch} onChange={(e) => setStatusSearch(e.target.value)} placeholder="Buscar estado..." className="w-full pl-7 pr-3 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-[#0d9488]" />
+                              <input autoFocus value={statusSearch} onChange={(e) => setStatusSearch(e.target.value)} placeholder="Buscar estado..." className="w-full pl-7 pr-3 py-1.5 text-sm border border-gray-200 bg-white rounded focus:outline-none focus:ring-1 focus:ring-[#0d9488]" />
                             </div>
                           </div>
                           <div className="max-h-72 overflow-y-auto py-1">
@@ -3854,7 +3854,7 @@ export default function TicketDetailPage() {
                         value={priceValue}
                         onChange={e => setPriceValue(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') handleSavePrice(); if (e.key === 'Escape') setEditingPrice(false); }}
-                        className="border border-[#0d9488] rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d9488] w-36"
+                        className="border border-[#0d9488] bg-white rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d9488] w-36"
                         placeholder="Introducir precio"
                       />
                       <button onClick={handleSavePrice} disabled={savingPrice} className="bg-[#0d9488] text-white text-xs px-3 py-1.5 rounded hover:bg-[#1d4ed8] flex items-center gap-1">
@@ -3983,7 +3983,7 @@ export default function TicketDetailPage() {
                                   value={assignSearch}
                                   onChange={(e) => setAssignSearch(e.target.value)}
                                   placeholder="Buscar técnico"
-                                  className="h-9 pr-9 text-sm"
+                                  className="h-9 pr-9 text-sm bg-white"
                                   autoComplete="off"
                                 />
                                 <Search className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -4061,7 +4061,7 @@ export default function TicketDetailPage() {
                           onBlur={() => commitDueDate()}
                           disabled={savingTicketMeta}
                           title="Seleccione fecha y hora"
-                          className="h-9 bg-gray-50 pl-8 text-xs"
+                          className="h-9 bg-white pl-8 text-xs"
                         />
                       </div>
                       {!dueDateDraft ? (
@@ -4075,7 +4075,7 @@ export default function TicketDetailPage() {
                         onValueChange={(v) => void patchTicketMeta({ task_type: v })}
                         disabled={savingTicketMeta}
                       >
-                        <SelectTrigger className="h-9 bg-gray-50 text-xs">
+                        <SelectTrigger className="h-9 bg-white text-xs">
                           <SelectValue placeholder="Tipo" />
                         </SelectTrigger>
                         <SelectContent>
@@ -4098,7 +4098,7 @@ export default function TicketDetailPage() {
                           onChange={(e) => setRepairTimeDraft(e.target.value || '00:00:00')}
                           onBlur={() => commitRepairTime()}
                           disabled={savingTicketMeta}
-                          className="h-9 bg-gray-50 pl-8 text-xs font-mono"
+                          className="h-9 bg-white pl-8 text-xs font-mono"
                         />
                       </div>
                     </div>
@@ -4439,7 +4439,7 @@ export default function TicketDetailPage() {
                       onChange={(e) => handleSaveAccessories({ notes: e.target.value })}
                       placeholder="Notas sobre accesorios..."
                       rows={2}
-                      className="w-full rounded border border-gray-300 px-2 py-1.5 text-sm"
+                      className="w-full rounded border border-gray-300 bg-white px-2 py-1.5 text-sm"
                     />
                   </div>
                 </div>
@@ -4536,7 +4536,7 @@ export default function TicketDetailPage() {
                         />
                         <label
                           htmlFor="image-upload-micro"
-                          className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-md border border-input bg-background px-2.5 text-xs font-medium text-gray-700 shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                          className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-md border border-input bg-white px-2.5 text-xs font-medium text-gray-700 shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
                         >
                           <Plus className="h-3 w-3" />
                           Agregar archivos
@@ -4732,7 +4732,7 @@ export default function TicketDetailPage() {
                             onChange={(e) => handleSaveConditions(activeConditionTab, { notes: e.target.value })}
                             placeholder={`Notas sobre condiciones ${activeConditionTab === 'pre' ? 'previas' : 'posteriores'}...`}
                             rows={2}
-                            className="w-full rounded border border-gray-300 px-2 py-1.5 text-sm"
+                            className="w-full rounded border border-gray-300 bg-white px-2 py-1.5 text-sm"
                           />
                         </div>
                         <div className="flex items-center gap-2">
@@ -4743,7 +4743,7 @@ export default function TicketDetailPage() {
                               handleSaveConditions(activeConditionTab, { checked_by: e.target.value })
                             }
                             placeholder="Revisado por..."
-                            className="flex-1 rounded border border-gray-300 px-2 py-1.5 text-sm"
+                            className="flex-1 rounded border border-gray-300 bg-white px-2 py-1.5 text-sm"
                           />
                           {savingConditions ? <span className="text-xs text-gray-500">Guardando...</span> : null}
                         </div>
@@ -4773,7 +4773,7 @@ export default function TicketDetailPage() {
                     placeholder="Nombre, SKU o UPC…"
                     value={repuestoSearch}
                     onChange={(e) => setRepuestoSearch(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d9488]/30"
+                    className="w-full border border-gray-300 bg-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0d9488]/30"
                   />
                   {repuestoSearchLoading ? (
                     <div className="flex justify-center py-6">
@@ -4802,7 +4802,7 @@ export default function TicketDetailPage() {
                           max={selectedRepuesto.quantity > 0 ? selectedRepuesto.quantity : undefined}
                           value={repuestoQty}
                           onChange={(e) => setRepuestoQty(Math.max(1, parseInt(e.target.value, 10) || 1))}
-                          className="w-20 border border-gray-300 rounded px-2 py-1 text-sm"
+                          className="w-20 border border-gray-300 bg-white rounded px-2 py-1 text-sm"
                         />
                       </div>
                       {repuestoQty > (selectedRepuesto.quantity || 0) && (selectedRepuesto.quantity || 0) > 0 ? (
@@ -4911,11 +4911,11 @@ export default function TicketDetailPage() {
                     <div className="grid grid-cols-3 gap-3">
                       <div>
                         <label className="text-xs text-gray-500 block mb-1">A:</label>
-                        <input value={emailTo} onChange={e => setEmailTo(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488]" placeholder="email@cliente.com" />
+                        <input value={emailTo} onChange={e => setEmailTo(e.target.value)} className="w-full border border-gray-300 bg-white rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488]" placeholder="email@cliente.com" />
                       </div>
                       <div>
                         <label className="text-xs text-gray-500 block mb-1">C.C.:</label>
-                        <input value={emailCC} onChange={e => setEmailCC(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488]" placeholder="cc@email.com" />
+                        <input value={emailCC} onChange={e => setEmailCC(e.target.value)} className="w-full border border-gray-300 bg-white rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488]" placeholder="cc@email.com" />
                       </div>
                       <div>
                         <label className="text-xs text-gray-500 block mb-1">Respuesta enlazada:</label>
@@ -4950,7 +4950,7 @@ export default function TicketDetailPage() {
 
                     <div>
                       <label className="text-xs text-gray-500 block mb-1">Asunto:</label>
-                      <input value={emailSubject} onChange={e => setEmailSubject(e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488]" placeholder="Asunto del correo..." />
+                      <input value={emailSubject} onChange={e => setEmailSubject(e.target.value)} className="w-full border border-gray-300 bg-white rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488]" placeholder="Asunto del correo..." />
                     </div>
 
                     {emailBody && (
@@ -4974,7 +4974,7 @@ export default function TicketDetailPage() {
 
                     <div>
                       <label className="text-xs text-gray-500 block mb-1">Mensaje personalizado para el cliente (opcional):</label>
-                      <textarea value={additionalNote} onChange={e => setAdditionalNote(e.target.value)} rows={3} className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] resize-none" placeholder="Aparecerá en el correo en el apartado «Mensaje del taller», debajo de los datos del cliente." />
+                      <textarea value={additionalNote} onChange={e => setAdditionalNote(e.target.value)} rows={3} className="w-full border border-gray-300 bg-white rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] resize-none" placeholder="Aparecerá en el correo en el apartado «Mensaje del taller», debajo de los datos del cliente." />
                     </div>
 
                     <div className="flex items-center justify-between pt-1">
@@ -5063,7 +5063,7 @@ export default function TicketDetailPage() {
                     onChange={(e) => setCommentText(e.target.value)}
                     placeholder={activeTab === 'privados' ? 'Comentario interno privado...' : activeTab === 'diagnostico' ? 'Registrar hallazgos técnicos...' : 'Escribir comentario...'}
                     rows={3}
-                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] resize-none"
+                    className="w-full border border-gray-300 bg-white rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] resize-none"
                   />
                   <div className="flex items-center justify-between gap-2 mt-2">
                     <button
@@ -5231,7 +5231,7 @@ export default function TicketDetailPage() {
                                 value={editingCommentText}
                                 onChange={(e) => setEditingCommentText(e.target.value)}
                                 rows={3}
-                                className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] resize-none"
+                                className="w-full border border-gray-300 bg-white rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0d9488] resize-none"
                               />
                             ) : (
                               <p className="text-gray-700 whitespace-pre-wrap">{displayContent}</p>
@@ -5572,8 +5572,9 @@ export default function TicketDetailPage() {
                       value={depositDraft}
                       onChange={(e) => setDepositDraft(e.target.value)}
                       onBlur={() => void handleSaveDeposit()}
-                      disabled={savingDeposit}
-                      placeholder="0"
+                      disabled={savingDeposit || billingPaidAmount >= billingGrandTotal}
+                      placeholder={billingPaidAmount >= billingGrandTotal ? 'Pagado' : '0'}
+                      title={billingPaidAmount >= billingGrandTotal ? 'La factura ya está pagada en su totalidad' : ''}
                     />
                     {savingDeposit ? <Loader2 className="h-3.5 w-3.5 animate-spin text-gray-400 shrink-0" /> : null}
                   </div>

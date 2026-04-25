@@ -9,9 +9,9 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { RegisterServiceWorker } from '@/components/pwa/RegisterServiceWorker';
 
 const APP_URL = getSiteCanonicalUrl();
-const OG_TITLE = 'Jconefix | El Software de Gestión para tu Servicio Técnico';
+const OG_TITLE = 'JC ONE FIX | Software de Gestión para Talleres de Reparación';
 const OG_DESC =
-  'Gestioná tus reparaciones, clientes y stock de forma profesional y eficiente. La herramienta líder para técnicos en Argentina.';
+  'El gestor de taller más completo de Argentina. Tickets, inventario, facturación AFIP/ARCA, WhatsApp automático e IA ilimitada. 30 días de prueba gratis.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
@@ -56,10 +56,10 @@ export const metadata: Metadata = {
     locale: 'es_AR',
     images: [
       {
-        url: `${APP_URL}/og-image.png?v=2025`,
+        url: `${APP_URL}/og-image.png?v=3`,
         width: 1200,
         height: 630,
-        alt: OG_TITLE,
+        alt: 'JC ONE FIX - Software de Gestión para Talleres',
         type: 'image/png',
       },
     ],
@@ -71,10 +71,10 @@ export const metadata: Metadata = {
     description: OG_DESC,
     images: [
       {
-        url: `${APP_URL}/og-image.png?v=2025`,
+        url: `${APP_URL}/og-image.png?v=3`,
         width: 1200,
         height: 630,
-        alt: OG_TITLE,
+        alt: 'JC ONE FIX - Software de Gestión para Talleres',
       },
     ],
   },
@@ -132,8 +132,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fknzxqfmresrkqpkbfil.supabase.co" />
         <link rel="dns-prefetch" href="https://fknzxqfmresrkqpkbfil.supabase.co" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        {/* Sin favicon por defecto - el usuario lo configura desde el panel */}
-        <script dangerouslySetInnerHTML={{ __html: `(function(){function r(){var l=document.querySelectorAll('link[rel*="icon"],link[rel="shortcut icon"],link[rel="apple-touch-icon"]');l.forEach(function(e){e.remove()});}r();setTimeout(r,0);setTimeout(r,100);})();` }} />
+        {/* Favicon dorado circular */}
+        <link rel="icon" type="image/png" href="/nuevologo.png" />
+        <link rel="shortcut icon" type="image/png" href="/nuevologo.png" />
+        <link rel="apple-touch-icon" href="/nuevologo.png" />
         <JsonLd />
         {/* Google Ads Global Site Tag (gtag.js) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18084854714"></script>

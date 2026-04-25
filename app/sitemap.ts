@@ -62,6 +62,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   const ayudaImportar = `${base}/ayuda/importar-datos-taller`;
+  const register = `${base}/register`;
+  const login = `${base}/login`;
+  const privacidad = `${base}/privacidad`;
+  const terminos = `${base}/terminos`;
 
   return [
     {
@@ -72,25 +76,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ...arLang(home),
     },
     {
-      url: ayudaImportar,
-      lastModified: lastMod,
-      changeFrequency: 'monthly',
-      priority: 0.86,
-      ...arLang(ayudaImportar),
-    },
-    {
-      url: `${base}/comparar`,
-      lastModified: lastMod,
-      changeFrequency: 'weekly',
-      priority: 0.85,
-      ...arLang(`${base}/comparar`),
-    },
-    {
       url: `${base}/precios`,
       lastModified: lastMod,
       changeFrequency: 'weekly',
-      priority: 0.91,
+      priority: 0.95,
       ...arLang(`${base}/precios`),
+    },
+    {
+      url: register,
+      lastModified: lastMod,
+      changeFrequency: 'monthly',
+      priority: 0.92,
+      ...arLang(register),
+    },
+    {
+      url: login,
+      lastModified: lastMod,
+      changeFrequency: 'monthly',
+      priority: 0.90,
+      ...arLang(login),
     },
     {
       url: solucionesIndex,
@@ -105,6 +109,34 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.87,
       ...arLang(rubrosIndex),
+    },
+    {
+      url: `${base}/comparar`,
+      lastModified: lastMod,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+      ...arLang(`${base}/comparar`),
+    },
+    {
+      url: ayudaImportar,
+      lastModified: lastMod,
+      changeFrequency: 'monthly',
+      priority: 0.86,
+      ...arLang(ayudaImportar),
+    },
+    {
+      url: privacidad,
+      lastModified: lastMod,
+      changeFrequency: 'yearly',
+      priority: 0.5,
+      ...arLang(privacidad),
+    },
+    {
+      url: terminos,
+      lastModified: lastMod,
+      changeFrequency: 'yearly',
+      priority: 0.5,
+      ...arLang(terminos),
     },
     ...solucionesLanding,
     ...comparar,

@@ -1,0 +1,16 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://jconefix.com.ar/sitemap.xml
+Sitemap: https://jconefix.com.ar/sitemap-ayuda.xml
+
+# Disallow private/admin routes
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /check/
+
+# Crawl-delay for bots (optional, keeps server load manageable)
+Crawl-delay: 1

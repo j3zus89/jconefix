@@ -24,7 +24,7 @@ function SuccessBody() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <JcOneFixAppIcon className="rounded-xl" />
+          <JcOneFixAppIcon className="h-10 w-10 rounded-full" />
           <JcOneFixMark tone="onLight" className="text-xl font-bold" />
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-8 text-center">

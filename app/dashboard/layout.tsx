@@ -57,6 +57,7 @@ export default function DashboardLayout({
   const SUPPORT_SESSION_STORAGE = 'jc_support_mode';
   const router = useRouter();
   const [splashBrandingLogo, setSplashBrandingLogo] = useState<string | null>(null);
+  const [chatEnabled, setChatEnabled] = useState<boolean>(false);
 
   useEffect(() => {
     const syncLogo = async () => {
@@ -70,6 +71,22 @@ export default function DashboardLayout({
     const onPrefs = () => void syncLogo();
     window.addEventListener(VISUAL_PREFS_EVENT, onPrefs);
     return () => window.removeEventListener(VISUAL_PREFS_EVENT, onPrefs);
+  }, []);
+
+  // Cargar configuración de chat
+  useEffect(() => {
+    const loadChatSetting = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: settings } = await supabase
+        .from('shop_settings')
+        .select('chat_enabled')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      setChatEnabled(settings?.chat_enabled ?? false);
+    };
+    void loadChatSetting();
   }, []);
 
   // ── Polling de mensajes no leídos del soporte (solo cuando el chat está cerrado) ──
@@ -472,7 +489,7 @@ export default function DashboardLayout({
         </div>
       </footer>
 
-      <FloatingChat />
+      {chatEnabled && <FloatingChat />}
       <WelcomeModal />
       <CapacitorBottomNav />
 

@@ -80,7 +80,7 @@ export default function SetupAdminPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
       <div className="max-w-md w-full">
         <div className="flex items-center justify-center gap-3 mb-8">
-          <JcOneFixAppIcon className="rounded-xl shadow-lg" />
+          <JcOneFixAppIcon className="h-10 w-10 rounded-full shadow-lg" />
           <JcOneFixMark tone="onLight" className="text-2xl font-bold" />
         </div>
 

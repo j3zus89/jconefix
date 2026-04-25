@@ -842,3 +842,59 @@ body {
   }
 }
 
+/* ── Impresión: ocultar header, footer y navegación del panel ── */
+@media print {
+  /* Ocultar header del dashboard */
+  [data-cap-app-shell] > header,
+  [data-app-panel] header,
+  header[data-cap-safe-top] {
+    display: none !important;
+  }
+
+  /* Ocultar bottom nav en móvil y footer */
+  [data-cap-app-shell] > nav,
+  .fixed.bottom-0,
+  [data-cap-bottom-nav],
+  footer,
+  .bg-\[\#004d40\],
+  .bg-primary {
+    display: none !important;
+  }
+
+  /* Ocultar footer de impresión */
+  .print\:hidden,
+  [class*='print:hidden'] {
+    display: none !important;
+  }
+
+  /* Ocultar floating chat y elementos flotantes */
+  .fixed.z-50,
+  [role='dialog'],
+  .fixed.inset-0,
+  button[class*='rounded-full'],
+  .fixed.bottom-4,
+  .fixed.bottom-6,
+  .fixed[class*='z-'],
+  .fixed[class*='bottom-'] {
+    display: none !important;
+  }
+
+  /* Ocultar elementos marcados como no-print */
+  .no-print,
+  [data-cap-no-print],
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Asegurar que el contenido ocupe todo el ancho */
+  [data-cap-app-main] {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Quitar fondo del shell para impresión */
+  [data-cap-app-shell] {
+    background: white !important;
+  }
+}

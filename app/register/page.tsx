@@ -109,7 +109,7 @@ export default function RegisterTrialPage() {
 
           <div className="rounded-2xl border border-white/10 bg-[#070f18]/75 backdrop-blur-xl p-8 sm:p-10 shadow-2xl shadow-black/40">
             <div className="flex items-center gap-3 mb-8">
-              <JcOneFixAppIcon className="h-16 w-16 sm:h-[4.5rem] sm:w-[4.5rem] transition-all" />
+              <JcOneFixAppIcon className="h-10 w-10 sm:h-11 sm:w-11 rounded-full transition-all" />
               <div>
                 <JcOneFixMark tone="onDark" className="text-xl sm:text-2xl font-bold tracking-tight" />
                 <p className="text-[11px] uppercase tracking-widest text-slate-500 mt-1">Prueba gratis</p>

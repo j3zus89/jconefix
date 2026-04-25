@@ -44,7 +44,7 @@ export function LandingSiteHeader() {
       >
         <div className="flex h-[72px] w-full items-center justify-between gap-3 px-4 sm:px-6 lg:h-20 lg:px-12 xl:px-16 2xl:px-24">
           <Link href="/" className="group flex min-w-0 items-center gap-2 sm:gap-2.5" onClick={close}>
-            <JcOneFixAppIcon className="h-10 w-10 shrink-0 rounded-xl transition-all group-hover:ring-[#F5C518]/60 sm:h-11 sm:w-11" />
+            <JcOneFixAppIcon className="h-8 w-8 shrink-0 rounded-full transition-all group-hover:ring-[#F5C518]/60 sm:h-9 sm:w-9" />
             <div className="min-w-0 text-left leading-tight">
               <JcOneFixMark className="text-sm font-bold tracking-tight sm:text-base" />
             </div>

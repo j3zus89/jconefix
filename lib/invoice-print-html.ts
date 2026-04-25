@@ -269,7 +269,7 @@ export function buildInvoicePrintParts(payload: InvoicePrintPayload): { styles: 
     .internal-ar-banner { border: 1px solid #d97706; background: #fffbeb; color: #78350f; padding: 12px 14px; border-radius: 4px; font-size: 11.5px; margin-bottom: 16px; line-height: 1.45; }
 
     /* ── 7. PIE ── */
-    .footer { display: flex; align-items: flex-start; gap: 22px; border-top: 2px solid #111; padding-top: 18px; margin-top: 8px; }
+    .footer { display: flex; align-items: flex-start; gap: 22px; border-top: 2px solid #111; padding-top: 18px; margin-top: 8px; background: #fff; }
     .footer-qrs { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 22px; }
     .footer-qr { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 5px; }
     .footer-qr img { width: 70px; height: 70px; border: 1px solid #ccc; padding: 3px; display: block; }
@@ -523,11 +523,6 @@ export function buildInvoicePrintParts(payload: InvoicePrintPayload): { styles: 
         ${inv.discount_amount > 0 ? `<div class="t-row"><span>Base imponible</span><span>${sym}&nbsp;${fmtNum(baseImponible)}</span></div>` : ''}
         ${inv.tax_amount > 0 ? `<div class="t-row"><span>IVA / Impuestos</span><span>${sym}&nbsp;${fmtNum(inv.tax_amount)}</span></div>` : ''}
         <div class="t-grand"><span>TOTAL</span><span>${sym}&nbsp;${fmtNum(inv.total_amount)}</span></div>
-        ${
-          paidNum != null
-            ? `<div class="t-row" style="font-weight:600;color:#0d9488"><span>Total cobrado</span><span>${sym}&nbsp;${fmtNum(paidNum)}</span></div>`
-            : ''
-        }
         ${
           pendingNum != null && pendingNum > 0.009
             ? `<div class="t-row" style="color:#b45309"><span>Saldo pendiente</span><span>${sym}&nbsp;${fmtNum(pendingNum)}</span></div>`

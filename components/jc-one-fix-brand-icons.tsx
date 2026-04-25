@@ -76,7 +76,7 @@ export function JcOneFixAppIcon({ className, hideRing, ...rest }: AppIconProps) 
         alt=""
         width={120}
         height={120}
-        className="block h-full w-full object-cover rounded-2xl"
+        className="block h-full w-full object-contain"
         draggable={false}
       />
     </span>

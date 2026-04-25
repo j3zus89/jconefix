@@ -457,16 +457,7 @@ export function ReceptionWizard() {
         toast.error('Busca y selecciona un cliente o cambia a «Cliente nuevo».');
         return;
       }
-      if (loc.isAR) {
-        if (
-          !assertArCustomerFiscal(
-            selectedCustomer.id_type || loc.defaultIdType,
-            selectedCustomer.id_number,
-            selectedCustomer.tax_class,
-          )
-        )
-          return;
-      }
+      // Nota: la validación fiscal se apliza al emitir factura, no en recepción
       setForm((prev) => ({ ...prev, customer_id: selectedCustomer.id }));
       setStep(2);
       return;

@@ -196,7 +196,7 @@ function ArCheckoutContent() {
             Planes
           </Link>
           <div className="flex items-center gap-2.5">
-            <JcOneFixAppIcon className="h-8 w-8 rounded-xl shadow-lg shadow-[#a3e635]/10" />
+            <JcOneFixAppIcon className="h-8 w-8 rounded-full shadow-lg shadow-[#a3e635]/10" />
             <JcOneFixMark className="text-sm font-bold tracking-tight" />
           </div>
           <Link

@@ -5,6 +5,9 @@ import { notifyAdminPanelLogin } from '@/lib/notifications/login-alert-email';
 
 const THROTTLE_MINUTES = 30;
 
+/** Días para considerar una organización como "nueva" para notificaciones */
+const NEW_ORG_DAYS = 7;
+
 function formatCountryLabel(raw: string | null | undefined): string {
   const s = (raw || '').trim().toUpperCase();
   if (s === 'ES' || s === 'AR' || s.includes('ARGENTINA') || s.includes('ESPAÑA') || s === 'SPAIN') {
@@ -16,8 +19,22 @@ function formatCountryLabel(raw: string | null | undefined): string {
 
 type OrgLite = { name?: string; country?: string | null };
 
+/** Verifica si la organización es "nueva" (creada en los últimos NEW_ORG_DAYS días) */
+async function isNewOrganization(admin: any, orgId: string | null): Promise<boolean> {
+  if (!orgId) return false;
+  try {
+    const { data: org } = await admin.from('organizations').select('created_at').eq('id', orgId).maybeSingle() as { data: { created_at?: string } | null };
+    if (!org?.created_at) return false;
+    const createdAt = new Date(org.created_at).getTime();
+    const daysDiff = (Date.now() - createdAt) / (1000 * 60 * 60 * 24);
+    return daysDiff <= NEW_ORG_DAYS;
+  } catch {
+    return false;
+  }
+}
+
 /**
- * Tras login exitoso: auditoría siempre; correo como mucho una vez cada THROTTLE_MINUTES por usuario.
+ * Tras login exitoso: auditoría siempre; correo solo si es organización nueva (o throttle).
  * Usa service role (insert en super_admin_audit_log y tabla throttle).
  */
 export async function processPanelLoginReport(params: {
@@ -95,10 +112,13 @@ export async function processPanelLoginReport(params: {
       .eq('user_id', params.userId)
       .maybeSingle();
 
+    // Solo notificar si la organización es nueva (creada en los últimos 7 días)
+    const orgIsNew = await isNewOrganization(admin, orgId);
+
     const now = Date.now();
     const last = throttle?.last_sent_at ? new Date(throttle.last_sent_at as string).getTime() : 0;
     const throttleMs = THROTTLE_MINUTES * 60 * 1000;
-    const shouldTryEmail = !last || now - last > throttleMs;
+    const shouldTryEmail = orgIsNew && (!last || now - last > throttleMs);
 
     let emailSent = false;
     if (shouldTryEmail) {
