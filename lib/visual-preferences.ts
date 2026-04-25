@@ -31,6 +31,8 @@ export type VisualPreferencesState = {
   compactTables: boolean;
   /** data URL (png/jpeg/webp) o null */
   brandingLogoDataUrl: string | null;
+  /** data URL del favicon (png/ico/svg) o null */
+  faviconUrl: string | null;
 };
 
 export const DEFAULT_VISUAL_PREFERENCES: VisualPreferencesState = {
@@ -39,6 +41,7 @@ export const DEFAULT_VISUAL_PREFERENCES: VisualPreferencesState = {
   primaryHex: '#0d9488',
   compactTables: false,
   brandingLogoDataUrl: null,
+  faviconUrl: null,
 };
 
 export const PANEL_DESIGN_OPTIONS: {
@@ -147,7 +150,11 @@ function parseVisualPreferencesJson(raw: string): VisualPreferencesState | null 
       typeof j.brandingLogoDataUrl === 'string' && j.brandingLogoDataUrl.startsWith('data:image/')
         ? j.brandingLogoDataUrl
         : null;
-    return { design, theme, primaryHex, compactTables, brandingLogoDataUrl };
+    const faviconUrl =
+      typeof j.faviconUrl === 'string' && j.faviconUrl.startsWith('data:image/')
+        ? j.faviconUrl
+        : null;
+    return { design, theme, primaryHex, compactTables, brandingLogoDataUrl, faviconUrl };
   } catch {
     return null;
   }
