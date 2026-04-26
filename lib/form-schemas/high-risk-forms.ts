@@ -103,6 +103,11 @@ export const newTicketFormSchema = z
       .trim()
       .min(1, 'La descripción del problema es obligatoria')
       .max(20000, 'La descripción es demasiado larga'),
+    issue_title: z
+      .string()
+      .trim()
+      .min(1, 'El título del problema es obligatorio')
+      .max(500, 'El título es demasiado largo'),
     status: z.string().min(1, 'Elegí un estado'),
     priority: ticketPrioritySchema,
     task_type: z.string().min(1, 'Elegí un tipo de tarea'),

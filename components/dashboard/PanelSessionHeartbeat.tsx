@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { getOrCreatePanelSessionClientKey } from '@/lib/panel-session-client';
 
@@ -9,6 +10,8 @@ const INTERVAL_MS = 60 * 1000;
 
 /** Registra actividad del panel (IP, UA, última actividad) para Configuración → Sesiones activas. */
 export function PanelSessionHeartbeat() {
+  const router = useRouter();
+
   useEffect(() => {
     const ping = async () => {
       const supabase = createClient();
@@ -19,7 +22,7 @@ export function PanelSessionHeartbeat() {
       const key = getOrCreatePanelSessionClientKey();
       if (!key) return;
       try {
-        await fetch('/api/auth/panel-session/heartbeat', {
+        const res = await fetch('/api/auth/panel-session/heartbeat', {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
@@ -28,6 +31,11 @@ export function PanelSessionHeartbeat() {
             user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
           }),
         });
+        // Si el admin desconectó al usuario, redirigir a página de inicio sin mensaje
+        if (res.status === 401) {
+          window.location.href = '/';
+          return;
+        }
       } catch {
         /* red / tabla ausente: no bloquear el panel */
       }
@@ -36,7 +44,7 @@ export function PanelSessionHeartbeat() {
     void ping();
     const id = window.setInterval(() => void ping(), INTERVAL_MS);
     return () => window.clearInterval(id);
-  }, []);
+  }, [router]);
 
   return null;
 }

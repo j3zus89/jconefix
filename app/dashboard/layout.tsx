@@ -58,6 +58,25 @@ export default function DashboardLayout({
   const router = useRouter();
   const [splashBrandingLogo, setSplashBrandingLogo] = useState<string | null>(null);
   const [chatEnabled, setChatEnabled] = useState<boolean>(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+
+  // Listen for bottom nav events from mobile navigation
+  useEffect(() => {
+    const handleSupport = () => setSupportOpen(true);
+    const handleNotifications = () => setNotificationsOpen(true);
+    const handleProfile = () => setProfileOpen(true);
+
+    window.addEventListener('jc:bottomnav:support', handleSupport);
+    window.addEventListener('jc:bottomnav:notifications', handleNotifications);
+    window.addEventListener('jc:bottomnav:profile', handleProfile);
+
+    return () => {
+      window.removeEventListener('jc:bottomnav:support', handleSupport);
+      window.removeEventListener('jc:bottomnav:notifications', handleNotifications);
+      window.removeEventListener('jc:bottomnav:profile', handleProfile);
+    };
+  }, []);
 
   useEffect(() => {
     const syncLogo = async () => {
@@ -271,12 +290,12 @@ export default function DashboardLayout({
 
   const searchSlot = (
     <div className="relative w-full">
-      <div className="flex items-center gap-2 rounded-full bg-white/15 px-3 py-2 transition-colors hover:bg-white/20">
-        <Search className="h-4 w-4 text-white/60 flex-shrink-0" />
+      <div className="flex items-center gap-1.5 md:gap-2 rounded-full bg-white/15 px-2.5 md:px-3 py-1.5 md:py-2 transition-colors hover:bg-white/20">
+        <Search className="h-3.5 w-3.5 md:h-4 md:w-4 text-white/60 flex-shrink-0" />
         <input
           type="text"
-          className="min-w-0 flex-1 bg-transparent text-sm text-white placeholder-white/50 focus:outline-none"
-          placeholder="Buscar clientes, tickets, teléfonos... (Enter)"
+          className="min-w-0 flex-1 bg-transparent text-xs md:text-sm text-white placeholder-white/50 focus:outline-none"
+          placeholder="Buscar..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           onKeyDown={e => {
@@ -286,7 +305,7 @@ export default function DashboardLayout({
         />
         {searchQuery && (
           <button type="button" onClick={() => setSearchQuery('')}>
-            <X className="h-3.5 w-3.5 text-white/50 hover:text-white" />
+            <X className="h-3 w-3 text-white/50 hover:text-white" />
           </button>
         )}
       </div>
@@ -422,15 +441,52 @@ export default function DashboardLayout({
       )}
       <header
         data-cap-safe-top
-        className="sticky top-0 z-40 flex flex-shrink-0 flex-wrap items-center gap-2 border-b border-black/10 bg-[var(--panel-header-bg)] px-2 py-2 text-white sm:flex-nowrap sm:gap-3 sm:px-3"
+        className="sticky top-0 z-40 flex flex-shrink-0 flex-col md:flex-row md:flex-wrap items-stretch md:items-center gap-1.5 md:gap-2 border-b border-black/10 bg-[var(--panel-header-bg)] px-2 py-1 md:py-2 text-white"
       >
-        <div className="order-1 min-w-0 w-full flex-1 basis-0 sm:order-none sm:w-auto">
+        {/* PC: Logo + menú de navegación + searchSlot */}
+        <div className="hidden md:block min-w-0 flex-1">
           <Suspense fallback={<NavFallback />}>
             <DashboardTopNav searchSlot={searchSlot} />
           </Suspense>
         </div>
 
-        <div className="order-2 flex w-full shrink-0 items-center justify-end gap-4 sm:order-none sm:ml-auto sm:w-auto">
+        {/* Móvil: Logo + barra de búsqueda más compacta + iconos pequeños */}
+        <div className="flex md:hidden items-center gap-1.5 w-full">
+          {/* Logo simplificado en móvil - más pequeño */}
+          <Link href="/dashboard" className="flex shrink-0 items-center">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-[10px] font-semibold text-white">
+              JC
+            </span>
+          </Link>
+          {/* Búsqueda en móvil - más compacta */}
+          <div className="flex-1 min-w-0">
+            {searchSlot}
+          </div>
+          
+          {/* Iconos en móvil: distancia uniforme entre los 3 */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setSupportOpen(true)}
+              aria-label="Soporte — JC BOT FIX"
+              title="JC BOT FIX · soporte"
+              className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full p-0 text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              <span className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full">
+                <SupportAssistantMascot size="md" title="JC BOT FIX" />
+              </span>
+            </button>
+            <div className="flex h-8 w-8 items-center justify-center">
+              <NotificationBell />
+            </div>
+            <div className="flex h-8 w-8 items-center justify-center">
+              <UserMenu />
+            </div>
+          </div>
+        </div>
+
+        {/* PC: Iconos normales a la derecha */}
+        <div className="hidden md:flex w-auto shrink-0 items-center justify-end gap-4">
           <button
             type="button"
             onClick={() => setSupportOpen(true)}
@@ -461,7 +517,7 @@ export default function DashboardLayout({
       </header>
       <main
         data-cap-app-main
-        className="min-h-0 flex-1 overflow-y-auto bg-background text-foreground"
+        className="min-h-0 flex-1 overflow-y-auto bg-background text-foreground [-webkit-overflow-scrolling:touch]"
       >
         {children}
       </main>

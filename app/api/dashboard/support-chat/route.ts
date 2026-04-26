@@ -103,24 +103,29 @@ export async function POST(req: Request) {
     }
 
     // Obtener datos del usuario para la notificación
-    const [{ data: profile }, { data: org }] = await Promise.all([
+    const [{ data: profile }, { data: org }, { data: previousMessages }] = await Promise.all([
       supabase.from('profiles').select('first_name, last_name').eq('id', user.id).maybeSingle(),
       organization_id
         ? supabase.from('organizations').select('name').eq('id', organization_id).maybeSingle()
         : Promise.resolve({ data: null }),
+      supabase.from('support_chat_messages').select('id').eq('user_id', user.id).limit(1),
     ]);
 
     const userName = [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim() || 'Usuario';
     const organizationName = org?.name ?? null;
 
-    // Notificar al admin (fire-and-forget)
-    void notifyAdminSupportMessage({
-      userName,
-      userEmail: user.email ?? '',
-      message: text,
-      organizationName,
-      sentAt: new Date(),
-    });
+    // Notificar al admin SOLO si es el primer mensaje del usuario (fire-and-forget)
+    // Si ya hay mensajes previos, no enviamos email para evitar saturación
+    const isFirstMessage = !previousMessages || previousMessages.length <= 1;
+    if (isFirstMessage) {
+      void notifyAdminSupportMessage({
+        userName,
+        userEmail: user.email ?? '',
+        message: text,
+        organizationName,
+        sentAt: new Date(),
+      });
+    }
 
     // Devolver OK de inmediato — el bot se dispara desde el cliente por separado
     return NextResponse.json({ ok: true, userId: user.id, organizationId: organization_id });

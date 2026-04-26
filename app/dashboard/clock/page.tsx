@@ -605,7 +605,7 @@ export default function ClockPage() {
       </Card>
 
       <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto [-webkit-overflow-scrolling:touch]">
           <DialogHeader>
             <DialogTitle>Planilla de control de horas</DialogTitle>
             <p className="text-sm text-gray-500 font-normal">

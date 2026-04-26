@@ -236,7 +236,7 @@ function ExcelImportModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) { reset(); onClose(); } }}>
-      <DialogContent className="max-w-5xl max-h-[92vh] overflow-y-auto">
+      <DialogContent className="max-w-5xl max-h-[92vh] overflow-y-auto [-webkit-overflow-scrolling:touch]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Upload className="h-5 w-5 text-[#0d9488]" />

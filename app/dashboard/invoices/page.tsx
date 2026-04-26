@@ -524,7 +524,7 @@ export default function InvoicesPage() {
           }
         }}
       >
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto [-webkit-overflow-scrolling:touch]">
           <DialogHeader>
             <DialogTitle>Nueva factura</DialogTitle>
           </DialogHeader>

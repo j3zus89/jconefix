@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { Activity, RefreshCw, Monitor, Building2, User, ChevronDown, ChevronUp, Wifi } from 'lucide-react';
+import { Activity, RefreshCw, Monitor, Building2, User, ChevronDown, ChevronUp, Wifi, LogOut } from 'lucide-react';
 import { adminFetch } from '@/lib/auth/adminFetch';
 import { cn } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
@@ -60,6 +60,7 @@ export default function PanelOnlinePage() {
   const [generatedAt, setGeneratedAt] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
+  const [disconnectingId, setDisconnectingId] = useState<string | null>(null);
   const supabaseRef = useRef<ReturnType<typeof createClient> | null>(null);
   const lastDataRef = useRef<OnlineUser[]>([]);
 
@@ -200,6 +201,26 @@ export default function PanelOnlinePage() {
     return () => clearInterval(id);
   }, [load, isRealtimeConnected]);
 
+  const disconnectUser = async (userId: string) => {
+    setDisconnectingId(userId);
+    try {
+      const res = await adminFetch('/api/admin/disconnect-user', {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId }),
+      });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json.error || 'Error al desconectar');
+      }
+      // Refrescar lista
+      await load({ silent: true });
+    } catch (e: any) {
+      alert(e?.message || 'Error al desconectar usuario');
+    } finally {
+      setDisconnectingId(null);
+    }
+  };
+
   const windowSec = Math.round(windowMs / 1000);
 
   return (
@@ -331,6 +352,16 @@ export default function PanelOnlinePage() {
                     >
                       Ver en Usuarios
                     </Link>
+                    <button
+                      type="button"
+                      onClick={() => disconnectUser(u.user_id)}
+                      disabled={disconnectingId === u.user_id}
+                      className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100 disabled:opacity-50"
+                      title="Desconectar usuario - lo redirigirá a la página de inicio"
+                    >
+                      <LogOut className="h-3.5 w-3.5" />
+                      {disconnectingId === u.user_id ? 'Desconectando...' : 'Desconectar'}
+                    </button>
                     {u.sessions.length > 0 ? (
                       <button
                         type="button"

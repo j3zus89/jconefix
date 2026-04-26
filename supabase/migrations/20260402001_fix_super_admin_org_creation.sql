@@ -15,10 +15,8 @@
 CREATE OR REPLACE FUNCTION is_super_admin()
 RETURNS boolean AS $$
 BEGIN
-  RETURN EXISTS (
-    SELECT 1 FROM auth.users
-    WHERE id = auth.uid()
-    AND email = 'sr.gonzalezcala89@gmail.com'
+  RETURN (
+    SELECT (auth.jwt() ->> 'email') = 'sr.gonzalezcala89@gmail.com'
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

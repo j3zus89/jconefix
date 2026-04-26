@@ -244,8 +244,9 @@ export function DashboardTopNav({ searchSlot }: { searchSlot?: ReactNode }) {
         </div>
       </Link>
 
+      {/* Menú de navegación: Solo en PC, oculto en móvil */}
       <nav
-        className="flex min-w-0 flex-1 items-stretch gap-0.5 overflow-x-auto overflow-y-visible py-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="hidden md:flex min-w-0 flex-1 items-stretch gap-0.5 overflow-x-auto overflow-y-visible py-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label="Principal"
       >
         {navItems.map((item) => {
@@ -408,16 +409,16 @@ export function DashboardTopNav({ searchSlot }: { searchSlot?: ReactNode }) {
             </span>
           );
         })}
+        {/* Botón Caja: Solo en PC */}
         <button
           type="button"
           onClick={() => void handleOpenDrawer()}
           disabled={openingDrawer}
           title="Abrir cajón portamonedas (QZ Tray)"
-          className="flex shrink-0 items-center gap-1.5 rounded-md border border-white/20 px-2.5 py-1.5 text-xs font-semibold text-white/90 hover:bg-white/10 disabled:opacity-50 transition-colors whitespace-nowrap"
+          className="hidden md:flex shrink-0 items-center gap-1.5 rounded-md border border-white/20 px-2.5 py-1.5 text-xs font-semibold text-white/90 hover:bg-white/10 disabled:opacity-50 transition-colors whitespace-nowrap"
         >
           <Archive className="h-3.5 w-3.5 shrink-0" />
-          <span className="hidden sm:inline">{openingDrawer ? 'Abriendo…' : 'Abrir caja'}</span>
-          <span className="sm:hidden">{openingDrawer ? '…' : 'Caja'}</span>
+          <span>{openingDrawer ? 'Abriendo…' : 'Abrir caja'}</span>
         </button>
       </nav>
     </div>

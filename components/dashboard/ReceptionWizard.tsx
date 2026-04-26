@@ -565,16 +565,6 @@ export function ReceptionWizard() {
       toast.error('Falta el cliente.');
       return;
     }
-    if (loc.isAR && selectedCustomer?.id === cid) {
-      if (
-        !assertArCustomerFiscal(
-          selectedCustomer.id_type || loc.defaultIdType,
-          selectedCustomer.id_number,
-          selectedCustomer.tax_class,
-        )
-      )
-        return;
-    }
     if (!form.device_type) {
       toast.error('Indica el dispositivo');
       return;
@@ -863,7 +853,7 @@ export function ReceptionWizard() {
                         <div className="relative">
                           <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
                           <input
-                            className="w-full rounded-md border border-gray-300 py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                            className="w-full rounded-md border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-primary"
                             placeholder="Nombre, email o teléfono…"
                             value={customerSearch}
                             onChange={(e) => {

@@ -831,7 +831,7 @@ export default function RepairLaborServicesPage() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg max-h-[90dvh] overflow-y-auto">
+        <DialogContent className="max-w-lg max-h-[90dvh] overflow-y-auto [-webkit-overflow-scrolling:touch]">
           <DialogHeader>
             <DialogTitle>{editing ? 'Editar servicio' : 'Nuevo servicio de reparación'}</DialogTitle>
           </DialogHeader>

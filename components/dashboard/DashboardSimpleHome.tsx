@@ -42,10 +42,15 @@ export function DashboardSimpleHome({
   formatCurrency,
 }: Props) {
   return (
-    <div className="min-h-full bg-background p-6 text-foreground">
-      <div className="mx-auto max-w-3xl space-y-6">
-        <DashboardOnboardingChecklist />
-        <div>
+    <div className="min-h-full bg-background p-4 md:p-6 text-foreground">
+      <div className="mx-auto max-w-3xl space-y-4 md:space-y-6">
+        {/* Vista PC: Mantiene el checklist y el mensaje de panel sencillo */}
+        <div className="hidden md:block">
+          <DashboardOnboardingChecklist />
+        </div>
+
+        {/* PC: Header completo con descripción */}
+        <div className="hidden md:block">
           <p className="text-xs font-medium uppercase tracking-wide text-teal-700">
             Panel sencillo
           </p>
@@ -62,7 +67,8 @@ export function DashboardSimpleHome({
           </p>
         </div>
 
-        <Link href="/dashboard/recepcion" className="block">
+        {/* Botón Nuevo Ingreso: PC */}
+        <Link href="/dashboard/recepcion" className="hidden md:block">
           <div className="rounded-2xl bg-gradient-to-br from-[#0d9488] to-[#0f766e] p-6 text-white shadow-lg shadow-teal-900/15 transition-transform hover:scale-[1.01] active:scale-[0.99]">
             <div className="flex items-start gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white/15">
@@ -79,7 +85,8 @@ export function DashboardSimpleHome({
           </div>
         </Link>
 
-        <div className="grid grid-cols-3 gap-3">
+        {/* PC: Grid normal de 3 columnas */}
+        <div className="hidden md:grid grid-cols-3 gap-3">
           <Card className="border-gray-200 shadow-sm">
             <CardContent className="p-4 text-center">
               <p className="text-2xl font-bold text-gray-900">{pendingTickets}</p>
@@ -100,7 +107,8 @@ export function DashboardSimpleHome({
           </Card>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        {/* PC: Botones de acción */}
+        <div className="hidden md:flex flex-wrap items-center gap-2">
           <WorkshopReportPdfMenu
             shopName={organizationName}
             currencySymbol={currencySymbol}
@@ -123,13 +131,65 @@ export function DashboardSimpleHome({
           </Button>
         </div>
 
+        {/* MÓVIL: Solo 4 elementos - Nuevo Ingreso, Gestión de Tickets, Clientes, Últimos Trabajos */}
+        <div className="md:hidden space-y-3">
+          {/* 1. NUEVO INGRESO */}
+          <Link href="/dashboard/recepcion">
+            <div className="rounded-xl bg-gradient-to-br from-[#0d9488] to-[#0f766e] p-4 text-white shadow-md">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
+                  <ClipboardSignature className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="font-semibold">Nuevo ingreso</p>
+                  <p className="text-xs text-white/80">Cliente y equipo</p>
+                </div>
+                <ChevronRight className="h-5 w-5 ml-auto opacity-80" />
+              </div>
+            </div>
+          </Link>
+
+          {/* 2. GESTIÓN DE TICKETS */}
+          <Link href="/dashboard/tickets">
+            <div className="rounded-xl bg-white border border-gray-200 p-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50">
+                  <Wrench className="h-5 w-5 text-[#0d9488]" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Gestión de tickets</p>
+                  <p className="text-xs text-gray-500">{totalTickets} activos en taller</p>
+                </div>
+                <ChevronRight className="h-5 w-5 ml-auto text-gray-400" />
+              </div>
+            </div>
+          </Link>
+
+          {/* 3. CLIENTES */}
+          <Link href="/dashboard/customers">
+            <div className="rounded-xl bg-white border border-gray-200 p-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50">
+                  <Users className="h-5 w-5 text-[#0d9488]" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Clientes</p>
+                  <p className="text-xs text-gray-500">Ver y gestionar clientes</p>
+                </div>
+                <ChevronRight className="h-5 w-5 ml-auto text-gray-400" />
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Últimos tickets: PC muestra lista completa, móvil lista compacta */}
         <Card className="border-gray-200 shadow-sm">
-          <CardHeader className="pb-2">
+          <CardHeader className="pb-2 px-3 md:px-6 py-2 md:py-4">
             <div className="flex items-center justify-between gap-2">
-              <CardTitle className="text-base font-semibold">Últimos tickets</CardTitle>
+              <CardTitle className="text-sm md:text-base font-semibold">Últimos tickets</CardTitle>
               <Link
                 href="/dashboard/tickets"
-                className="text-xs font-medium text-[#0d9488] hover:underline"
+                className="text-[10px] md:text-xs font-medium text-[#0d9488] hover:underline"
               >
                 Ver todos
               </Link>
@@ -137,41 +197,41 @@ export function DashboardSimpleHome({
           </CardHeader>
           <CardContent className="p-0">
             {recentTickets.length === 0 ? (
-              <p className="px-4 py-8 text-center text-sm text-gray-500">
+              <p className="px-3 md:px-4 py-6 md:py-8 text-center text-xs md:text-sm text-gray-500">
                 Aún no hay tickets. Usa «Nuevo ingreso» para el primero.
               </p>
             ) : (
               <ul className="divide-y divide-gray-100">
-                {recentTickets.slice(0, 6).map((t) => {
+                {recentTickets.slice(0, 4).map((t) => {
                   const sc = getTicketStatusBadge(t.status);
                   return (
                     <li key={t.id}>
                       <Link
                         href={`/dashboard/tickets/${t.id}`}
-                        className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-gray-50"
+                        className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 transition-colors hover:bg-gray-50"
                       >
                         <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium text-[#0d9488]">
+                          <div className="flex items-center gap-1.5 md:gap-2">
+                            <span className="font-medium text-[#0d9488] text-xs md:text-sm">
                               {t.ticket_number}
                             </span>
-                            <span className="truncate text-sm text-gray-900">
+                            <span className="truncate text-xs md:text-sm text-gray-900">
                               {t.device_type}
                             </span>
                           </div>
-                          <p className="truncate text-xs text-gray-500">
+                          <p className="truncate text-[10px] md:text-xs text-gray-500">
                             {t.customers?.name ?? '—'} · {formatDate(t.created_at)}
                           </p>
                         </div>
                         <span
                           className={cn(
-                            'shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold',
+                            'shrink-0 rounded-full border px-1.5 md:px-2 py-0.5 text-[9px] md:text-[10px] font-semibold',
                             sc.cls
                           )}
                         >
                           {sc.label}
                         </span>
-                        <span className="shrink-0 text-sm font-medium text-gray-900">
+                        <span className="hidden md:block shrink-0 text-sm font-medium text-gray-900">
                           {formatCurrency(t.final_cost ?? t.estimated_cost ?? 0)}
                         </span>
                       </Link>

@@ -96,6 +96,88 @@ function PrintQrCode({ url }: { url: string }) {
     </div>
   );
 }
+
+/** Devuelve el SVG del icono correspondiente a cada categoría de dispositivo */
+function getCategoryIconSVG(category: string | null, deviceType?: string | null): React.ReactNode {
+  const strokeWidth = 1.5;
+  const strokeColor = "currentColor";
+
+  // Normalizar la categoría - manejar guiones y espacios
+  let cat = (category || '').toUpperCase().trim();
+
+  // Si la categoría está vacía o es OTROS, intentar inferir por el nombre del dispositivo
+  if (!cat || cat === 'OTROS' || cat === 'NULL') {
+    const deviceName = (deviceType || '').toLowerCase();
+    if (/tv|televisor|smartv|samsung|lg|noblex|tcl|philips/.test(deviceName)) cat = 'SMART_TV';
+    else if (/iphone|galaxy|xiaomi|motorola|huawei/.test(deviceName)) cat = 'SMARTPHONES';
+    else if (/ipad|tablet/.test(deviceName)) cat = 'TABLETS';
+    else if (/laptop|notebook|macbook/.test(deviceName)) cat = 'LAPTOPS';
+    else if (/playstation|xbox|nintendo/.test(deviceName)) cat = 'CONSOLAS';
+    else if (/watch/.test(deviceName)) cat = 'SMARTWATCH';
+    else if (/airpods|auricular/.test(deviceName)) cat = 'AURICULARES';
+    else cat = 'OTROS';
+  }
+
+  switch (cat) {
+    case 'SMARTPHONES':
+      return (
+        <svg className="w-5 h-5 text-repairdesk-500" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+        </svg>
+      );
+    case 'TABLETS':
+      return (
+        <svg className="w-5 h-5 text-repairdesk-500" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M10.5 19.5h3m-9.75-3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125h18.75c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375zM19.5 4.5h-15A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5z" />
+        </svg>
+      );
+    case 'LAPTOPS':
+    case 'LAPTOPS_Y_PC':
+      return (
+        <svg className="w-5 h-5 text-repairdesk-500" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+        </svg>
+      );
+    case 'CONSOLAS':
+      return (
+        <svg className="w-5 h-5 text-repairdesk-500" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" />
+        </svg>
+      );
+    case 'SMARTWATCH':
+      return (
+        <svg className="w-5 h-5 text-repairdesk-500" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
+    case 'AURICULARES':
+      return (
+        <svg className="w-5 h-5 text-repairdesk-500" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75zm3.75 0v15m3.75-15l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H15.49c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0113.5 12c0-.83.112-1.633.322-2.396C13.556 8.756 14.38 8.25 15.26 8.25H17.25z" />
+        </svg>
+      );
+    case 'SMART_TV':
+      return (
+        <svg className="w-5 h-5 text-repairdesk-500" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      );
+    case 'AUDIO_VIDEO':
+    case 'EQUIPOS DE AUDIO Y VÍDEO':
+      return (
+        <svg className="w-5 h-5 text-repairdesk-500" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3" />
+        </svg>
+      );
+    default:
+      return (
+        <svg className="w-5 h-5 text-repairdesk-500" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+        </svg>
+      );
+  }
+}
+
 import {
   getTicketPrintCurrencySymbol,
   getTicketWarrantyFootnote,
@@ -1629,7 +1711,7 @@ export default function TicketDetailPage() {
       phone: '',
       email: '',
       registration_number: '',
-      currency_symbol: '€',
+      currency_symbol: '$',
       country: '',
     };
     const ctx = buildTicketEmailContext(ticket, payments, additionalNote);
@@ -2235,7 +2317,7 @@ export default function TicketDetailPage() {
 
       toast.success(
         result.method === 'cash' && result.change != null && result.change > 0
-          ? `✅ Cobrado. Cambio: ${shopSettings?.currency_symbol ?? '€'}${result.change.toFixed(2)}`
+          ? `✅ Cobrado. Cambio: ${shopSettings?.currency_symbol ?? '$'}${result.change.toFixed(2)}`
           : `✅ Cobrado correctamente (${methodLabel[result.method] ?? result.method})`
       );
       setShowPaymentModal(false);
@@ -2836,7 +2918,7 @@ export default function TicketDetailPage() {
         registration_number: settings?.registration_number || '',
         iva_condition: settings?.iva_condition ?? null,
         currency: settings?.currency || 'ARS',
-        currency_symbol: settings?.currency_symbol || '€',
+        currency_symbol: settings?.currency_symbol || '$',
         country: org?.country || '',
         ticket_repairs_settings: (settings as { ticket_repairs_settings?: unknown } | null)
           ?.ticket_repairs_settings,
@@ -2858,7 +2940,7 @@ export default function TicketDetailPage() {
         phone: '',
         email: '',
         registration_number: '',
-        currency_symbol: '€',
+        currency_symbol: '$',
         country: '',
       });
     }
@@ -3783,7 +3865,7 @@ export default function TicketDetailPage() {
                 <div className="flex items-center justify-between p-3">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 bg-repairdesk-50 rounded-md flex items-center justify-center">
-                      <Phone className="h-4 w-4 text-repairdesk-500" />
+                      {getCategoryIconSVG(ticket.device_category, ticket.device_type)}
                     </div>
                     <div>
                       <div className="text-sm font-semibold text-gray-900">{ticket.device_type}</div>
@@ -3820,7 +3902,7 @@ export default function TicketDetailPage() {
                               <input autoFocus value={statusSearch} onChange={(e) => setStatusSearch(e.target.value)} placeholder="Buscar estado..." className="w-full pl-7 pr-3 py-1.5 text-sm border border-gray-200 bg-white rounded focus:outline-none focus:ring-1 focus:ring-[#0d9488]" />
                             </div>
                           </div>
-                          <div className="max-h-72 overflow-y-auto py-1">
+                          <div className="max-h-72 overflow-y-auto py-1 [-webkit-overflow-scrolling:touch]">
                             {filteredStatuses ? filteredStatuses.map((s) => (
                               <button key={s.value} onClick={() => handleStatusChange(s.value)} className={cn('w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2.5', ticket.status === s.value && 'bg-gray-50 font-medium')}>
                                 <StatusDot color={s.dot} />{s.label}
@@ -3989,7 +4071,7 @@ export default function TicketDetailPage() {
                                 <Search className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                               </div>
                             </div>
-                            <div className="max-h-64 overflow-y-auto p-1">
+                            <div className="max-h-64 overflow-y-auto p-1 [-webkit-overflow-scrolling:touch]">
                               {ticket.assigned_to ? (
                                 <button
                                   type="button"
@@ -4820,7 +4902,7 @@ export default function TicketDetailPage() {
                       </button>
                     </div>
                   ) : (
-                    <div className="max-h-52 overflow-y-auto rounded-lg border border-gray-200 divide-y divide-gray-100">
+                    <div className="max-h-52 overflow-y-auto rounded-lg border border-gray-200 divide-y divide-gray-100 [-webkit-overflow-scrolling:touch]">
                       {repuestoResults.length === 0 ? (
                         <p className="p-4 text-center text-xs text-gray-400">Sin resultados. Crea repuestos en Inventario.</p>
                       ) : (
@@ -4869,10 +4951,10 @@ export default function TicketDetailPage() {
             </Dialog>
 
           <div className="bg-white border border-gray-200 rounded-md mt-4">
-            <div className="border-b border-gray-200 overflow-x-auto">
+            <div className="border-b border-gray-200 overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               <div className="flex min-w-max">
                 {COMMENT_TABS.map((tab) => (
-                  <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={cn('px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors', activeTab === tab.key ? 'border-[#0d9488] text-[#0d9488]' : 'border-transparent text-gray-500 hover:text-gray-700')}>
+                  <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={cn('px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium border-b-2 whitespace-nowrap transition-colors touch-manipulation', activeTab === tab.key ? 'border-[#0d9488] text-[#0d9488]' : 'border-transparent text-gray-500 hover:text-gray-700')}>
                     {tab.label}
                     {tab.key !== 'tareas' && comments.filter(c => c.comment_type === tab.key || (tab.key === 'privados' && c.is_private)).length > 0 && (
                       <span className="ml-1.5 text-xs bg-repairdesk-100 text-repairdesk-600 px-1.5 py-0.5 rounded-full">{comments.filter(c => c.comment_type === tab.key || (tab.key === 'privados' && c.is_private)).length}</span>
@@ -4932,7 +5014,7 @@ export default function TicketDetailPage() {
                               <div className="p-1.5 border-b border-gray-100">
                                 <p className="text-xs font-semibold text-gray-500 px-2 py-1 uppercase tracking-wide">Plantillas de email</p>
                               </div>
-                              <div className="max-h-64 overflow-y-auto py-1">
+                              <div className="max-h-64 overflow-y-auto py-1 [-webkit-overflow-scrolling:touch]">
                                 {buildTicketEmailTemplates().map((tmpl) => (
                                   <button key={tmpl.id} onClick={() => applyTemplate(tmpl)} className={cn('w-full text-left px-3 py-2.5 text-sm hover:bg-repairdesk-50 transition-colors', selectedTemplate?.id === tmpl.id && 'bg-repairdesk-50 text-[#0d9488] font-medium')}>
                                     <div className="flex items-center gap-2">

@@ -127,50 +127,72 @@ export function NotificationBell() {
 
   useEffect(() => {
     const supabase = createClient();
-    const channelRef: { current: ReturnType<typeof supabase.channel> | null } = { current: null };
+    let cleanupFn: (() => void) | null = null;
     let cancelled = false;
 
-    void (async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+    const setupChannel = async () => {
+      // Delay para evitar race conditions
+      await new Promise(r => setTimeout(r, 150));
+      if (cancelled) return;
+
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user || cancelled) return;
-      channelRef.current = supabase
-        .channel(`panel_notifications_sound_${user.id}`)
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'panel_notifications',
-            filter: `user_id=eq.${user.id}`,
-          },
-          (payload) => {
-            const row = payload.new as Record<string, unknown>;
-            const n: PanelNotificationRow = {
-              id: String(row.id ?? ''),
-              kind: String(row.kind ?? 'default'),
-              title: String(row.title ?? 'Aviso'),
-              body: row.body != null ? String(row.body) : null,
-              ticket_id: row.ticket_id != null ? String(row.ticket_id) : null,
-              read_at: row.read_at != null ? String(row.read_at) : null,
-              created_at: String(row.created_at ?? new Date().toISOString()),
-            };
-            if (!n.id || n.read_at) return;
-            setItems((prev) => [n, ...prev.filter((x) => x.id !== n.id)].slice(0, 25));
-            if (!getDashboardUiSoundOn()) return;
-            const now = Date.now();
-            if (now - lastPanelSoundAtRef.current < 400) return;
-            lastPanelSoundAtRef.current = now;
-            void primeAndPlayPanelAssignChime().catch(() => {});
-          }
-        )
-        .subscribe();
-    })();
+
+      // Crear canal fresco cada vez
+      const channelName = `panel_notifications_sound_${user.id}_${Date.now()}`;
+      const channel = supabase.channel(channelName);
+
+      // Configurar callback antes de subscribe
+      channel.on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'panel_notifications',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const row = payload.new as Record<string, unknown>;
+          const n: PanelNotificationRow = {
+            id: String(row.id ?? ''),
+            kind: String(row.kind ?? 'default'),
+            title: String(row.title ?? 'Aviso'),
+            body: row.body != null ? String(row.body) : null,
+            ticket_id: row.ticket_id != null ? String(row.ticket_id) : null,
+            read_at: row.read_at != null ? String(row.read_at) : null,
+            created_at: String(row.created_at ?? new Date().toISOString()),
+          };
+          if (!n.id || n.read_at) return;
+          setItems((prev) => [n, ...prev.filter((x) => x.id !== n.id)].slice(0, 25));
+          if (!getDashboardUiSoundOn()) return;
+          const now = Date.now();
+          if (now - lastPanelSoundAtRef.current < 400) return;
+          lastPanelSoundAtRef.current = now;
+          void primeAndPlayPanelAssignChime().catch(() => {});
+        }
+      );
+
+      // Subscribe sin callback inline - usar promise
+      try {
+        await channel.subscribe();
+      } catch (e) {
+        console.warn('[NotificationBell] Subscribe error:', e);
+      }
+
+      // Guardar función de limpieza
+      cleanupFn = () => {
+        void supabase.removeChannel(channel);
+      };
+    };
+
+    void setupChannel();
 
     return () => {
       cancelled = true;
-      if (channelRef.current) void supabase.removeChannel(channelRef.current);
+      if (cleanupFn) {
+        cleanupFn();
+        cleanupFn = null;
+      }
     };
   }, []);
 
@@ -361,11 +383,11 @@ export function NotificationBell() {
       >
         <span
           className={cn(
-            'flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white/20 ring-1 ring-white/25',
+            'flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-white/20 ring-1 ring-white/25',
             bellShaking && 'animate-panel-bell-shake'
           )}
         >
-          <Bell className="h-5 w-5 text-white" strokeWidth={2} aria-hidden />
+          <Bell className="h-4 w-4 text-white" strokeWidth={2} aria-hidden />
         </span>
         {unread > 0 && (
           <span

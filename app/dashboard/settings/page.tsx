@@ -1085,12 +1085,84 @@ export default function SettingsPage() {
     window.dispatchEvent(new CustomEvent('org-name-changed', { detail: { name: trimmed } }));
   };
 
-  /** Guarda fila shop_settings y, si hay org activa, intenta reflejar el logo en organizations (RLS: suele requerir ser propietario). */
+  /** Guarda fila shop_settings usando UPDATE+INSERT separados para evitar schema cache de PostgREST. */
   const persistShopSettingsSnapshot = async (row: ShopSettings, userId: string) => {
-    const { error } = await (supabase as any)
+    const payload = { ...row, user_id: userId, updated_at: new Date().toISOString() };
+    
+    // Intentar UPDATE primero (evita problemas de schema cache con UPSERT)
+    const { data: updateCheck, error: selectError } = await (supabase as any)
       .from('shop_settings')
-      .upsert([{ ...row, user_id: userId }], { onConflict: 'user_id' });
-    if (error) throw new Error(humanizeShopSettingsSchemaError(error.message));
+      .select('user_id')
+      .eq('user_id', userId)
+      .maybeSingle();
+    
+    if (selectError) {
+      throw new Error(humanizeShopSettingsSchemaError(selectError.message));
+    }
+    
+    if (updateCheck) {
+      // Existe: hacer UPDATE de solo los campos básicos (evita columnas problemáticas)
+      const { error: updateError } = await (supabase as any)
+        .from('shop_settings')
+        .update({
+          shop_name: payload.shop_name,
+          email: payload.email,
+          phone: payload.phone,
+          phone2: payload.phone2,
+          fax: payload.fax,
+          city: payload.city,
+          postal_code: payload.postal_code,
+          state: payload.state,
+          country: payload.country,
+          address: payload.address,
+          website: payload.website,
+          registration_number: payload.registration_number,
+          currency: payload.currency,
+          currency_symbol: payload.currency_symbol,
+          tax_rate: payload.tax_rate,
+          tax_included: payload.tax_included,
+          time_format: payload.time_format,
+          language: payload.language,
+          start_time: payload.start_time,
+          end_time: payload.end_time,
+          invoice_prefix: payload.invoice_prefix,
+          ticket_prefix: payload.ticket_prefix,
+          default_warranty: payload.default_warranty,
+          footer_text: payload.footer_text,
+          receive_emails: payload.receive_emails,
+          restocking_fee: payload.restocking_fee,
+          deposit_repairs: payload.deposit_repairs,
+          screen_timeout: payload.screen_timeout,
+          decimal_places: payload.decimal_places,
+          timezone: payload.timezone,
+          price_format: payload.price_format,
+          iva_condition: payload.iva_condition,
+          logo_url: payload.logo_url,
+          whatsapp_phone: payload.whatsapp_phone,
+          panel_ui_mode: payload.panel_ui_mode,
+          chat_enabled: payload.chat_enabled,
+          updated_at: payload.updated_at,
+        })
+        .eq('user_id', userId);
+      if (updateError) throw new Error(humanizeShopSettingsSchemaError(updateError.message));
+    } else {
+      // No existe: INSERT con valores mínimos
+      const { error: insertError } = await (supabase as any)
+        .from('shop_settings')
+        .insert({
+          user_id: userId,
+          shop_name: payload.shop_name || 'Mi Taller',
+          email: payload.email,
+          phone: payload.phone,
+          currency: payload.currency || 'ARS',
+          currency_symbol: payload.currency_symbol || '$',
+          tax_rate: payload.tax_rate || 21,
+          updated_at: payload.updated_at,
+          created_at: payload.updated_at,
+        });
+      if (insertError) throw new Error(humanizeShopSettingsSchemaError(insertError.message));
+    }
+    
     const orgId = activeOrgId ?? (await getActiveOrganizationId(supabase));
     if (orgId) {
       const logo = row.logo_url?.trim() || null;
@@ -4195,10 +4267,10 @@ export default function SettingsPage() {
                   </div>
                 </div>
                 <Grid2>
-                  <Field label="Puntos por euro gastado">
+                  <Field label="Puntos por peso gastado">
                     <Input className="h-9" type="number" defaultValue="1" />
                   </Field>
-                  <Field label="Valor de cada punto (€)">
+                  <Field label="Valor de cada punto ($)">
                     <Input className="h-9" type="number" step="0.01" defaultValue="0.01" />
                   </Field>
                   <Field label="Puntos mínimos para canjear">
@@ -4242,9 +4314,9 @@ export default function SettingsPage() {
             </div>
             <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
               {[
-                { code: 'GIFT-001', amount: '€50', status: 'Activa', used: '€0' },
-                { code: 'GIFT-002', amount: '€25', status: 'Usada', used: '€25' },
-                { code: 'GIFT-003', amount: '€100', status: 'Activa', used: '€30' },
+                { code: 'GIFT-001', amount: '$50', status: 'Activa', used: '$0' },
+                { code: 'GIFT-002', amount: '$25', status: 'Usada', used: '$25' },
+                { code: 'GIFT-003', amount: '$100', status: 'Activa', used: '$30' },
               ].map(g => (
                 <div key={g.code} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50">
                   <div>
@@ -4636,7 +4708,7 @@ export default function SettingsPage() {
           }
         }}
       >
-        <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
+        <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto [-webkit-overflow-scrolling:touch]">
           <DialogHeader>
             <DialogTitle>
               {teamDialogMode === 'create'

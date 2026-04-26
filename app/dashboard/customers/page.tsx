@@ -806,13 +806,12 @@ export default function CustomersPage() {
 
   return (
     <div className="flex h-full flex-col bg-background text-foreground">
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="bg-white border-b border-gray-200 px-4 md:px-6 py-3 md:py-4">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
           <div className="min-w-0">
-            <h1 className="text-xl font-semibold text-gray-900">Clientes</h1>
-            <p className="text-sm text-gray-500 mt-0.5">
-              {totalCount.toLocaleString('es-ES')} cliente{totalCount === 1 ? '' : 's'} (coinciden con filtros
-              aplicados)
+            <h1 className="text-lg md:text-xl font-semibold text-gray-900">Clientes</h1>
+            <p className="text-xs md:text-sm text-gray-500 mt-0.5">
+              {totalCount.toLocaleString('es-ES')} cliente{totalCount === 1 ? '' : 's'}
             </p>
           </div>
           <input
@@ -825,12 +824,13 @@ export default function CustomersPage() {
             disabled={importing}
             onChange={handleCustomerCsvSelected}
           />
-          <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+          <div className="flex flex-wrap items-center gap-2 md:justify-end">
+            {/* Filtros: Solo en PC */}
             <Button
               type="button"
               variant="outline"
               size="sm"
-              className="text-sm gap-1.5 shrink-0"
+              className="hidden md:flex text-sm gap-1.5 shrink-0"
               onClick={() => setShowFilters(!showFilters)}
               title={
                 showFilters
@@ -842,14 +842,14 @@ export default function CustomersPage() {
               {showFilters ? 'Ocultar filtros' : 'Filtros'}
             </Button>
 
-            {/* Menú CSV: Item + label (htmlFor) es el patrón estable en Radix; modal={false} evita bloqueos del diálogo de archivos. */}
+            {/* CSV/Excel: Solo en PC */}
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="text-sm gap-1.5 shrink-0"
+                  className="hidden md:flex text-sm gap-1.5 shrink-0"
                   disabled={importing}
                   title="Importar CSV o Excel (Excel usa detección inteligente de columnas) / exportar"
                 >
@@ -895,10 +895,11 @@ export default function CustomersPage() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/dashboard/customers/new" className="shrink-0">
+            {/* Agregar cliente: Visible en ambos */}
+            <Link href="/dashboard/customers/new" className="shrink-0 w-full md:w-auto">
               <Button
                 size="sm"
-                className="gap-1.5"
+                className="gap-1.5 w-full md:w-auto"
               >
                 <Plus className="h-4 w-4" />
                 Agregar cliente
@@ -909,7 +910,7 @@ export default function CustomersPage() {
       </div>
 
       {showFilters && (
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="hidden md:block bg-white border-b border-gray-200 px-6 py-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
             <div>
               <label className="text-xs font-medium text-gray-600 mb-1 block">
@@ -1098,21 +1099,23 @@ export default function CustomersPage() {
         </div>
       )}
 
-      <div className="flex-1 overflow-auto px-6 py-4">
+      <div className="flex-1 overflow-auto px-3 md:px-6 py-3 md:py-4">
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="relative w-64">
+          {/* Búsqueda: Móvil más prominente arriba */}
+          <div className="px-3 md:px-4 py-3 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              <div className="relative flex-1 md:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
                 <Input
                   placeholder="Buscar clientes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 h-8 text-sm"
+                  className="pl-9 h-9 md:h-8 text-sm w-full"
                 />
               </div>
+              {/* Selección: Solo en PC */}
               {selectedIds.size > 0 && (
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="hidden md:flex flex-wrap items-center gap-2">
                   <span className="text-sm text-gray-600">
                     {selectedIds.size} seleccionado(s)
                   </span>
@@ -1135,20 +1138,21 @@ export default function CustomersPage() {
                 </div>
               )}
             </div>
-            <span className="text-xs text-gray-500 text-right max-w-[14rem]">
-              {customers.length} resultado(s)
-              <span className="block text-[10px] text-gray-400 mt-0.5">
+            {/* Resultados: Texto compacto en móvil */}
+            <span className="text-xs text-gray-500 text-right">
+              {customers.length} resultado{customers.length !== 1 ? 's' : ''}
+              <span className="hidden md:block text-[10px] text-gray-400 mt-0.5">
                 CSV con «;» para Excel (ES). Exportá desde el menú «CSV / Excel». Importar Excel: primera hoja, fila 1 = cabeceras.
               </span>
             </span>
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center py-16">
+            <div className="flex items-center justify-center py-12 md:py-16">
               <Loader2 className="h-7 w-7 animate-spin text-primary" />
             </div>
           ) : customers.length === 0 ? (
-            <div className="text-center py-16 text-gray-400">
+            <div className="text-center py-12 md:py-16 text-gray-400 px-4">
               <p className="font-medium text-gray-600">No hay clientes</p>
               <p className="text-sm mt-1">
                 Agrega tu primer cliente para comenzar
@@ -1159,7 +1163,8 @@ export default function CustomersPage() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50">
-                    <TableHead className="w-10">
+                    {/* Checkbox: Solo en PC */}
+                    <TableHead className="w-10 hidden md:table-cell">
                       <Checkbox
                         checked={
                           allVisibleSelected
@@ -1189,7 +1194,7 @@ export default function CustomersPage() {
                     </TableHead>
                     <TableHead
                       className={cn(
-                        'text-xs font-semibold text-gray-600',
+                        'hidden md:table-cell text-xs font-semibold text-gray-600',
                         showRgpdColumn ? 'min-w-[180px]' : 'min-w-[210px]'
                       )}
                     >
@@ -1203,9 +1208,10 @@ export default function CustomersPage() {
                     >
                       Teléfono móvil
                     </TableHead>
+                    {/* Ocultas en móvil */}
                     <TableHead
                       className={cn(
-                        'text-xs font-semibold text-gray-600',
+                        'hidden md:table-cell text-xs font-semibold text-gray-600',
                         showRgpdColumn ? 'min-w-[150px]' : 'min-w-[175px]'
                       )}
                     >
@@ -1213,7 +1219,7 @@ export default function CustomersPage() {
                     </TableHead>
                     <TableHead
                       className={cn(
-                        'text-xs font-semibold text-gray-600 text-right',
+                        'hidden md:table-cell text-xs font-semibold text-gray-600 text-right',
                         showRgpdColumn ? 'min-w-[80px]' : 'min-w-[92px]'
                       )}
                     >
@@ -1221,7 +1227,7 @@ export default function CustomersPage() {
                     </TableHead>
                     <TableHead
                       className={cn(
-                        'text-xs font-semibold text-gray-600 text-right',
+                        'hidden md:table-cell text-xs font-semibold text-gray-600 text-right',
                         showRgpdColumn ? 'min-w-[120px]' : 'min-w-[135px]'
                       )}
                     >
@@ -1229,7 +1235,7 @@ export default function CustomersPage() {
                     </TableHead>
                     <TableHead
                       className={cn(
-                        'text-xs font-semibold text-gray-600 text-right',
+                        'hidden md:table-cell text-xs font-semibold text-gray-600 text-right',
                         showRgpdColumn ? 'min-w-[130px]' : 'min-w-[148px]'
                       )}
                     >
@@ -1237,29 +1243,29 @@ export default function CustomersPage() {
                     </TableHead>
                     <TableHead
                       className={cn(
-                        'text-xs font-semibold text-gray-600',
+                        'hidden md:table-cell text-xs font-semibold text-gray-600',
                         showRgpdColumn ? 'min-w-[120px]' : 'min-w-[140px]'
                       )}
                     >
                       Grupo de clientes
                     </TableHead>
                     {showRgpdColumn && (
-                      <TableHead className="text-xs font-semibold text-gray-600 min-w-[120px]">
+                      <TableHead className="hidden md:table-cell text-xs font-semibold text-gray-600 min-w-[120px]">
                         RGPD
                       </TableHead>
                     )}
                     <TableHead
                       className={cn(
-                        'text-xs font-semibold text-gray-600',
+                        'hidden md:table-cell text-xs font-semibold text-gray-600',
                         showRgpdColumn ? 'min-w-[120px]' : 'min-w-[135px]'
                       )}
                     >
                       MailChimp
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 min-w-[88px] text-center whitespace-nowrap">
+                    <TableHead className="text-xs font-semibold text-gray-600 min-w-[80px] md:min-w-[88px] text-center whitespace-nowrap">
                       WhatsApp
                     </TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 w-20 text-center">
+                    <TableHead className="text-xs font-semibold text-gray-600 w-16 md:w-20 text-center">
                       Acciones
                     </TableHead>
                   </TableRow>
@@ -1270,7 +1276,8 @@ export default function CustomersPage() {
                       key={customer.id}
                       className="hover:bg-gray-50 group"
                     >
-                      <TableCell>
+                      {/* Checkbox: Solo en PC */}
+                      <TableCell className="hidden md:table-cell">
                         <Checkbox
                           checked={selectedIds.has(String(customer.id))}
                           onCheckedChange={(checked) => {
@@ -1287,12 +1294,13 @@ export default function CustomersPage() {
                       <TableCell>
                         <Link
                           href={`/dashboard/customers/${customer.id}`}
-                          className="text-sm font-medium text-primary hover:underline"
+                          className="text-xs md:text-sm font-medium text-primary hover:underline"
                         >
                           {customer.name}
                         </Link>
                       </TableCell>
-                      <TableCell>
+                      {/* Email: Oculto en móvil */}
+                      <TableCell className="hidden md:table-cell">
                         {customer.email ? (
                           <a
                             href={`mailto:${customer.email}`}
@@ -1309,16 +1317,17 @@ export default function CustomersPage() {
                         {customer.phone ? (
                           <a
                             href={`tel:${customer.phone}`}
-                            className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-primary"
+                            className="flex items-center gap-1.5 text-xs md:text-sm text-gray-600 hover:text-primary"
                           >
                             <Phone className="h-3 w-3 text-gray-400 flex-shrink-0" />
                             {customer.phone}
                           </a>
                         ) : (
-                          <span className="text-gray-400 text-sm">-</span>
+                          <span className="text-gray-400 text-xs md:text-sm">-</span>
                         )}
                       </TableCell>
-                      <TableCell>
+                      {/* Organización: Solo en PC */}
+                      <TableCell className="hidden md:table-cell">
                         {customer.organization ? (
                           <div className="flex items-center gap-1.5 text-sm text-gray-600">
                             <Building2 className="h-3 w-3 text-gray-400 flex-shrink-0" />
@@ -1328,22 +1337,26 @@ export default function CustomersPage() {
                           <span className="text-gray-400 text-sm">-</span>
                         )}
                       </TableCell>
-                      <TableCell className="text-right">
+                      {/* Entradas: Solo en PC */}
+                      <TableCell className="hidden md:table-cell text-right">
                         <span className="text-sm font-medium text-gray-700">
                           {customer.ticket_count || 0}
                         </span>
                       </TableCell>
-                      <TableCell className="text-right">
+                      {/* Monto: Solo en PC */}
+                      <TableCell className="hidden md:table-cell text-right">
                         <span className="text-sm font-medium text-gray-700">
                           {loc.format(customer.ticket_amount || 0)}
                         </span>
                       </TableCell>
-                      <TableCell className="text-right">
+                      {/* Saldo: Solo en PC */}
+                      <TableCell className="hidden md:table-cell text-right">
                         <span className="text-sm font-medium text-gray-700">
                           {loc.format(customer.receivables || 0)}
                         </span>
                       </TableCell>
-                      <TableCell>
+                      {/* Grupo: Solo en PC */}
+                      <TableCell className="hidden md:table-cell">
                         {customer.customer_group ? (
                           <Badge
                             variant="outline"
@@ -1355,8 +1368,9 @@ export default function CustomersPage() {
                           <span className="text-gray-400 text-sm">-</span>
                         )}
                       </TableCell>
+                      {/* RGPD: Solo en PC */}
                       {showRgpdColumn && (
-                        <TableCell>
+                        <TableCell className="hidden md:table-cell">
                           {customer.gdpr_consent ? (
                             <div className="flex items-center gap-1 text-green-600">
                               <UserCheck className="h-4 w-4" />
@@ -1370,7 +1384,8 @@ export default function CustomersPage() {
                           )}
                         </TableCell>
                       )}
-                      <TableCell>
+                      {/* MailChimp: Solo en PC */}
+                      <TableCell className="hidden md:table-cell">
                         {mailchimpBadge(customer.mailchimp_status)}
                       </TableCell>
                       <TableCell className="text-center">
@@ -1389,53 +1404,56 @@ export default function CustomersPage() {
                           }}
                         />
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center justify-center gap-1">
+                      <TableCell className="p-1 md:p-4">
+                        <div className="flex items-center justify-center gap-0.5 md:gap-1">
                           <Link href={`/dashboard/customers/${customer.id}`}>
                             <Button
                               size="sm"
                               variant="ghost"
-                              className="h-7 w-7 p-0"
+                              className="h-6 w-6 md:h-7 md:w-7 p-0"
                             >
-                              <Pencil className="h-3.5 w-3.5 text-gray-500" />
+                              <Pencil className="h-3 w-3 md:h-3.5 md:w-3.5 text-gray-500" />
                             </Button>
                           </Link>
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-7 w-7 p-0"
+                            className="h-6 w-6 md:h-7 md:w-7 p-0"
                             onClick={() => handleDelete(customer.id)}
                           >
-                            <Trash2 className="h-3.5 w-3.5 text-red-500" />
+                            <Trash2 className="h-3 w-3 md:h-3.5 md:w-3.5 text-red-500" />
                           </Button>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-7 w-7 p-0"
-                              >
-                                <MoreHorizontal className="h-3.5 w-3.5 text-gray-500" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/customers/${customer.id}`}>
-                                  Ver detalles
-                                </Link>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/recepcion?customerId=${customer.id}`}>
-                                  Nuevo ingreso (recepción)
-                                </Link>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/tickets/new?customerId=${customer.id}`}>
-                                  Nuevo ticket (formulario completo)
-                                </Link>
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+                          {/* Dropdown solo en PC */}
+                          <div className="hidden md:block">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-7 w-7 p-0"
+                                >
+                                  <MoreHorizontal className="h-3.5 w-3.5 text-gray-500" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem asChild>
+                                  <Link href={`/dashboard/customers/${customer.id}`}>
+                                    Ver detalles
+                                  </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                  <Link href={`/dashboard/recepcion?customerId=${customer.id}`}>
+                                    Nuevo ingreso (recepción)
+                                  </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                  <Link href={`/dashboard/tickets/new?customerId=${customer.id}`}>
+                                    Nuevo ticket (formulario completo)
+                                  </Link>
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
                         </div>
                       </TableCell>
                     </TableRow>

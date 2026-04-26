@@ -32,8 +32,8 @@ import {
   BarChart3,
   ChevronDown,
   Copy,
+  DollarSign,
   Download,
-  Euro,
   FileText,
   Filter,
   Loader2,
@@ -1051,7 +1051,7 @@ export function InvoicesAdminDashboard({ onCreateInvoice, reloadToken = 0 }: Pro
           <Kpi
             title="Total facturas (vista)"
             value={money(kpis.totalSales)}
-            icon={Euro}
+            icon={DollarSign}
             extraLabel="Ingreso Resumen (mismo período)"
             extraValue={resumenPeriodIncome != null ? money(resumenPeriodIncome) : '—'}
             hint={
@@ -1075,15 +1075,15 @@ export function InvoicesAdminDashboard({ onCreateInvoice, reloadToken = 0 }: Pro
             icon={Wallet}
             hint="Todas las fechas: facturas con saldo distinto de borrador/cancelada. No cambia al elegir «Mes pasado», etc."
           />
-          <Kpi title="Base imponible (vista)" value={money(kpis.taxable)} icon={Euro} />
-          <Kpi title="No imponible (vista)" value={money(kpis.nonTaxable)} icon={Euro} />
+          <Kpi title="Base imponible (vista)" value={money(kpis.taxable)} icon={DollarSign} />
+          <Kpi title="No imponible (vista)" value={money(kpis.nonTaxable)} icon={DollarSign} />
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Kpi
             title="Total facturas (vista)"
             value={money(kpis.totalSales)}
-            icon={Euro}
+            icon={DollarSign}
             extraLabel="Ingreso Resumen (mismo período)"
             extraValue={resumenPeriodIncome != null ? money(resumenPeriodIncome) : '—'}
           />

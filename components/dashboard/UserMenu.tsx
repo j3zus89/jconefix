@@ -112,7 +112,7 @@ export function UserMenu() {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-1 rounded-full p-0 text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
       >
-        <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-white/20 ring-1 ring-white/25">
+        <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-white/20 ring-1 ring-white/25">
           {avatarUrl && !avatarBroken ? (
             <img
               src={avatarUrl}
@@ -121,7 +121,7 @@ export function UserMenu() {
               onError={() => setAvatarBroken(true)}
             />
           ) : (
-            <User className="h-[1.125rem] w-[1.125rem] text-white" />
+            <User className="h-4 w-4 text-white" />
           )}
         </div>
         <ChevronDown

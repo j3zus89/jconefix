@@ -57,10 +57,12 @@ import {
   ChevronRight,
   Pin,
   Settings2,
+  UserPlus,
 } from 'lucide-react';
 import { buildXlsx, downloadXlsx } from '@/lib/excel-export';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { Checkbox } from '@/components/ui/checkbox';
 import { getActiveOrganizationId } from '@/lib/dashboard-org';
 import {
   customersOrgScopeOr,
@@ -137,20 +139,128 @@ type TicketCalendarRow = {
 };
 
 const STATUS_OPTIONS = [
-  { value: 'pending', label: 'Pending', color: 'bg-yellow-500' },
-  { value: 'in_progress', label: 'En progreso', color: 'bg-repairdesk-500' },
-  { value: 'completed', label: 'Reparado', color: 'bg-green-500' },
-  { value: 'cancelled', label: 'Cancelado', color: 'bg-red-500' },
-  { value: 'no_repair', label: 'No Reparado', color: 'bg-gray-500' },
-  { value: 'draft', label: 'Draft', color: 'bg-slate-400' },
+  // Estados base
+  { value: 'pending', label: 'Pendiente', color: 'bg-yellow-500' },
+  { value: 'entrada', label: 'Entrada', color: 'bg-red-500' },
+  { value: 'presupuesto', label: 'Presupuesto', color: 'bg-yellow-400' },
+  { value: 'diagnostico', label: 'Diagnóstico', color: 'bg-orange-500' },
   { value: 'diagnostic', label: 'Diagnóstico', color: 'bg-orange-500' },
+  { value: 'in_progress', label: 'En progreso', color: 'bg-blue-500' },
+  { value: 'en_proceso', label: 'En proceso', color: 'bg-blue-500' },
+  { value: 'envios', label: 'Envíos', color: 'bg-blue-600' },
+  { value: 'externa', label: 'Externa', color: 'bg-green-400' },
+  { value: 'reparado', label: 'Reparado', color: 'bg-green-500' },
+  { value: 'completed', label: 'Completado', color: 'bg-green-500' },
+  { value: 'no_repair', label: 'No reparado', color: 'bg-gray-500' },
+  { value: 'no_reparado', label: 'No reparado', color: 'bg-red-500' },
+  { value: 'cancelled', label: 'Cancelado', color: 'bg-red-500' },
+  { value: 'draft', label: 'Borrador', color: 'bg-slate-400' },
+  // Estados adicionales
+  { value: 'waiting_parts', label: 'Esperando piezas', color: 'bg-blue-400' },
+  { value: 'pendiente_pedido', label: 'Pendiente de pedido', color: 'bg-orange-400' },
+  { value: 'pendiente_pieza', label: 'Pendiente de pieza', color: 'bg-orange-400' },
+  { value: 'pendiente_cliente', label: 'Pendiente cliente', color: 'bg-orange-400' },
+  { value: 'prioridad', label: 'Prioridad', color: 'bg-purple-500' },
+  { value: 'traslado', label: 'Traslado', color: 'bg-pink-500' },
+  { value: 'en_estudio', label: 'En estudio', color: 'bg-green-300' },
 ];
+
+// Función helper para obtener label de estado con fallback
+const getStatusLabelSafe = (status: string | null | undefined): string => {
+  if (!status) return 'Sin estado';
+  const found = STATUS_OPTIONS.find(s => s.value.toLowerCase() === status.toLowerCase());
+  return found?.label || status;
+};
 
 const FILTER_TABS = ['TODO', 'HOY', 'AYER', '7 DÍAS', '14 DÍAS', '30 DÍAS', 'ACTIVOS', 'VENCIDOS'];
 
 /** Grupos de fecha, en el orden en que deben aparecer de arriba a abajo. */
 const DATE_GROUP_ORDER = ['HOY', 'AYER', '7 DÍAS', '14 DÍAS', '30 DÍAS', 'ACTIVOS', 'VENCIDOS'] as const;
 type DateGroup = typeof DATE_GROUP_ORDER[number];
+
+/** Devuelve el SVG del icono correspondiente a cada categoría de dispositivo */
+function getCategoryIconSVG(category: string | null, deviceType?: string | null): React.ReactNode {
+  const strokeWidth = 1.5;
+  const strokeColor = "currentColor";
+  
+  // Normalizar la categoría - manejar guiones y espacios
+  let cat = (category || '').toUpperCase().trim();
+  
+  // Si la categoría está vacía o es OTROS, intentar inferir por el nombre del dispositivo
+  if (!cat || cat === 'OTROS' || cat === 'NULL') {
+    const deviceName = (deviceType || '').toLowerCase();
+    if (/tv|televisor|smartv|samsung|lg|noblex|tcl|philips/.test(deviceName)) cat = 'SMART_TV';
+    else if (/iphone|galaxy|xiaomi|motorola|huawei/.test(deviceName)) cat = 'SMARTPHONES';
+    else if (/ipad|tablet/.test(deviceName)) cat = 'TABLETS';
+    else if (/laptop|notebook|macbook/.test(deviceName)) cat = 'LAPTOPS';
+    else if (/playstation|xbox|nintendo/.test(deviceName)) cat = 'CONSOLAS';
+    else if (/watch/.test(deviceName)) cat = 'SMARTWATCH';
+    else if (/airpods|auricular/.test(deviceName)) cat = 'AURICULARES';
+    else cat = 'OTROS';
+  }
+  
+  // Debug - ver en consola del navegador qué categoría se está usando
+  console.log('[Icon Debug] category:', category, 'deviceType:', deviceType, 'resolved:', cat);
+  
+  switch (cat) {
+    case 'SMARTPHONES':
+      return (
+        <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+        </svg>
+      );
+    case 'TABLETS':
+      return (
+        <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M10.5 19.5h3m-9.75-3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125h18.75c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375zM19.5 4.5h-15A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5z" />
+        </svg>
+      );
+    case 'LAPTOPS':
+    case 'LAPTOPS_Y_PC':
+      return (
+        <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+        </svg>
+      );
+    case 'CONSOLAS':
+      return (
+        <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" />
+        </svg>
+      );
+    case 'SMARTWATCH':
+      return (
+        <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
+    case 'AURICULARES':
+      return (
+        <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75zm3.75 0v15m3.75-15l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H15.49c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0113.5 12c0-.83.112-1.633.322-2.396C13.556 8.756 14.38 8.25 15.26 8.25H17.25z" />
+        </svg>
+      );
+    case 'SMART_TV':
+      return (
+        <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      );
+    case 'AUDIO_VIDEO':
+    case 'EQUIPOS DE AUDIO Y VÍDEO':
+      return (
+        <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3" />
+        </svg>
+      );
+    default:
+      return (
+        <svg className="w-6 h-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke={strokeColor}>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M6.343 21h7.628a2.251 2.251 0 002.25-2.25v-5.19a2.251 2.251 0 00-2.25-2.25h-7.5a2.251 2.251 0 00-2.25 2.25v5.19A2.251 2.251 0 006.343 21zM12 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      );
+  }
+}
 
 /** Clasifica un ticket en su grupo de fecha (para la vista TODO agrupada). */
 function getTicketDateGroup(ticket: Ticket): DateGroup {
@@ -237,8 +347,8 @@ export default function TicketsPage() {
   } | null>(null);
   /** Selección para exportar CSV (todos los filtrados, no solo la página actual). */
   const [selectedTicketIds, setSelectedTicketIds] = useState<Set<string>>(new Set());
-  /** Ref para la casilla de "seleccionar todo" del encabezado: permite poner `indeterminate` vía JS. */
-  const headerCheckRef = useRef<HTMLInputElement>(null);
+  /** Ref para la casilla de "seleccionar todo" del encabezado. */
+  const headerCheckRef = useRef<HTMLButtonElement>(null);
 
   const supabase = createClient();
 
@@ -460,6 +570,58 @@ export default function TicketsPage() {
     }
     void fetchTicketsPageRef.current();
   }, [listScopeReady, listPage]);
+
+  /** Sincronización en tiempo real: escuchar cambios en repair_tickets para actualizar estados automáticamente */
+  useEffect(() => {
+    if (!listScopeReady || !listContextRef.current) return;
+    
+    const orgId = listContextRef.current.orgId;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    
+    try {
+      channel = supabase
+        .channel(`repair_tickets_realtime_${orgId}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'repair_tickets',
+            filter: `organization_id=eq.${orgId}`,
+          },
+          (payload) => {
+            // Actualizar el ticket modificado en la lista local
+            if (payload.eventType === 'UPDATE' && payload.new) {
+              const updatedTicket = payload.new as Ticket;
+              setTickets((prev) =>
+                prev.map((t) =>
+                  t.id === updatedTicket.id
+                    ? { ...t, status: updatedTicket.status, updated_at: updatedTicket.updated_at }
+                    : t
+                )
+              );
+            }
+            // Para INSERT/DELETE, refrescar toda la lista
+            if (payload.eventType === 'INSERT' || payload.eventType === 'DELETE') {
+              void fetchTicketsPageRef.current();
+            }
+          }
+        )
+        .subscribe((status) => {
+          if (status !== 'SUBSCRIBED') {
+            console.warn('[Tickets] Realtime subscription status:', status);
+          }
+        });
+    } catch (e) {
+      console.error('[Tickets] Error setting up realtime:', e);
+    }
+
+    return () => {
+      if (channel) {
+        void supabase.removeChannel(channel);
+      }
+    };
+  }, [listScopeReady, supabase]);
 
   /** Calendario: tickets con entrega en el mes visible y mismos filtros que el listado (sin paginación). */
   useEffect(() => {
@@ -943,13 +1105,6 @@ export default function TicketsPage() {
     !allTicketsSelected &&
     allFilteredIds.some((id) => selectedTicketIds.has(id));
 
-  /** Mantiene la propiedad `indeterminate` del <input> del encabezado sincronizada con el estado. */
-  useEffect(() => {
-    if (!headerCheckRef.current) return;
-    headerCheckRef.current.indeterminate = someTicketsSelected;
-    headerCheckRef.current.checked = allTicketsSelected;
-  }, [someTicketsSelected, allTicketsSelected]);
-
   const toggleSelectAllTickets = () => {
     if (allTicketsSelected) {
       setSelectedTicketIds(new Set());
@@ -999,14 +1154,14 @@ export default function TicketsPage() {
 
   return (
     <div className="flex h-full flex-col bg-background text-foreground">
-      <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-gray-900">Administrar tickets</h1>
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="px-4 md:px-6 py-3 md:py-4 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <h1 className="text-base md:text-xl font-semibold text-gray-900">Administrar tickets</h1>
+        <div className="flex flex-col md:flex-row md:flex-wrap md:items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50 text-gray-700"
+                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50 text-gray-700"
               >
                 <Filter className="h-3.5 w-3.5" />
                 Filtros
@@ -1044,7 +1199,7 @@ export default function TicketsPage() {
               setCalendarPickDay(null);
               setCalendarOpen(true);
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50 text-gray-700"
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50 text-gray-700"
           >
             <Calendar className="h-3.5 w-3.5" />
             Vista de calendario
@@ -1053,7 +1208,7 @@ export default function TicketsPage() {
             type="button"
             onClick={() => setListLayout((v) => (v === 'full' ? 'compact' : 'full'))}
             className={cn(
-              'flex items-center gap-1.5 px-3 py-1.5 text-sm border rounded hover:bg-gray-50 text-gray-700',
+              'hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm border rounded hover:bg-gray-50 text-gray-700',
               listLayout === 'compact'
                 ? 'border-primary bg-primary/10 ring-1 ring-primary/30'
                 : 'border-gray-300'
@@ -1067,7 +1222,7 @@ export default function TicketsPage() {
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50 text-gray-700"
+                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50 text-gray-700"
                 title="CSV con separador para Excel (ES). Exportar solo marcados o todos los visibles con filtros."
               >
                 <Download className="h-3.5 w-3.5" />
@@ -1101,7 +1256,7 @@ export default function TicketsPage() {
             </DropdownMenuContent>
           </DropdownMenu>
           <div className="flex flex-wrap items-center gap-2">
-            <Link href="/dashboard/recepcion">
+            <Link href="/dashboard/recepcion" className="hidden md:block">
               <Button
                 variant="outline"
                 className="h-auto gap-1 border-primary/40 px-3 py-1.5 text-sm text-primary hover:bg-primary/5"
@@ -1109,8 +1264,9 @@ export default function TicketsPage() {
                 Recepción
               </Button>
             </Link>
-            <Link href="/dashboard/tickets/new">
-              <Button className="h-auto gap-0 px-4 py-1.5 text-sm">
+            {/* Crear ticket - solo PC, en móvil hay botón flotante */}
+            <Link href="/dashboard/tickets/new" className="hidden md:block w-full md:w-auto">
+              <Button className="h-auto gap-0 px-4 py-1.5 text-sm w-full md:w-auto">
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
                 Crear ticket
               </Button>
@@ -1365,21 +1521,31 @@ export default function TicketsPage() {
         </div>
       </div>
 
-      <div className="px-6 py-2 border-b border-gray-200 flex items-center gap-1">
-        {FILTER_TABS.map((tab) => (
+      {/* Tabs: Estilo móvil compacto */}
+      <div className="px-2 md:px-6 py-2 border-b border-gray-200 flex items-center gap-1 overflow-x-auto">
+        {['HOY', '7 DÍAS', '30 DÍAS'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveFilter(tab)}
             className={cn(
-              'px-3 py-1.5 text-sm font-medium rounded transition-colors',
+              'px-3 py-1.5 text-sm font-medium rounded-full transition-colors whitespace-nowrap',
               activeFilter === tab
-                ? 'bg-primary text-primary-foreground'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-[#0d9488] text-white'
+                : 'text-gray-500 hover:bg-gray-100'
             )}
           >
             {tab}
           </button>
         ))}
+        {/* Botón Crear Ticket visible en PC */}
+        <div className="hidden md:block ml-auto">
+          <Link href="/dashboard/tickets/new">
+            <Button className="h-auto gap-0 px-4 py-1.5 text-sm">
+              <Plus className="mr-1.5 h-3.5 w-3.5" />
+              Crear ticket
+            </Button>
+          </Link>
+        </div>
         <div className="ml-auto flex items-center gap-2">
           {selectedTicketIds.size > 0 && (
             <span className="whitespace-nowrap rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
@@ -1402,7 +1568,17 @@ export default function TicketsPage() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto">
+      {/* Botón flotante Nuevo Ingreso - solo móvil - todo en uno: cliente + equipo */}
+      <div className="md:hidden fixed bottom-20 left-0 right-0 z-50 flex justify-center pointer-events-none">
+        <Link href="/dashboard/recepcion" className="pointer-events-auto">
+          <Button className="h-9 px-4 rounded-full bg-[#0d9488] hover:bg-[#0f766e] text-white shadow-lg shadow-teal-900/30 text-xs font-semibold">
+            <UserPlus className="mr-1.5 h-3.5 w-3.5" />
+            Nuevo ingreso
+          </Button>
+        </Link>
+      </div>
+
+      <div className="flex-1 overflow-auto pb-24 md:pb-0">
         {loading ? (
           <div className="flex items-center justify-center h-48">
             <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
@@ -1424,16 +1600,177 @@ export default function TicketsPage() {
             ) : null}
           </div>
         ) : (
-          <table className="jc-panel-data-table w-full text-sm">
+          <>
+            {/* Vista Compacta Horizontal para Móvil - Como la imagen */}
+            <div className="md:hidden pb-20">
+              {sortedTickets.map((ticket) => {
+                const phone = ticket.customers?.phone?.trim() || customers.find((c) => c.id === ticket.customer_id)?.phone?.trim() || null;
+                const hasPhone = !!phone;
+                
+                return (
+                  <div key={ticket.id} className="flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-white min-h-[56px]">
+                    {/* Izquierda: Icono + ID + Nombre */}
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+                        {getCategoryIconSVG(ticket.device_category, ticket.device_type)}
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[11px] text-gray-500 font-medium">{ticket.ticket_number}</span>
+                        <span className="text-[13px] font-semibold text-gray-900 truncate">{ticket.device_type || 'Dispositivo'}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Centro: Badge de estado píldora */}
+                    <div className="mx-2">
+                      {(() => {
+                        const statusLower = (ticket.status || '').toLowerCase();
+                        const statusColors: Record<string, string> = {
+                          'pending': 'bg-yellow-400 text-yellow-900',
+                          'in_progress': 'bg-blue-500 text-white',
+                          'en_proceso': 'bg-blue-500 text-white',
+                          'completed': 'bg-green-500 text-white',
+                          'reparado': 'bg-green-500 text-white',
+                          'cancelled': 'bg-red-500 text-white',
+                          'no_repair': 'bg-gray-500 text-white',
+                          'no_reparado': 'bg-red-500 text-white',
+                          'diagnostic': 'bg-orange-500 text-white',
+                          'diagnostico': 'bg-orange-500 text-white',
+                          'entrada': 'bg-red-500 text-white',
+                          'envios': 'bg-blue-600 text-white',
+                          'presupuesto': 'bg-yellow-400 text-yellow-900',
+                          'externa': 'bg-green-400 text-white',
+                          'prioridad': 'bg-purple-500 text-white',
+                          'waiting_parts': 'bg-blue-400 text-white',
+                          'pendiente_pedido': 'bg-orange-400 text-white',
+                          'pendiente_pieza': 'bg-orange-400 text-white',
+                          'pendiente_cliente': 'bg-orange-400 text-white',
+                          'traslado': 'bg-pink-500 text-white',
+                          'en_estudio': 'bg-green-300 text-green-900',
+                          'draft': 'bg-slate-400 text-white',
+                        };
+                        const colorClass = statusColors[statusLower] || 'bg-gray-400 text-white';
+                        const label = getStatusLabelSafe(ticket.status);
+                        
+                        return (
+                          <Select
+                            value={ticket.status || 'unknown'}
+                            onValueChange={async (newStatus) => {
+                              try {
+                                const memberIds = await fetchActiveOrgMemberUserIds(supabase, listContextRef.current!.orgId);
+                                const ticketScopeOr = repairTicketsOrgScopeOr(listContextRef.current!.orgId, memberIds);
+                                const { error } = await supabase
+                                  .from('repair_tickets')
+                                  .update({ status: newStatus, updated_at: new Date().toISOString() })
+                                  .eq('id', ticket.id)
+                                  .or(ticketScopeOr);
+                                if (error) throw error;
+                                setTickets(prev => prev.map(t => 
+                                  t.id === ticket.id ? { ...t, status: newStatus, updated_at: new Date().toISOString() } : t
+                                ));
+                                toast.success('Estado actualizado');
+                              } catch (e) {
+                                toast.error('Error al actualizar estado');
+                              }
+                            }}
+                          >
+                            <SelectTrigger className={cn(
+                              'h-6 text-[11px] font-medium border-0 rounded-full px-2.5 py-0 w-auto min-w-[90px] focus:ring-0',
+                              colorClass
+                            )}>
+                              <span className="truncate">{label}</span>
+                            </SelectTrigger>
+                            <SelectContent className="max-h-[280px] overflow-y-auto">
+                              {STATUS_OPTIONS.map(s => (
+                                <SelectItem key={s.value} value={s.value} className="text-xs">{s.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        );
+                      })()}
+                    </div>
+                    
+                    {/* Derecha: 3 botones circulares */}
+                    <div className="flex items-center gap-1.5">
+                      {/* Llamar */}
+                      <a
+                        href={hasPhone ? `tel:${phone}` : '#'}
+                        onClick={(e) => {
+                          if (!hasPhone) {
+                            e.preventDefault();
+                            toast.error('Este cliente no tiene teléfono');
+                          }
+                        }}
+                        className={cn(
+                          'w-8 h-8 rounded-full flex items-center justify-center transition-colors',
+                          hasPhone 
+                            ? 'bg-gray-100 text-gray-600 hover:bg-gray-200' 
+                            : 'bg-gray-50 text-gray-300 pointer-events-none'
+                        )}
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                      </a>
+                      
+                      {/* WhatsApp */}
+                      <button
+                        onClick={() => {
+                          if (!phone) {
+                            toast.error('Este cliente no tiene teléfono en la ficha');
+                            return;
+                          }
+                          const name = ticket.customers?.name || 'Cliente';
+                          const defaultMessage = `${loc.isAR ? 'Te escribo respecto a la orden' : 'Te escribo respecto al ticket'} ${ticket.ticket_number}${
+                            ticket.device_type?.trim() ? ` (${ticket.device_type.trim()})` : ticket.device_category?.trim() ? ` (${ticket.device_category.trim()})` : ''
+                          }.`;
+                          setWaModal({
+                            name,
+                            phone,
+                            defaultMessage,
+                            deviceCategory: ticket.device_category,
+                            deviceType: ticket.device_type,
+                            deviceBrand: ticket.device_brand,
+                            deviceModel: ticket.device_model,
+                          });
+                        }}
+                        className={cn(
+                          'w-8 h-8 rounded-full flex items-center justify-center transition-colors',
+                          hasPhone
+                            ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            : 'bg-gray-50 text-gray-300 pointer-events-none'
+                        )}
+                      >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.004c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                      </button>
+                      
+                      {/* Ver orden */}
+                      <Link
+                        href={`/dashboard/tickets/${ticket.id}`}
+                        className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Vista de Tabla para PC */}
+            <table className="hidden md:table jc-panel-data-table w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200 sticky top-0">
               <tr>
                 <th className="w-8 px-3 py-3">
-                  <input
+                  <Checkbox
                     ref={headerCheckRef}
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 accent-primary cursor-pointer"
+                    checked={allTicketsSelected}
                     title="Seleccionar / deseleccionar todos"
-                    onChange={toggleSelectAllTickets}
+                    onCheckedChange={toggleSelectAllTickets}
                   />
                 </th>
                 <th className="px-3 py-3 text-left font-medium text-gray-600 text-xs uppercase tracking-wide">IDENTIFICACIÓN</th>
@@ -1521,15 +1858,13 @@ export default function TicketsPage() {
                   )}
                 >
                   <td className="px-3 py-3">
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 accent-primary cursor-pointer"
+                    <Checkbox
                       checked={selectedTicketIds.has(String(ticket.id))}
-                      onChange={(e) => {
+                      onCheckedChange={(checked) => {
                         const id = String(ticket.id);
                         setSelectedTicketIds((prev) => {
                           const next = new Set(prev);
-                          if (e.target.checked) next.add(id);
+                          if (checked) next.add(id);
                           else next.delete(id);
                           return next;
                         });
@@ -1544,11 +1879,12 @@ export default function TicketsPage() {
                       return (
                         <Link
                           href={`/dashboard/tickets/${ticket.id}`}
-                          className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold ring-1 ring-inset transition-opacity hover:opacity-80 bg-white"
+                          className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold ring-1 ring-inset transition-opacity hover:opacity-80 bg-white md:bg-white"
                           style={{
                             color: fg,
                             outline: `1px solid ${fg}33`,
                             border: `1px solid ${bg}`,
+                            backgroundColor: bg,
                           }}
                           title={getStatusLabel(ticket.status)}
                         >
@@ -1705,6 +2041,7 @@ export default function TicketsPage() {
               })}
             </tbody>
           </table>
+          </>
         )}
         {!loading && ticketsTotalCount > 0 && pageCount > 1 ? (
           <div className="flex items-center justify-between px-6 py-3 border-t border-gray-200 bg-gray-50 text-sm text-gray-600">

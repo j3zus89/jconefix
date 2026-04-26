@@ -352,6 +352,65 @@ function DashboardSharedBody({ props }: { props: DashboardHomeViewProps }) {
         </div>
       )}
 
+      {/* Recent Tickets - AHORA ARRIBA */}
+      <Card className="mb-6">
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-base font-semibold">
+                {isAR ? 'Últimos trabajos' : 'Tickets recientes'}
+              </CardTitle>
+              <p className="mt-0.5 text-xs text-gray-500">Los 5 últimos (no dependen del período del resumen)</p>
+            </div>
+            <Link
+              href="/dashboard/tickets"
+              className="flex shrink-0 items-center gap-0.5 text-xs text-primary hover:underline"
+            >
+              Ver todos <ChevronRight className="h-3 w-3" />
+            </Link>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          {recentTickets.length === 0 ? (
+            <div className="py-8 text-center text-gray-400">
+              <Wrench className="mx-auto mb-2 h-8 w-8 opacity-30" />
+              <p className="text-sm">{isAR ? 'Todavía no hay trabajos cargados' : 'No hay tickets aún'}</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {recentTickets.map((ticket) => {
+                const sc = getTicketStatusBadge(ticket.status);
+                return (
+                  <Link key={ticket.id} href={`/dashboard/tickets/${ticket.id}`}>
+                    <div className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-gray-50">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-primary">{ticket.ticket_number}</span>
+                          <span className="truncate text-sm text-gray-900">{ticket.device_type}</span>
+                        </div>
+                        <div className="mt-0.5 flex items-center gap-2">
+                          <span className="text-xs text-gray-500">
+                            {ticket.customers?.name || (isAR ? 'Mostrador' : 'Walkin')}
+                          </span>
+                          <span className="text-gray-300">·</span>
+                          <span className="text-xs text-gray-400">{formatDate(ticket.created_at)}</span>
+                        </div>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-3">
+                        <span className="text-sm font-medium text-gray-900">
+                          {loc.format(ticket.final_cost || ticket.estimated_cost || 0)}
+                        </span>
+                        <span className={cn('rounded border px-2 py-0.5 text-xs font-medium', sc.cls)}>{sc.label}</span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Main Content Grid */}
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
@@ -438,73 +497,6 @@ function DashboardSharedBody({ props }: { props: DashboardHomeViewProps }) {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-base font-semibold">
-                    {isAR ? 'Detalle diario (POS + reparaciones)' : 'Ventas diarias (POS)'}
-                  </CardTitle>
-                  <p className="text-xs text-gray-500">{periodUiShort(activePeriod)} · según el período arriba</p>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 border-transparent bg-primary text-xs text-primary-foreground hover:bg-primary/90"
-                >
-                  {isAR ? 'Descargar' : 'Descargar informe'}
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="p-0">
-              {dailySalesRows.length === 0 ? (
-                <div className="py-12 text-center text-sm text-gray-500">
-                  {isAR
-                    ? 'No hay ventas POS ni cobros de reparación en este período. Solo datos reales de tu organización.'
-                    : 'No hay ventas POS en este periodo. El panel muestra solo datos reales de tu cuenta.'}
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="border-b border-gray-200 bg-gray-50">
-                      <tr>
-                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500">Fecha</th>
-                        <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Venta</th>
-                        <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Descuento</th>
-                        <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Neto</th>
-                        <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">Margen</th>
-                        <th className="px-3 py-2 text-right text-xs font-medium text-gray-500">
-                          {isAR ? 'IVA / impuestos' : 'Impuesto'}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      {dailySalesRows.map((row, idx) => (
-                        <tr key={idx} className="hover:bg-gray-50">
-                          <td className="px-3 py-2 text-sm text-gray-900">{row.fecha}</td>
-                          <td className="px-3 py-2 text-right text-sm text-gray-900">{loc.format(row.venta)}</td>
-                          <td className="px-3 py-2 text-right text-sm text-gray-900">{loc.format(row.descuento)}</td>
-                          <td className="px-3 py-2 text-right text-sm text-gray-900">{loc.format(row.neto)}</td>
-                          <td className="px-3 py-2 text-right text-sm text-gray-900">{row.margen.toFixed(2)}%</td>
-                          <td className="px-3 py-2 text-right text-sm text-gray-900">{loc.format(row.impuesto)}</td>
-                        </tr>
-                      ))}
-                      <tr className="bg-gray-50 font-semibold">
-                        <td className="px-3 py-2 text-sm text-gray-900">Total</td>
-                        <td className="px-3 py-2 text-right text-sm text-gray-900">{loc.format(dailyTotals.venta)}</td>
-                        <td className="px-3 py-2 text-right text-sm text-gray-900">
-                          {loc.format(dailyTotals.descuento)}
-                        </td>
-                        <td className="px-3 py-2 text-right text-sm text-gray-900">{loc.format(dailyTotals.neto)}</td>
-                        <td className="px-3 py-2 text-right text-sm text-gray-900">{dailyMargenPct.toFixed(2)}%</td>
-                        <td className="px-3 py-2 text-right text-sm text-gray-900">{loc.format(dailyTotals.impuesto)}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </CardContent>
-          </Card>
         </div>
 
         <div className="space-y-6">
@@ -550,130 +542,8 @@ function DashboardSharedBody({ props }: { props: DashboardHomeViewProps }) {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base font-semibold">
-                  {isAR ? 'Formas de pago (caja)' : 'Métodos de pago (POS)'}
-                </CardTitle>
-                <Button variant="outline" size="sm" className="h-7 text-xs">
-                  {isAR ? 'Ver detalle' : 'Ver informe'}
-                </Button>
-              </div>
-              <p className="text-xs text-gray-500">{periodUiShort(activePeriod)}</p>
-            </CardHeader>
-            <CardContent>
-              {paymentChartData.length === 0 ? (
-                <div className="flex h-48 flex-col items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50/80 px-4 text-center">
-                  <p className="text-sm text-gray-600">
-                    {isAR
-                      ? `Sin cobros en caja en ${periodUiShort(activePeriod)}`
-                      : `Sin cobros POS en ${periodUiShort(activePeriod)}`}
-                  </p>
-                  <p className="mt-1 text-xs text-gray-500">
-                    {isAR
-                      ? 'Mostrador (POS) y cobros de reparación del período: efectivo, tarjeta, seña, etc.'
-                      : 'POS sales plus repair ticket payments in this period.'}
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="mb-4 h-48">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={paymentChartData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={40}
-                          outerRadius={70}
-                          paddingAngle={2}
-                          dataKey="value"
-                        >
-                          {paymentChartData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip formatter={(value: number) => loc.format(Number(value))} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                  <div className="space-y-2">
-                    {paymentChartData.map((method) => (
-                      <div key={method.name} className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-2">
-                          <div className="h-3 w-3 rounded-full" style={{ backgroundColor: method.color }} />
-                          <span className="text-gray-600">{method.name}</span>
-                        </div>
-                        <p className="font-medium text-gray-900">{loc.format(method.value)}</p>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
         </div>
       </div>
-
-      {/* Recent Tickets */}
-      <Card className="mb-6">
-        <CardHeader className="pb-2">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-base font-semibold">
-                {isAR ? 'Últimos trabajos' : 'Tickets recientes'}
-              </CardTitle>
-              <p className="mt-0.5 text-xs text-gray-500">Los 5 últimos (no dependen del período del resumen)</p>
-            </div>
-            <Link
-              href="/dashboard/tickets"
-              className="flex shrink-0 items-center gap-0.5 text-xs text-primary hover:underline"
-            >
-              Ver todos <ChevronRight className="h-3 w-3" />
-            </Link>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          {recentTickets.length === 0 ? (
-            <div className="py-8 text-center text-gray-400">
-              <Wrench className="mx-auto mb-2 h-8 w-8 opacity-30" />
-              <p className="text-sm">{isAR ? 'Todavía no hay trabajos cargados' : 'No hay tickets aún'}</p>
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-100">
-              {recentTickets.map((ticket) => {
-                const sc = getTicketStatusBadge(ticket.status);
-                return (
-                  <Link key={ticket.id} href={`/dashboard/tickets/${ticket.id}`}>
-                    <div className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-gray-50">
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-primary">{ticket.ticket_number}</span>
-                          <span className="truncate text-sm text-gray-900">{ticket.device_type}</span>
-                        </div>
-                        <div className="mt-0.5 flex items-center gap-2">
-                          <span className="text-xs text-gray-500">
-                            {ticket.customers?.name || (isAR ? 'Mostrador' : 'Walkin')}
-                          </span>
-                          <span className="text-gray-300">·</span>
-                          <span className="text-xs text-gray-400">{formatDate(ticket.created_at)}</span>
-                        </div>
-                      </div>
-                      <div className="flex shrink-0 items-center gap-3">
-                        <span className="text-sm font-medium text-gray-900">
-                          {loc.format(ticket.final_cost || ticket.estimated_cost || 0)}
-                        </span>
-                        <span className={cn('rounded border px-2 py-0.5 text-xs font-medium', sc.cls)}>{sc.label}</span>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">

@@ -383,9 +383,9 @@ const pages: CompararPageDef[] = [
   },
   {
     slug: 'jconefix-vs-lider-gestion-taller-argentina',
-    metaTitle: 'Alternativa a Líder Gestión: Jconefix es más simple y rápido 🇦🇷',
+    metaTitle: 'Mejor Software Gestión Taller 2026 ⚡ JC ONE FIX vs Líder Gestión',
     metaDescription:
-      '¿Cansado de menús complicados? Jconefix es el software para talleres que prioriza tu tiempo. Gestión de órdenes y facturación ARCA sin vueltas. Compará y elegí modernidad.',
+      '🚀 ¿Buscas alternativa a Líder Gestión? JC ONE FIX: software de taller más rápido, simple y con facturación AFIP/ARCA integrada. Prueba gratis 30 días.',
     h1: 'Jconefix vs Líder Gestión: evolución y agilidad para tu servicio técnico',
     lead:
       'Líder Gestión es un nombre que muchos talleres conocen: suele asociarse a un abanico amplio de módulos y recorridos pensados para cubrir de todo. El costo lateral es conocido: más pantallas, más clics y la sensación de “laberinto” cuando solo querés cerrar una orden o facturar sin perder el hilo. Jconefix apuesta a otra curva: simplicidad operativa para el día a día del service — sin menospreciar a quien prefiere profundidad clásica; hablamos de evolución tecnológica y de encaje con equipos que valoran velocidad sobre complejidad innecesaria.',
