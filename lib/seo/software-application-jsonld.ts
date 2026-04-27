@@ -38,6 +38,42 @@ export function getJcOneFixSoftwareApplicationJsonLd(): Record<string, unknown> 
         name: 'JC ONE FIX',
         url: base,
       },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+        returnMethod: 'https://schema.org/ReturnAtKiosk',
+        merchantReturnDays: 0,
+        applicableCountry: 'AR',
+        returnFees: 'https://schema.org/FreeReturn',
+      },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '0',
+          currency: 'ARS',
+        },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 0,
+            maxValue: 0,
+            unitCode: 'DAY',
+          },
+          transitTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 0,
+            maxValue: 0,
+            unitCode: 'DAY',
+          },
+        },
+        doesNotShip: 'false',
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: 'AR',
+        },
+      },
     },
     provider: {
       '@type': 'Organization',
