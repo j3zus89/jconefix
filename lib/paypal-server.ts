@@ -20,8 +20,8 @@ function paypalBase(): string {
 }
 
 export async function paypalAccessToken(): Promise<string> {
-  const id = process.env.PAYPAL_CLIENT_ID;
-  const secret = process.env.PAYPAL_CLIENT_SECRET;
+  const id = process.env.PAYPAL_CLIENT_ID?.trim();
+  const secret = process.env.PAYPAL_CLIENT_SECRET?.trim();
   if (!id || !secret) {
     throw new Error('PayPal no configurado: PAYPAL_CLIENT_ID y PAYPAL_CLIENT_SECRET son obligatorios');
   }
@@ -36,7 +36,11 @@ export async function paypalAccessToken(): Promise<string> {
   });
   if (!res.ok) {
     const t = await res.text();
-    throw new Error(`PayPal OAuth error: ${res.status} ${t}`);
+    const hint =
+      res.status === 401 && t.includes('invalid_client')
+        ? ' Comprobá que PAYPAL_CLIENT_ID y PAYPAL_CLIENT_SECRET sean el par de la MISMA app (Sandbox o Live), que coincidan con PAYPAL_API_BASE (sandbox → api-m.sandbox.paypal.com), y que NEXT_PUBLIC_PAYPAL_CLIENT_ID sea el mismo Client ID; tras cambiar variables públicas hay que redeploy.'
+        : '';
+    throw new Error(`PayPal OAuth error: ${res.status} ${t}${hint}`);
   }
   const j = (await res.json()) as { access_token: string };
   return j.access_token;
