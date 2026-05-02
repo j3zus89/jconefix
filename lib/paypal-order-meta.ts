@@ -7,6 +7,32 @@ import {
 import type { CheckoutCycle, CheckoutPlan } from '@/lib/checkout-pricing';
 
 const PREFIX = 'jc1x|';
+const PREFIX_PREMIUM_DIRECT = 'jc1pd|';
+
+/** Registro + pago en un paso: token hex + plan + cycle (custom_id &lt; 127). */
+export function buildPaypalCustomIdPremiumDirect(
+  token: string,
+  plan: CheckoutPlan,
+  cycle: CheckoutCycle
+): string {
+  return `${PREFIX_PREMIUM_DIRECT}${token}|${plan}|${cycle}`.slice(0, 127);
+}
+
+export function parsePaypalCustomIdPremiumDirect(
+  customId: string | undefined | null
+): { token: string; plan: PlanType; cycle: BillingCycle } | null {
+  if (!customId || !customId.startsWith(PREFIX_PREMIUM_DIRECT)) return null;
+  const rest = customId.slice(PREFIX_PREMIUM_DIRECT.length);
+  const parts = rest.split('|');
+  if (parts.length !== 3) return null;
+  const [token, planRaw, cycleRaw] = parts;
+  if (!token || token.length < 16) return null;
+  return {
+    token,
+    plan: normalizePlanType(planRaw),
+    cycle: normalizeBillingCycle(cycleRaw),
+  };
+}
 
 /** Metadatos en PayPal `custom_id` (máx. 127). Si hay sesión, enlazamos cobro → organización. */
 export function buildPaypalCustomId(

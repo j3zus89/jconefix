@@ -32,6 +32,63 @@ export function computeLicenseExpiresAt(cycle: BillingCycle, from: Date = new Da
   return new Date(from.getTime() + ms).toISOString();
 }
 
+const GIFT_PREMIUM_DAYS = 30;
+
+/**
+ * Registro Premium directo (PayPal): 30 días de regalo + periodo pagado.
+ */
+export function computePremiumDirectLicenseEnd(
+  cycle: BillingCycle,
+  from: Date = new Date()
+): string {
+  const giftMs = GIFT_PREMIUM_DAYS * 24 * 60 * 60 * 1000;
+  if (cycle === 'mensual') {
+    const paidMs = 30 * 24 * 60 * 60 * 1000;
+    return new Date(from.getTime() + paidMs + giftMs).toISOString();
+  }
+  const paidMs = 365 * 24 * 60 * 60 * 1000;
+  return new Date(from.getTime() + paidMs + giftMs).toISOString();
+}
+
+function parseLicenseEndMs(iso: string | null | undefined): number {
+  if (!iso) return 0;
+  const t = new Date(iso).getTime();
+  return Number.isNaN(t) ? 0 : t;
+}
+
+/** Fin del acceso vigente antes de sumar un nuevo periodo (webhooks / captura). */
+export function currentPaidOrTrialEndMs(org: {
+  subscription_status?: string | null;
+  license_expires_at?: string | null;
+  trial_ends_at?: string | null;
+}): number {
+  const licenseEndMs = parseLicenseEndMs(org.license_expires_at);
+  const trialEndMs = parseLicenseEndMs(org.trial_ends_at);
+  const st = String(org.subscription_status || '');
+  if (st === 'trial') {
+    return Math.max(licenseEndMs, trialEndMs);
+  }
+  return licenseEndMs > 0 ? licenseEndMs : trialEndMs;
+}
+
+/**
+ * Tras pago aprobado: max(fecha de aprobación, fin de periodo actual) + 30 o 365 días.
+ */
+export function computeStackedLicenseExpiresAt(
+  cycle: BillingCycle,
+  org: {
+    subscription_status?: string | null;
+    license_expires_at?: string | null;
+    trial_ends_at?: string | null;
+  },
+  approvedAt: Date = new Date()
+): string {
+  const periodEndMs = currentPaidOrTrialEndMs(org);
+  const baseStartMs = Math.max(approvedAt.getTime(), periodEndMs);
+  const addMs = (cycle === 'anual' ? 365 : 30) * 24 * 60 * 60 * 1000;
+  return new Date(baseStartMs + addMs).toISOString();
+}
+
 export function planTypeLabel(t: PlanType): string {
   return t === 'profesional' ? 'JC ONE FIX' : 'Cuenta con límites (histórico)';
 }
@@ -91,6 +148,7 @@ export function licenseDefaultsForPlan(plan: PlanType): {
   plan_type: PlanType;
   subscription_plan: PlanType;
   max_users: number | null;
+  max_tickets: number | null;
   features: OrgPlanFeatures;
 } {
   if (plan === 'profesional') {
@@ -98,6 +156,7 @@ export function licenseDefaultsForPlan(plan: PlanType): {
       plan_type: 'profesional',
       subscription_plan: 'profesional',
       max_users: null,
+      max_tickets: null,
       features: defaultFeaturesForPlanType('profesional'),
     };
   }
@@ -105,6 +164,7 @@ export function licenseDefaultsForPlan(plan: PlanType): {
     plan_type: 'basico',
     subscription_plan: 'basico',
     max_users: 3,
+    max_tickets: 50,
     features: defaultFeaturesForPlanType('basico'),
   };
 }
