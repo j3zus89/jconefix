@@ -4,6 +4,7 @@ import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from '@pa
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import type { CheckoutCycle, CheckoutPlan } from '@/lib/checkout-pricing';
+import { PAYPAL_SDK_SCRIPT_LOCALE } from '@/lib/paypal-locale';
 import { paypalSubscriptionPlanIdForCycle } from '@/lib/paypal-subscription-env';
 
 type Props = {
@@ -75,6 +76,7 @@ export function PayPalSubscriptionButton({ cycle, plan, tone = 'light', planId: 
         intent: 'subscription',
         currency: 'ARS',
         components: 'buttons',
+        locale: PAYPAL_SDK_SCRIPT_LOCALE,
       }}
     >
       <SubscribeButton cycle={cycle} plan={plan} planId={planId} />

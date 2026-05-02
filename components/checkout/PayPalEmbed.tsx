@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import type { CheckoutCycle, CheckoutPlan } from '@/lib/checkout-pricing';
+import { PAYPAL_SDK_SCRIPT_LOCALE } from '@/lib/paypal-locale';
 
 declare global {
   interface Window {
@@ -21,11 +22,13 @@ declare global {
 type Props = {
   plan: CheckoutPlan;
   cycle: CheckoutCycle;
+  /** Moneda del SDK de PayPal (embed LatAm = USD) */
+  payPalCurrency?: 'USD' | 'ARS';
   /** Errores legibles en fondo claro u oscuro */
   tone?: 'light' | 'dark';
 };
 
-export function PayPalEmbed({ plan, cycle, tone = 'light' }: Props) {
+export function PayPalEmbed({ plan, cycle, payPalCurrency = 'USD', tone = 'light' }: Props) {
   const router = useRouter();
   const paypalWrapRef = useRef<HTMLDivElement>(null);
   const renderedRef = useRef(false);
@@ -54,7 +57,9 @@ export function PayPalEmbed({ plan, cycle, tone = 'light' }: Props) {
     setPayError(null);
     renderedRef.current = false;
 
-    const sdkCaptureUrl = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=ARS&intent=capture`;
+    const sdkCaptureUrl = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=${encodeURIComponent(
+      payPalCurrency
+    )}&intent=capture&locale=${PAYPAL_SDK_SCRIPT_LOCALE}`;
     const scriptId = 'paypal-sdk-jconefix';
 
     const stripPaypal = () => {
@@ -184,7 +189,7 @@ export function PayPalEmbed({ plan, cycle, tone = 'light' }: Props) {
       container.innerHTML = '';
       safeSetPaypalLoading(false);
     };
-  }, [plan, cycle, clientId, router]);
+  }, [plan, cycle, payPalCurrency, clientId, router]);
 
   const errAmber =
     tone === 'dark'
