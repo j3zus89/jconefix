@@ -6,9 +6,17 @@ import {
   type CheckoutPlan,
 } from '@/lib/checkout-pricing';
 import { buildPaypalCustomId } from '@/lib/paypal-order-meta';
+import { PAYPAL_ORDERS_V2_LOCALE } from '@/lib/paypal-locale';
 
 function paypalBase(): string {
-  return process.env.PAYPAL_API_BASE || 'https://api-m.sandbox.paypal.com';
+  const fromEnv = process.env.PAYPAL_API_BASE?.trim();
+  if (fromEnv) return fromEnv;
+  // Sin PAYPAL_API_BASE, sandbox solo en desarrollo. En producción el valor por defecto
+  // debe ser live; si no, el navegador crea órdenes con NEXT_PUBLIC_* live pero el
+  // servidor creaba órdenes en sandbox → INVALID_RESOURCE_ID al abrir checkout.
+  return process.env.NODE_ENV === 'production'
+    ? 'https://api-m.paypal.com'
+    : 'https://api-m.sandbox.paypal.com';
 }
 
 export async function paypalAccessToken(): Promise<string> {
@@ -71,6 +79,7 @@ export async function paypalCreateOrder(
       ],
       application_context: {
         brand_name: 'JC ONE FIX',
+        locale: PAYPAL_ORDERS_V2_LOCALE,
         landing_page: 'NO_PREFERENCE',
         shipping_preference: 'NO_SHIPPING',
         user_action: 'PAY_NOW',
@@ -119,6 +128,7 @@ export async function paypalCreateUsdOrderWithCustomId(
       ],
       application_context: {
         brand_name: 'JC ONE FIX',
+        locale: PAYPAL_ORDERS_V2_LOCALE,
         landing_page: 'NO_PREFERENCE',
         shipping_preference: 'NO_SHIPPING',
         user_action: 'PAY_NOW',
