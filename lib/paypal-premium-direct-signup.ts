@@ -368,5 +368,130 @@ export async function tryProvisionPremiumDirectSignup(
     console.error('[premium-direct] notifyAdminNewUser', e);
   }
 
+  // Registrar pago en subscription_payments
+  const paypalOrderId = (captureBody as { id?: string }).id ?? '';
+  const capAmt = extractCaptureUsdAmount(captureBody);
+  if (paypalOrderId && capAmt) {
+    await admin.from('subscription_payments').insert({
+      user_id: userId,
+      organization_id: orgData.id,
+      platform: 'paypal',
+      paypal_order_id: paypalOrderId,
+      transaction_amount: Number.parseFloat(capAmt.value),
+      currency_id: capAmt.currency,
+      status: 'COMPLETED',
+      billing_cycle: cycleNorm,
+      date_approved: new Date().toISOString(),
+      raw_payment: captureBody as unknown as Record<string, unknown>,
+    }).then(({ error: pErr }) => {
+      if (pErr && pErr.code !== '23505') console.error('[premium-direct] subscription_payments', pErr);
+    });
+  }
+
   return { handled: true, success: true };
+}
+
+/**
+ * Variante del webhook: sin cookie (el navegador del cliente ya se cerró).
+ * Para funcionar desde el webhook, el custom_id premium-direct requiere que
+ * el payload cifrado se haya guardado previamente en la tabla `paypal_pending_orders`
+ * durante `createPremiumDirectPayPalOrder`. Si esa tabla no existe, devuelve
+ * handled: false y el webhook simplemente no actúa sobre órdenes premium-direct
+ * (el flujo capture desde el cliente sigue siendo el camino principal).
+ */
+export async function tryProvisionPremiumDirectSignupFromWebhook(
+  captureBody: unknown
+): Promise<PremiumDirectProvisionResult> {
+  const body = captureBody as { status?: string; purchase_units?: CapturePu[] };
+
+  // Solo actuar si la orden está COMPLETED
+  if (body.status !== 'COMPLETED') return { handled: false };
+
+  const pu = body.purchase_units?.[0];
+  const customId = pu?.custom_id;
+  const parsedMeta = parsePaypalCustomIdPremiumDirect(customId);
+  if (!parsedMeta) return { handled: false };
+
+  const cap = pu?.payments?.captures?.[0];
+  if (!cap || cap.status !== 'COMPLETED') return { handled: false };
+
+  const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!SUPABASE_URL || !SERVICE_KEY) return { handled: false };
+
+  const admin = createClient(SUPABASE_URL, SERVICE_KEY, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+
+  // Idempotencia: ¿ya provisionamos esta orden?
+  const paypalOrderId = (captureBody as { id?: string }).id ?? '';
+  if (paypalOrderId) {
+    const { data: existing } = await admin
+      .from('subscription_payments')
+      .select('id')
+      .eq('paypal_order_id', paypalOrderId)
+      .maybeSingle();
+    if (existing) {
+      return { handled: true, success: true }; // ya procesado por el cliente
+    }
+  }
+
+  // Intentar recuperar payload desde `paypal_pending_orders` (tabla opcional)
+  const { data: pendingRow } = await admin
+    .from('paypal_pending_orders')
+    .select('encrypted_payload, token')
+    .eq('token', parsedMeta.token)
+    .maybeSingle();
+
+  if (!pendingRow) {
+    // Sin tabla o sin fila: no podemos provisionar desde el webhook sin cookie.
+    // El flujo cliente es el principal; esto es el respaldo.
+    console.warn('[webhook paypal] premium-direct: no pending order found for token', parsedMeta.token);
+    return { handled: false };
+  }
+
+  const payload = decryptPremiumDirectPayload(pendingRow.encrypted_payload);
+  if (!payload || payload.token !== parsedMeta.token) {
+    return { handled: true, success: false, status: 400, message: 'Token de orden no válido' };
+  }
+
+  // Validar monto
+  const amt = extractCaptureUsdAmount(captureBody);
+  const plan = normalizeCheckoutPlan('profesional');
+  const cycleNorm = normalizeBillingCycle(parsedMeta.cycle);
+  const expectedVal = checkoutAmountUsd(plan, cycleNorm === 'anual' ? 'anual' : 'mensual');
+  if (!amt || amt.currency !== 'USD' || Number.parseFloat(amt.value) !== Number.parseFloat(expectedVal)) {
+    return { handled: true, success: false, status: 400, message: 'Importe de pago no válido (webhook)' };
+  }
+
+  // Verificar que no exista ya el usuario
+  const { data: existingUser } = await admin.auth.admin.listUsers();
+  const alreadyExists = existingUser?.users?.some(u => u.email === payload.email);
+  if (alreadyExists) {
+    return { handled: true, success: false, status: 409, message: 'Usuario ya existe (webhook)' };
+  }
+
+  // Reutilizamos la ruta normal pasando un Request sintético sin cookie
+  // pero con los datos del payload descifrado embebidos:
+  const syntheticReq = new Request('https://internal/webhook-provision', {
+    method: 'POST',
+    headers: { 'x-vercel-ip-country': '' },
+  }) as unknown as import('next/server').NextRequest;
+
+  // Inyectar cookie sintética para reutilizar tryProvisionPremiumDirectSignup
+  Object.defineProperty(syntheticReq, 'cookies', {
+    value: {
+      get: (name: string) =>
+        name === PREMIUM_DIRECT_COOKIE ? { value: pendingRow.encrypted_payload } : undefined,
+    },
+  });
+
+  const result = await tryProvisionPremiumDirectSignup(syntheticReq, captureBody);
+
+  // Limpiar fila de pendientes si se provisionó correctamente
+  if (result.handled && result.success) {
+    await admin.from('paypal_pending_orders').delete().eq('token', parsedMeta.token);
+  }
+
+  return result;
 }
