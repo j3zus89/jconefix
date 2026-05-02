@@ -51,8 +51,42 @@ export function PayPalPremiumDirectEmbed({ formValid, cycle, getPayload, onPaidS
   const [sdkError, setSdkError] = useState<string | null>(null);
   const [payError, setPayError] = useState<string | null>(null);
   const [paypalLoading, setPaypalLoading] = useState(false);
+  /** null = aún no pedimos config al servidor; string = Client ID (puede ser ""). */
+  const [resolvedClientId, setResolvedClientId] = useState<string | null>(null);
+  const [configFetchError, setConfigFetchError] = useState<string | null>(null);
 
-  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '';
+  useEffect(() => {
+    if (!formValid) {
+      setResolvedClientId(null);
+      setConfigFetchError(null);
+      return;
+    }
+    let cancelled = false;
+    setConfigFetchError(null);
+    setResolvedClientId(null);
+    void (async () => {
+      try {
+        const res = await fetch('/api/paypal/public-config', { cache: 'no-store' });
+        const data = (await res.json().catch(() => ({}))) as { clientId?: string };
+        if (cancelled) return;
+        const id = typeof data.clientId === 'string' ? data.clientId.trim() : '';
+        setResolvedClientId(id);
+        if (!id) {
+          setConfigFetchError(
+            'Falta PAYPAL_CLIENT_ID / NEXT_PUBLIC_PAYPAL_CLIENT_ID en el servidor.'
+          );
+        }
+      } catch {
+        if (!cancelled) {
+          setResolvedClientId('');
+          setConfigFetchError('No se pudo leer la configuración de PayPal.');
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [formValid]);
 
   useEffect(() => {
     if (!formValid) {
@@ -64,8 +98,12 @@ export function PayPalPremiumDirectEmbed({ formValid, cycle, getPayload, onPaidS
       return;
     }
 
+    if (resolvedClientId === null) {
+      return;
+    }
+
+    const clientId = resolvedClientId;
     if (!clientId) {
-      setSdkError('Falta NEXT_PUBLIC_PAYPAL_CLIENT_ID en el servidor.');
       return;
     }
 
@@ -220,13 +258,16 @@ export function PayPalPremiumDirectEmbed({ formValid, cycle, getPayload, onPaidS
       safeLoading(false);
       removeScripts();
     };
-  }, [formValid, cycle, clientId]);
+  }, [formValid, cycle, resolvedClientId]);
 
   const errAmber = 'border-amber-200/50 bg-amber-500/10 text-amber-100';
   const errRed = 'border-red-400/40 bg-red-500/10 text-red-200';
 
   return (
     <>
+      {configFetchError && (
+        <div className={`rounded-lg border p-3 text-sm ${errAmber}`}>{configFetchError}</div>
+      )}
       {sdkError && <div className={`rounded-lg border p-3 text-sm ${errAmber}`}>{sdkError}</div>}
       {payError && <div className={`mt-4 rounded-lg border p-3 text-sm ${errRed}`}>{payError}</div>}
       <div className="mt-4">
@@ -236,7 +277,12 @@ export function PayPalPremiumDirectEmbed({ formValid, cycle, getPayload, onPaidS
             <strong className="font-semibold text-slate-400">email válido con @</strong>, y contraseña (mín. 6
             caracteres) para habilitar PayPal.
           </p>
-        ) : !clientId ? (
+        ) : resolvedClientId === null ? (
+          <div className="flex items-center gap-2 text-sm text-slate-400">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Preparando PayPal…
+          </div>
+        ) : !resolvedClientId ? (
           <p className="text-sm text-slate-500">Configuración pendiente del comercio.</p>
         ) : (
           <>
