@@ -11,12 +11,12 @@ import { PAYPAL_ORDERS_V2_LOCALE } from '@/lib/paypal-locale';
 function paypalBase(): string {
   const fromEnv = process.env.PAYPAL_API_BASE?.trim();
   if (fromEnv) return fromEnv;
-  // Sin PAYPAL_API_BASE, sandbox solo en desarrollo. En producción el valor por defecto
-  // debe ser live; si no, el navegador crea órdenes con NEXT_PUBLIC_* live pero el
-  // servidor creaba órdenes en sandbox → INVALID_RESOURCE_ID al abrir checkout.
-  return process.env.NODE_ENV === 'production'
-    ? 'https://api-m.paypal.com'
-    : 'https://api-m.sandbox.paypal.com';
+  // Por defecto siempre API sandbox (coincide con el modo "Sandbox" del dashboard).
+  // Si pasás a credenciales Live, definí explícitamente:
+  // PAYPAL_API_BASE=https://api-m.paypal.com
+  // y usá el Client ID + Secret de la app Live. Mezclar client live con API sandbox
+  // (o al revés) provoca INVALID_RESOURCE_ID u OAuth fallido.
+  return 'https://api-m.sandbox.paypal.com';
 }
 
 export async function paypalAccessToken(): Promise<string> {
